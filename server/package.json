@@ -1,0 +1,32 @@
+{
+  "name": "farmwise",
+  "module": "index.ts",
+  "scripts": {
+    "build": "tsc -b",
+    "start": "node dist/src/index",
+    "dev": "concurrently \"tsc -w\" \"nodemon dist/src/index\"",
+    "db:generate": "drizzle-kit generate --schema src/db/schema.ts --dialect postgresql --out ./drizzle",
+    "db:migrate": "tsx ./src/scripts/migrate.ts",
+    "db:studio": "drizzle-kit studio"
+  },
+  "dependencies": {
+    "@clerk/express": "^1.7.38",
+    "@neondatabase/serverless": "^1.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "drizzle-orm": "^0.44.6",
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.7.2",
+    "concurrently": "^9.2.1",
+    "drizzle-kit": "^0.31.5",
+    "nodemon": "^3.1.10"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}

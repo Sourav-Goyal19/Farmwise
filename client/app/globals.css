@@ -1,0 +1,165 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --background: oklch(0.99 0 196.53);
+  --foreground: oklch(0.12 0.01 185.09);
+  --card: oklch(0.99 0 196.53);
+  --card-foreground: oklch(0.12 0.01 185.09);
+  --popover: oklch(0.99 0 196.53);
+  --popover-foreground: oklch(0.12 0.01 185.09);
+  --primary: oklch(0.52 0.09 186.48);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.87 0.02 191.61);
+  --secondary-foreground: oklch(0.36 0.02 187.29);
+  --muted: oklch(0.92 0.02 192.9);
+  --muted-foreground: oklch(0.5 0.02 190.94);
+  --accent: oklch(0.87 0.02 191.61);
+  --accent-foreground: oklch(0.36 0.02 187.29);
+  --destructive: oklch(0.46 0.18 29.68);
+  --border: oklch(0.93 0 196.68);
+  --input: oklch(0.93 0 196.68);
+  --ring: oklch(0.52 0.09 186.48);
+  --chart-1: oklch(0.52 0.09 186.48);
+  --chart-2: oklch(0.87 0.02 191.61);
+  --chart-3: oklch(0.87 0.02 191.61);
+  --chart-4: oklch(0.89 0.01 196.8);
+  --chart-5: oklch(0.53 0.09 185.71);
+  --sidebar: oklch(0.96 0.01 196.53);
+  --sidebar-foreground: oklch(0.12 0.01 185.09);
+  --sidebar-primary: oklch(0.52 0.09 186.48);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.87 0.02 191.61);
+  --sidebar-accent-foreground: oklch(0.36 0.02 187.29);
+  --sidebar-border: oklch(0.93 0 196.68);
+  --sidebar-ring: oklch(0.52 0.09 186.48);
+
+  --font-sans: Montserrat, sans-serif;
+  --font-serif: Merriweather, serif;
+  --font-mono: Source Code Pro, monospace;
+
+  --radius: 0.65rem;
+
+  --shadow-2xs: 0 1px 3px 0px oklch(0 0 0 / 0.05);
+  --shadow-xs: 0 1px 3px 0px oklch(0 0 0 / 0.05);
+  --shadow-sm: 0 1px 3px 0px oklch(0 0 0 / 0.1),
+    0 1px 2px -1px oklch(0 0 0 / 0.1);
+  --shadow: 0 1px 3px 0px oklch(0 0 0 / 0.1), 0 1px 2px -1px oklch(0 0 0 / 0.1);
+  --shadow-md: 0 1px 3px 0px oklch(0 0 0 / 0.1),
+    0 2px 4px -1px oklch(0 0 0 / 0.1);
+  --shadow-lg: 0 1px 3px 0px oklch(0 0 0 / 0.1),
+    0 4px 6px -1px oklch(0 0 0 / 0.1);
+  --shadow-xl: 0 1px 3px 0px oklch(0 0 0 / 0.1),
+    0 8px 10px -1px oklch(0 0 0 / 0.1);
+  --shadow-2xl: 0 1px 3px 0px oklch(0 0 0 / 0.25);
+}
+
+.dark {
+  --background: oklch(0.16 0.02 189.12);
+  --foreground: oklch(1 0 0);
+  --card: oklch(0.16 0.02 189.12);
+  --card-foreground: oklch(1 0 0);
+  --popover: oklch(0.16 0.02 189.12);
+  --popover-foreground: oklch(1 0 0);
+  --primary: oklch(0.52 0.09 186.48);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.29 0.05 186.46);
+  --secondary-foreground: oklch(0.92 0.13 187.32);
+  --muted: oklch(0.26 0.02 191.43);
+  --muted-foreground: oklch(0.72 0.01 191.16);
+  --accent: oklch(0.29 0.05 186.46);
+  --accent-foreground: oklch(0.92 0.13 187.32);
+  --destructive: oklch(0.57 0.22 29.76);
+  --border: oklch(0.23 0.01 196.67);
+  --input: oklch(0.23 0.01 196.67);
+  --ring: oklch(0.52 0.09 186.48);
+  --chart-1: oklch(0.52 0.09 186.48);
+  --chart-2: oklch(0.29 0.05 186.46);
+  --chart-3: oklch(0.29 0.05 186.46);
+  --chart-4: oklch(0.34 0.06 186.33);
+  --chart-5: oklch(0.53 0.09 185.71);
+  --sidebar: oklch(0.18 0.02 189.12);
+  --sidebar-foreground: oklch(0.92 0.02 192.9);
+  --sidebar-primary: oklch(0.52 0.09 186.48);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.29 0.05 186.46);
+  --sidebar-accent-foreground: oklch(0.92 0.13 187.32);
+  --sidebar-border: oklch(0.23 0.01 196.67);
+  --sidebar-ring: oklch(0.52 0.09 186.48);
+
+  --shadow-2xs: 0 1px 3px 0px oklch(0 0 0 / 0.05);
+  --shadow-xs: 0 1px 3px 0px oklch(0 0 0 / 0.05);
+  --shadow-sm: 0 1px 3px 0px oklch(0 0 0 / 0.1),
+    0 1px 2px -1px oklch(0 0 0 / 0.1);
+  --shadow: 0 1px 3px 0px oklch(0 0 0 / 0.1), 0 1px 2px -1px oklch(0 0 0 / 0.1);
+  --shadow-md: 0 1px 3px 0px oklch(0 0 0 / 0.1),
+    0 2px 4px -1px oklch(0 0 0 / 0.1);
+  --shadow-lg: 0 1px 3px 0px oklch(0 0 0 / 0.1),
+    0 4px 6px -1px oklch(0 0 0 / 0.1);
+  --shadow-xl: 0 1px 3px 0px oklch(0 0 0 / 0.1),
+    0 8px 10px -1px oklch(0 0 0 / 0.1);
+  --shadow-2xl: 0 1px 3px 0px oklch(0 0 0 / 0.25);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+  --font-serif: var(--font-serif);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --shadow-2xs: var(--shadow-2xs);
+  --shadow-xs: var(--shadow-xs);
+  --shadow-sm: var(--shadow-sm);
+  --shadow: var(--shadow);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+  --shadow-xl: var(--shadow-xl);
+  --shadow-2xl: var(--shadow-2xl);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}

@@ -6,7 +6,11 @@
     "outDir": "dist",
     "noEmit": false,
     "strict": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
     // "rootDir": "src"
   },
   "exclude": ["node_modules", "dist"],

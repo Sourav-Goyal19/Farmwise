@@ -3,6 +3,7 @@ import cors from "cors";
 import express from "express";
 import { clerkMiddleware } from "@clerk/express";
 import { verifyWebhook } from "@clerk/express/webhooks";
+import { startWorkflow } from "./workflows/core-profile-workflow";
 
 const PORT = process.env.PORT || 8000;
 
@@ -41,5 +42,7 @@ app.post(
     }
   }
 );
+
+// startWorkflow();
 
 app.listen(PORT, () => console.log("Server started at port", PORT));

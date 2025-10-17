@@ -7,7 +7,7 @@ import {
   decimal,
 } from "drizzle-orm/pg-core";
 
-const genderEnum = pgEnum("gender", ["M", "F"]);
+export const genderEnum = pgEnum("gender", ["M", "F", "O"]);
 
 export const farmersTable = pgTable("farmers", {
   id: text("id").primaryKey().notNull(),

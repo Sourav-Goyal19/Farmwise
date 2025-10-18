@@ -356,8 +356,7 @@ export default defineAgent({
       // }),
       tts: new neuphonic.TTS({
         voiceId: "a2103bbb-ab1f-4b1a-b4b7-f2466ce14f11",
-        apiKey:
-          "fcb433d12f8a47a579b5ff28c28366fb897b7b7fe906a4a803248777fb60af07.b479ee3b-6879-44d8-bd3e-5200b8ed4018",
+        apiKey: process.env.NEUPHONIC_API_KEY,
       }),
       // tts: new elevenlabs.TTS({
       //   voice: {

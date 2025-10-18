@@ -1,13 +1,13 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "module": "CommonJS",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
     "esModuleInterop": true,
     "outDir": "dist",
     "noEmit": false,
     "strict": true,
     "skipLibCheck": true
-    // "rootDir": "src"
   },
   "exclude": ["node_modules", "dist"],
   "include": ["./src/**/*.ts", "drizzle.config.ts"]

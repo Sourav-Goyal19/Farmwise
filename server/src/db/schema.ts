@@ -1,27 +1,30 @@
-import { integer, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
+import {
+  integer,
+  pgEnum,
+  pgTable,
+  text,
+  timestamp,
+  decimal,
+} from "drizzle-orm/pg-core";
 
-export const usersTable = pgTable("users_table", {
-  id: serial("id").primaryKey(),
+export const genderEnum = pgEnum("gender", ["M", "F", "O"]);
+
+export const farmersTable = pgTable("farmers", {
+  id: text("id").primaryKey().notNull(),
   name: text("name").notNull(),
+  gender: genderEnum().notNull(),
+  primaryLanguage: text("primary_language").notNull(),
+  village: text("village").notNull(),
+  district: text("district"),
   age: integer("age").notNull(),
-  email: text("email").notNull().unique(),
-});
-
-export const postsTable = pgTable("posts_table", {
-  id: serial("id").primaryKey(),
-  title: text("title").notNull(),
-  content: text("content").notNull(),
-  userId: integer("user_id")
-    .notNull()
-    .references(() => usersTable.id, { onDelete: "cascade" }),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
+  educationLevel: text("education_level"),
+  totalLandArea: decimal("total_land_area").notNull(),
+  experience: decimal("farming_experience").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")
-    .notNull()
-    .$onUpdate(() => new Date()),
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
-export type InsertUser = typeof usersTable.$inferInsert;
-export type SelectUser = typeof usersTable.$inferSelect;
-
-export type InsertPost = typeof postsTable.$inferInsert;
-export type SelectPost = typeof postsTable.$inferSelect;
+export type FarmerSelect = typeof farmersTable.$inferSelect;
+export type FarmerInsert = typeof farmersTable.$inferInsert;

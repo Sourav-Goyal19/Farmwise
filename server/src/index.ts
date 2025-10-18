@@ -1,12 +1,15 @@
 import "dotenv/config";
 import cors from "cors";
 import express from "express";
+import profileRouter from "./routers/profile.router";
 import { clerkMiddleware } from "@clerk/express";
+import { WebhookReceiver } from "livekit-server-sdk";
 import { verifyWebhook } from "@clerk/express/webhooks";
 
 const PORT = process.env.PORT || 8000;
-
-const clientUrl = process.env.CLIENT_URL || "http://localhost:3000";
+const LIVEKIT_API_KEY = process.env.LIVEKIT_API_KEY!;
+const LIVEKIT_API_SECRET = process.env.LIVEKIT_API_SECRET!;
+const CLIENT_URL = process.env.CLIENT_URL || "http://localhost:3000";
 
 const app = express();
 
@@ -19,6 +22,7 @@ app.use(
   })
 );
 app.use(express.json());
+app.use(express.raw({ type: "application/webhook+json" }));
 app.use(clerkMiddleware());
 
 app.get("/", (req, res) => {
@@ -41,5 +45,23 @@ app.post(
     }
   }
 );
+
+app.use("/api/profile", profileRouter);
+
+const webhookReciever = new WebhookReceiver(
+  LIVEKIT_API_KEY,
+  LIVEKIT_API_SECRET
+);
+
+app.post("/livekit/webhook", async (req, res) => {
+  try {
+    const event = await webhookReciever.receive(
+      req.body,
+      req.get("Authorization")
+    );
+    console.log(event);
+  } catch (error) {}
+  res.status(200).send();
+});
 
 app.listen(PORT, () => console.log("Server started at port", PORT));

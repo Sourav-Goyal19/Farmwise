@@ -1,21 +1,44 @@
 {
   "name": "farmwise",
   "module": "index.ts",
+  "type": "module",
   "scripts": {
     "build": "tsc -b",
     "start": "node dist/src/index",
     "dev": "concurrently \"tsc -w\" \"nodemon dist/src/index\"",
     "db:generate": "drizzle-kit generate --schema src/db/schema.ts --dialect postgresql --out ./drizzle",
     "db:migrate": "tsx ./src/scripts/migrate.ts",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "download-files": "bun run build && node dist/src/agents/core-profile-agent.js download-files",
+    "dev-agent": "tsx ./src/agents/core-profile-agent.ts dev"
   },
   "dependencies": {
     "@clerk/express": "^1.7.38",
+    "@langchain/core": "^0.3.78",
+    "@langchain/google-genai": "^0.2.18",
+    "@langchain/groq": "^0.2.4",
+    "@langchain/langgraph": "^0.4.9",
+    "@langchain/openai": "^0.6.16",
+    "@livekit/agents": "^1.0.11",
+    "@livekit/agents-plugin-cartesia": "^1.0.11",
+    "@livekit/agents-plugin-deepgram": "^1.0.11",
+    "@livekit/agents-plugin-elevenlabs": "^1.0.11",
+    "@livekit/agents-plugin-google": "^1.0.11",
+    "@livekit/agents-plugin-livekit": "^1.0.11",
+    "@livekit/agents-plugin-neuphonic": "^1.0.11",
+    "@livekit/agents-plugin-openai": "^1.0.11",
+    "@livekit/agents-plugin-resemble": "^1.0.11",
+    "@livekit/agents-plugin-rime": "^1.0.4",
+    "@livekit/agents-plugin-silero": "^1.0.11",
     "@neondatabase/serverless": "^1.0.2",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "drizzle-orm": "^0.44.6",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "langchain": "^0.3.36",
+    "livekit-server-sdk": "^2.14.0",
+    "uuid": "^13.0.0",
+    "zod": "3.25.76"
   },
   "devDependencies": {
     "@types/bun": "latest",
@@ -24,7 +47,8 @@
     "@types/node": "^24.7.2",
     "concurrently": "^9.2.1",
     "drizzle-kit": "^0.31.5",
-    "nodemon": "^3.1.10"
+    "nodemon": "^3.1.10",
+    "tsx": "^4.20.6"
   },
   "peerDependencies": {
     "typescript": "^5"

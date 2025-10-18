@@ -1,5 +1,15 @@
-import "dotenv/config";
 import z from "zod";
+import "dotenv/config";
+import { db } from "../db";
+import { fileURLToPath } from "node:url";
+import { farmersTable } from "../db/schema";
+import * as silero from "@livekit/agents-plugin-silero";
+import * as google from "@livekit/agents-plugin-google";
+import * as livekit from "@livekit/agents-plugin-livekit";
+// import * as resemble from "@livekit/agents-plugin-resemble";
+// import * as elevenlabs from "@livekit/agents-plugin-elevenlabs";
+import * as neuphonic from "@livekit/agents-plugin-neuphonic";
+// import * as cartesia from "@livekit/agents-plugin-cartesia";
 import {
   voice,
   llm,
@@ -10,14 +20,6 @@ import {
   WorkerOptions,
   metrics,
 } from "@livekit/agents";
-
-import * as silero from "@livekit/agents-plugin-silero";
-import * as google from "@livekit/agents-plugin-google";
-import * as cartesia from "@livekit/agents-plugin-cartesia";
-import * as livekit from "@livekit/agents-plugin-livekit";
-import { fileURLToPath } from "node:url";
-import { db } from "../db";
-import { farmersTable } from "../db/schema";
 
 type FarmerData = Partial<{
   id: string;
@@ -328,8 +330,8 @@ export default defineAgent({
     proc.userData.vad = await silero.VAD.load();
   },
   entry: async (ctx: JobContext) => {
-    const id = "39c58ce3-d3cb-49c6-a92e-7dd4ed4c1c75";
-    const primaryLanguage = "Hindi";
+    let id = "39c58ce3-d3cb-49c6-a92e-7dd4ed4c1c75";
+    let primaryLanguage = "Hindi";
     // const participant = await ctx.waitForParticipant();
     // console.log("participant joined: ", participant.identity);
     const userData = createUserData(id, primaryLanguage, {
@@ -348,10 +350,24 @@ export default defineAgent({
         model: "gemini-2.0-flash",
         apiKey: process.env.GOOGLE_API_KEY!,
       }),
-      tts: new cartesia.TTS({
-        model: "sonic-2",
-        voice: "28ca2041-5dda-42df-8123-f58ea9c3da00",
+      // tts: new cartesia.TTS({
+      //   model: "sonic-2",
+      //   voice: "faf0731e-dfb9-4cfc-8119-259a79b27e12",
+      // }),
+      tts: new neuphonic.TTS({
+        voiceId: "a2103bbb-ab1f-4b1a-b4b7-f2466ce14f11",
+        apiKey:
+          "fcb433d12f8a47a579b5ff28c28366fb897b7b7fe906a4a803248777fb60af07.b479ee3b-6879-44d8-bd3e-5200b8ed4018",
       }),
+      // tts: new elevenlabs.TTS({
+      //   voice: {
+      //     id: "Z3R5wn05IrDiVCyEkUrK",
+      //     name: "arabella",
+      //     category: "conversational",
+      //   },
+      //   modelID: "eleven_multilingual_v2",
+      // }),
+
       vad: ctx.proc.userData.vad! as silero.VAD,
       turnDetection: new livekit.turnDetector.MultilingualModel(),
     });
@@ -373,7 +389,22 @@ export default defineAgent({
       agent: userData.agents.coreProfile!,
       room: ctx.room,
     });
+
+    const participant = await ctx.waitForParticipant();
+    const metadata = participant.metadata
+      ? JSON.parse(participant.metadata)
+      : {};
+    id = metadata.userId;
+    primaryLanguage = metadata.primaryLanguage;
+
+    session.userData.id = id;
+    session.userData.primaryLanguage = primaryLanguage;
   },
 });
 
-cli.runApp(new WorkerOptions({ agent: fileURLToPath(import.meta.url) }));
+cli.runApp(
+  new WorkerOptions({
+    agentName: "core-profile-agent",
+    agent: fileURLToPath(import.meta.url),
+  })
+);

@@ -1,8 +1,8 @@
-import z from "zod";
+import z, { number } from "zod";
 import "dotenv/config";
-import { db } from "../db";
+import { db } from "../db/index.js";
 import { fileURLToPath } from "node:url";
-import { farmersTable } from "../db/schema";
+import { farmersTable } from "../db/schema.js";
 import * as silero from "@livekit/agents-plugin-silero";
 import * as google from "@livekit/agents-plugin-google";
 import * as livekit from "@livekit/agents-plugin-livekit";
@@ -266,10 +266,10 @@ function createCoreProfileAgent() {
       updateAge: llm.tool({
         description: "A tool to update the age of a farmer.",
         parameters: z.object({
-          age: z.number().min(0),
+          age: z.string().min(0),
         }),
         execute: async ({ age }, { ctx }) => {
-          ctx.userData.age = age;
+          ctx.userData.age = Number(age);
           return "Farmer's total land area saved successfully.";
         },
       }),
@@ -278,10 +278,10 @@ function createCoreProfileAgent() {
         description:
           "A tool to update the total land area owned by the farmer (in acres or hectares).",
         parameters: z.object({
-          totalLandArea: z.number().min(0),
+          totalLandArea: z.string().min(0),
         }),
         execute: async ({ totalLandArea }, { ctx }) => {
-          ctx.userData.totalLandArea = totalLandArea;
+          ctx.userData.totalLandArea = Number(totalLandArea);
           return "Farmer's total land area saved successfully.";
         },
       }),

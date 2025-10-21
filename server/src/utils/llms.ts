@@ -1,5 +1,5 @@
 import { ChatGroq } from "@langchain/groq";
-import { createOpenRouterLLM } from "./open-router";
+import { createOpenRouterLLM } from "./open-router.js";
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 
 export const chatLlama70B = createOpenRouterLLM({

@@ -14,19 +14,20 @@ const LIVEKIT_API_KEY = process.env.LIVEKIT_API_KEY!;
 const LIVEKIT_API_SECRET = process.env.LIVEKIT_API_SECRET!;
 
 const tokenRequestSchema = z.object({
-  participantName: z.string().min(1, "Participant name is required"),
+  roomName: z.string().min(1, "Participant name is required"),
   userId: z.string().min(1, "User Id is Required"),
   primaryLanguage: z.string().min(1, "Primary Language is Required"),
 });
 
 type ConnectionDetails = {
-  serverUrl: string;
+  livekitServerUrl: string;
   roomName: string;
-  participantName: string;
+  participantIdentity: string;
   participantToken: string;
 };
 
 router.post("/token", async (req, res) => {
+  console.log("Got Request to /profile/token");
   const parseResult = tokenRequestSchema.safeParse(req.body);
 
   if (!parseResult.success) {
@@ -37,12 +38,9 @@ router.post("/token", async (req, res) => {
     });
   }
 
-  const { participantName, userId, primaryLanguage } = parseResult.data;
+  const { roomName, userId, primaryLanguage } = parseResult.data;
 
-  const participantIdentity = `farmer_${Math.floor(Math.random() * 10000)}`;
-  const roomName = `farmer_profile_builder_room_${Math.floor(
-    Math.random() * 10000
-  )}`;
+  const participantIdentity = `farmer_${userId}`;
 
   const agentName = "core-profile-agent";
   const agentDispatchClient = new AgentDispatchClient(
@@ -54,7 +52,6 @@ router.post("/token", async (req, res) => {
   const dispatchOptions = {
     metadata: JSON.stringify({
       userId,
-      participantName,
       primaryLanguage,
     }),
   };
@@ -78,18 +75,16 @@ router.post("/token", async (req, res) => {
   );
 
   const data: ConnectionDetails = {
-    serverUrl: LIVEKIT_URL,
+    livekitServerUrl: LIVEKIT_URL,
     roomName,
-    participantName: participantIdentity,
+    participantIdentity,
     participantToken: token,
   };
 
-  res
-    .json({
-      message: "Token generated successfully",
-      data,
-    })
-    .header({ "Cache-Control": "no-store" });
+  res.status(200).set("Cache-Control", "no-store").json({
+    message: "Token generated successfully",
+    data,
+  });
 });
 
 export default router;

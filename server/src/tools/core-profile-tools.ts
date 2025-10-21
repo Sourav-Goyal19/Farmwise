@@ -1,6 +1,6 @@
 import z from "zod";
-import { db } from "../db/index";
-import { farmersTable } from "../db/schema";
+import { db } from "../db/index.js";
+import { farmersTable } from "../db/schema.js";
 import { tool } from "@langchain/core/tools";
 
 const insertFarmerSchema = z.object({

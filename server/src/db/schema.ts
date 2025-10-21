@@ -5,25 +5,27 @@ import {
   text,
   timestamp,
   decimal,
+  boolean,
 } from "drizzle-orm/pg-core";
 
 export const genderEnum = pgEnum("gender", ["M", "F", "O"]);
 
 export const farmersTable = pgTable("farmers", {
   id: text("id").primaryKey().notNull(),
-  name: text("name").notNull(),
-  gender: genderEnum().notNull(),
-  primaryLanguage: text("primary_language").notNull(),
-  village: text("village").notNull(),
+  name: text("name"),
+  gender: genderEnum(),
+  primaryLanguage: text("primary_language"),
+  village: text("village"),
   district: text("district"),
-  age: integer("age").notNull(),
+  age: integer("age"),
   educationLevel: text("education_level"),
-  totalLandArea: decimal("total_land_area").notNull(),
-  experience: decimal("farming_experience").notNull(),
+  totalLandArea: decimal("total_land_area"),
+  experience: decimal("farming_experience"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")
     .$onUpdate(() => new Date())
     .notNull(),
+  completed: boolean("completed").default(false).notNull(),
 });
 
 export type FarmerSelect = typeof farmersTable.$inferSelect;

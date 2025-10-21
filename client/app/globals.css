@@ -163,3 +163,16 @@
     @apply bg-background text-foreground;
   }
 }
+
+.lk-control-bar {
+  background: var(--background) !important;
+}
+
+.lk-button {
+  background: var(--primary) !important;
+  color: var(--primary-foreground) !important;
+}
+
+.lk-button:hover {
+  background: var(--primary) / 0.8 !important;
+}

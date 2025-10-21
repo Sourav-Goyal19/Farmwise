@@ -1,10 +1,13 @@
 import "dotenv/config";
 import cors from "cors";
 import express from "express";
-import profileRouter from "./routers/profile.router";
+import userRouter from "./routers/user.router.js";
 import { clerkMiddleware } from "@clerk/express";
 import { WebhookReceiver } from "livekit-server-sdk";
+import profileRouter from "./routers/profile.router.js";
 import { verifyWebhook } from "@clerk/express/webhooks";
+import { db } from "./db/index.js";
+import { farmersTable } from "./db/schema.js";
 
 const PORT = process.env.PORT || 8000;
 const LIVEKIT_API_KEY = process.env.LIVEKIT_API_KEY!;
@@ -15,7 +18,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: "*",
+    origin: CLIENT_URL,
     methods: ["GET", "POST", "PATCH", "OPTIONS", "DELETE"],
     credentials: true,
     optionsSuccessStatus: 204,
@@ -38,6 +41,12 @@ app.post(
       console.log(evt.type);
       console.log(evt.data);
 
+      if (evt.type == "user.created") {
+        await db.insert(farmersTable).values({
+          id: evt.data.id,
+        });
+      }
+
       return res.send("Webhook received");
     } catch (err) {
       console.error("Error verifying webhook:", err);
@@ -47,6 +56,7 @@ app.post(
 );
 
 app.use("/api/profile", profileRouter);
+app.use("/api/user", userRouter);
 
 const webhookReciever = new WebhookReceiver(
   LIVEKIT_API_KEY,

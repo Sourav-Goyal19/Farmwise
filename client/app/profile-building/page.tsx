@@ -1,13 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import axiosIns from "@/lib/axios";
-import { UserType } from "@/types";
-import { AxiosResponse } from "axios";
-import { useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
 import { useUser } from "@clerk/nextjs";
-import { ProfileBuilding } from "./components/profile-building";
+import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import { useFetchUser } from "@/hooks/use-fetch-user";
+import { ProfileBuilding } from "./components/profile-building";
 import {
   Card,
   CardContent,
@@ -15,7 +14,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
 
 const LANGUAGES = [
   { id: "english", label: "English" },
@@ -27,38 +25,20 @@ const LANGUAGES = [
 ] as const;
 
 const ProfileBuildingPage = () => {
-  const [_, setUser] = useState<UserType | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [selectedLanguage, setSelectedLanguage] = useState<string>("");
-  const [languageSelected, setLanguageSelected] = useState(false);
-  const { user, isLoaded } = useUser();
   const router = useRouter();
+  const { user, isLoaded } = useUser();
+  const [languageSelected, setLanguageSelected] = useState(false);
+  const [selectedLanguage, setSelectedLanguage] = useState<string>("");
+  const { data, isLoading, isPending } = useFetchUser(user?.id, isLoaded);
 
   useEffect(() => {
-    const fetchUser = async () => {
-      if (!user?.id) {
-        router.push("/");
-        return;
-      }
+    if (!user?.id) {
+      router.push("/sign-in");
+      return;
+    }
 
-      try {
-        const res: AxiosResponse<{ message: string; user: UserType | null }> =
-          await axiosIns.get(`/api/user?userId=${user.id}`);
-
-        if (res.data?.user?.completed) {
-          router.push("/dashboard");
-        } else {
-          setUser(res.data.user);
-        }
-      } catch (error) {
-        console.error("Error fetching user:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (isLoaded) {
-      fetchUser();
+    if (data?.completed) {
+      router.push("/dashboard");
     }
   }, [user?.id, isLoaded, router]);
 
@@ -72,7 +52,7 @@ const ProfileBuildingPage = () => {
     }
   };
 
-  if (!isLoaded || loading) {
+  if (!isLoaded || isLoading || isPending) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-center">
@@ -135,7 +115,10 @@ const ProfileBuildingPage = () => {
         userId={user.id}
         primaryLanguage={selectedLanguage}
         onCallEnd={() => {
-          console.log("Call ended");
+          // console.log("Call ended");
+          setSelectedLanguage("");
+          setLanguageSelected(false);
+          router.push("/dashboard");
         }}
       />
     </div>

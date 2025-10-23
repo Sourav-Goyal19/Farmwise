@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Mic, MicOff, PhoneOff } from "lucide-react";
+import { ArrowLeft, Mic, MicOff } from "lucide-react";
 import { useLocalParticipant } from "@livekit/components-react";
+import { ModeToggle } from "@/components/ui/theme-button";
+import { useRouter } from "next/navigation";
 
-export const CustomControlBar: React.FC<{ onCallEnd: () => void }> = ({
-  onCallEnd,
-}) => {
-  const { localParticipant } = useLocalParticipant();
+export const CustomControlBar = ({}) => {
   const [isMuted, setIsMuted] = useState(false);
+  const router = useRouter();
+  const { localParticipant } = useLocalParticipant();
 
   const toggleMute = async () => {
     if (!localParticipant) return;
@@ -23,10 +24,6 @@ export const CustomControlBar: React.FC<{ onCallEnd: () => void }> = ({
     } catch (error) {
       console.error("Error toggling microphone:", error);
     }
-  };
-
-  const handleEndCall = () => {
-    onCallEnd();
   };
 
   return (
@@ -49,15 +46,17 @@ export const CustomControlBar: React.FC<{ onCallEnd: () => void }> = ({
           </>
         )}
       </Button>
-
+      <ModeToggle />
       <Button
-        onClick={handleEndCall}
-        variant="destructive"
+        onClick={() => {
+          router.back();
+        }}
+        variant="outline"
         size="lg"
         className="flex items-center gap-2"
       >
-        <PhoneOff className="h-5 w-5" />
-        <span>End Call</span>
+        <ArrowLeft className="h-5 w-5" />
+        <span>Back</span>
       </Button>
     </div>
   );

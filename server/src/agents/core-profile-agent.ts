@@ -1,5 +1,6 @@
 import z from "zod";
 import "dotenv/config";
+import { eq } from "drizzle-orm";
 import { db } from "../db/index.js";
 import { fileURLToPath } from "node:url";
 import { farmersTable } from "../db/schema.js";
@@ -7,10 +8,10 @@ import * as silero from "@livekit/agents-plugin-silero";
 import * as openai from "@livekit/agents-plugin-openai";
 import * as google from "@livekit/agents-plugin-google";
 import * as livekit from "@livekit/agents-plugin-livekit";
-// import * as resemble from "@livekit/agents-plugin-resemble";
-import * as elevenlabs from "@livekit/agents-plugin-elevenlabs";
 import * as neuphonic from "@livekit/agents-plugin-neuphonic";
+// import * as resemble from "@livekit/agents-plugin-resemble";
 // import * as cartesia from "@livekit/agents-plugin-cartesia";
+// import * as elevenlabs from "@livekit/agents-plugin-elevenlabs";
 import {
   voice,
   llm,
@@ -20,9 +21,8 @@ import {
   cli,
   WorkerOptions,
   metrics,
+  getJobContext,
 } from "@livekit/agents";
-import { eq } from "drizzle-orm";
-import redis from "../utils/redis.js";
 
 type FarmerData = Partial<{
   id: string;
@@ -45,6 +45,7 @@ function createUserData(
     id: "",
     name: "",
     gender: "",
+    age: 0,
     primaryLanguage: "",
     village: "",
     district: "",
@@ -151,6 +152,7 @@ function createCoreProfileAgent() {
     village: z.string().describe("Village where the farmer resides"),
     district: z
       .string()
+      .default("")
       .optional()
       .describe("District of the farmer (optional)"),
     age: z.number().int().describe("Age of the farmer in years"),
@@ -276,6 +278,8 @@ function createCoreProfileAgent() {
     If all fields are filled (Target Language: English, after checking with tool):
     Response: "Thank you! Your profile is complete. Now I can share farming tips and support tailored for you."
     Why this is good: Grateful tone, focuses on benefits, no technical references.
+
+    **Important Note** - In the end, data must be save into the database using one of your tools.s
     `,
     tools: {
       updateName: llm.tool({
@@ -402,7 +406,26 @@ function createCoreProfileAgent() {
             })
             .where(eq(farmersTable.id, input.id))
             .returning();
-          await redis.publish(ctx.userData.roomName, "profile-completed");
+
+          const room = getJobContext().room;
+          if (!room) {
+            console.warn("Could not access LiveKit room via JobContext.");
+            return "Inserted successfully, but no message sent to frontend.";
+          }
+
+          const message = {
+            event: "profile_completed",
+            data: farmer,
+            message:
+              "Farmer profile stored successfully. You may disconnect now.",
+          };
+
+          const encoded = new TextEncoder().encode(JSON.stringify(message));
+          room.localParticipant?.publishData(encoded, {
+            reliable: true,
+            topic: "core-profile-topic",
+          });
+
           return "A farmer profile has been inserted successfully";
         },
       }),
@@ -446,12 +469,7 @@ export default defineAgent({
       //   model: "moonshotai/kimi-k2-instruct-0905",
       //   apiKey: process.env.GROQ_API_KEY!,
       // }),
-      llm: openai.LLM.withDeepSeek({
-        // model: "openai/gpt-4.1",
-        model: "deepseek/deepseek-chat-v3-0324",
-        apiKey: process.env.OPENROUTER_API_KEY,
-        baseURL: process.env.OPENROUTER_BASE_URL,
-      }),
+      llm: getLLM("openai"),
       // tts: new cartesia.TTS({
       //   model: "sonic-2",
       //   voice: "faf0731e-dfb9-4cfc-8119-259a79b27e12",
@@ -496,6 +514,57 @@ export default defineAgent({
   },
 });
 
+function getSTT(language: string) {
+  language = language.toLowerCase();
+  switch (language) {
+    case "hindi":
+      return "deepgram/nova-2:hi";
+    case "english":
+      return "deepgram/nova-2:en";
+    default:
+      return "deepgram/nova-2:en";
+  }
+}
+
+function getLLM(model: string) {
+  model = model.toLowerCase();
+  switch (model) {
+    case "openai":
+      return openai.LLM.withDeepSeek({
+        model: "openai/gpt-4.1",
+        apiKey: process.env.OPENROUTER_API_KEY,
+        baseURL: process.env.OPENROUTER_BASE_URL,
+      });
+    case "deepseek":
+      return openai.LLM.withDeepSeek({
+        model: "deepseek/deepseek-chat-v3-0324",
+        apiKey: process.env.OPENROUTER_API_KEY,
+        baseURL: process.env.OPENROUTER_BASE_URL,
+      });
+    case "moonshot":
+      return openai.LLM.withGroq({
+        model: "moonshotai/kimi-k2-instruct-0905",
+        apiKey: process.env.GROQ_API_KEY!,
+      });
+    case "llama":
+      return openai.LLM.withDeepSeek({
+        model: "meta-llama/llama-3.3-70b-instruct",
+        apiKey: process.env.OPENROUTER_API_KEY,
+        baseURL: process.env.OPENROUTER_BASE_URL,
+      });
+    case "google":
+      return new google.LLM({
+        model: "gemini-2.0-flash",
+        apiKey: process.env.GOOGLE_API_KEY!,
+      });
+    default:
+      return new google.LLM({
+        model: "gemini-2.0-flash",
+        apiKey: process.env.GOOGLE_API_KEY!,
+      });
+  }
+}
+
 function getTTS(language: string) {
   language = language.toLowerCase();
   switch (language) {
@@ -511,18 +580,6 @@ function getTTS(language: string) {
       return new neuphonic.TTS({
         voiceId: "a2103bbb-ab1f-4b1a-b4b7-f2466ce14f11",
       });
-  }
-}
-
-function getSTT(language: string) {
-  language = language.toLowerCase();
-  switch (language) {
-    case "hindi":
-      return "deepgram/nova-2:hi";
-    case "english":
-      return "deepgram/nova-2:en";
-    default:
-      return "deepgram/nova-2:en";
   }
 }
 

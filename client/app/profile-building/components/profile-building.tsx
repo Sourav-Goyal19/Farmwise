@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { ConnectionDetails } from "@/types";
 import { SessionView } from "./session-view";
 import { Card, CardContent } from "@/components/ui/card";
+import { DataChannelHandler } from "./data-channel-handler";
 import { RoomAudioRenderer, RoomContext } from "@livekit/components-react";
 
 interface ProfileBuildingProps {
@@ -21,7 +22,6 @@ export const ProfileBuilding: React.FC<ProfileBuildingProps> = ({
   primaryLanguage,
   onCallEnd = () => {},
 }) => {
-  const roomName = `profile-building-${userId}`;
   const [token, setToken] = useState("");
   const [sessionStarted, setSessionStarted] = useState(false);
   const [roomInstance] = useState(
@@ -39,6 +39,7 @@ export const ProfileBuilding: React.FC<ProfileBuildingProps> = ({
 
   useEffect(() => {
     let mounted = true;
+    const roomName = `profile-building-${userId}_${Date.now()}`;
 
     (async () => {
       try {
@@ -70,7 +71,7 @@ export const ProfileBuilding: React.FC<ProfileBuildingProps> = ({
         roomInstance.disconnect();
       }
     };
-  }, [roomInstance, userId, primaryLanguage, roomName]);
+  }, [roomInstance, userId, primaryLanguage]);
 
   if (token === "") {
     return (
@@ -104,10 +105,11 @@ export const ProfileBuilding: React.FC<ProfileBuildingProps> = ({
       >
         <RoomAudioRenderer />
         <StartAudio label="Enable Audio" />
-        <SessionView
-          sessionStarted={sessionStarted}
-          onCallEnd={handleCallEnd}
+        <DataChannelHandler
+          roomInstance={roomInstance}
+          handleEndCall={handleCallEnd}
         />
+        <SessionView sessionStarted={sessionStarted} />
       </div>
     </RoomContext.Provider>
   );

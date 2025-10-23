@@ -37,10 +37,12 @@ const ProfileBuildingPage = () => {
       return;
     }
 
+    if (!data) return;
+
     if (data?.completed) {
-      router.push("/dashboard");
+      router.push(`/dashboard/${user.id}`);
     }
-  }, [user?.id, isLoaded, router]);
+  }, [user?.id, isLoaded, router, data]);
 
   const handleLanguageSelect = (languageId: string) => {
     setSelectedLanguage(languageId);
@@ -118,7 +120,7 @@ const ProfileBuildingPage = () => {
           // console.log("Call ended");
           setSelectedLanguage("");
           setLanguageSelected(false);
-          router.push("/dashboard");
+          router.push(`/dashboard/${user.id}`);
         }}
       />
     </div>

@@ -1,5 +1,6 @@
 import "./globals.css";
 import type { Metadata } from "next";
+import { shadcn } from "@clerk/themes";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "@/components/ui/sonner";
 import { QueryProvider } from "@/providers/query-provider";
@@ -16,7 +17,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
+    <ClerkProvider
+      appearance={{
+        theme: shadcn,
+      }}
+    >
       <html lang="en">
         <body>
           <QueryProvider>

@@ -6,6 +6,7 @@ import { eq } from "drizzle-orm";
 const router = express.Router();
 
 router.get("/", async (req, res) => {
+  console.log("Got request to /api/user?userId= ");
   try {
     const { userId }: { userId?: string } = req.query;
     if (!userId) {

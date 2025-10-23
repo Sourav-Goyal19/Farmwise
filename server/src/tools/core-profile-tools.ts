@@ -39,7 +39,6 @@ const insertFarmerSchema = z.object({
 
 type InsertFarmerSchemaType = z.infer<typeof insertFarmerSchema>;
 
-//@ts-ignore
 const insertFarmerProfileTool = tool(
   async (input: InsertFarmerSchemaType) => {
     try {

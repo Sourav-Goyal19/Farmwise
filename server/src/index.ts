@@ -1,13 +1,13 @@
 import "dotenv/config";
 import cors from "cors";
 import express from "express";
-import userRouter from "./routers/user.router.js";
+import { db } from "./db/index.js";
+import { farmersTable } from "./db/schema.js";
 import { clerkMiddleware } from "@clerk/express";
+import userRouter from "./routers/user.router.js";
 import { WebhookReceiver } from "livekit-server-sdk";
 import profileRouter from "./routers/profile.router.js";
 import { verifyWebhook } from "@clerk/express/webhooks";
-import { db } from "./db/index.js";
-import { farmersTable } from "./db/schema.js";
 
 const PORT = process.env.PORT || 8000;
 const LIVEKIT_API_KEY = process.env.LIVEKIT_API_KEY!;

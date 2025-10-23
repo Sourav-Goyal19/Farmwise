@@ -4,8 +4,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
 export const SessionView: React.FC<{
   sessionStarted: boolean;
-  onCallEnd: () => void;
-}> = ({ sessionStarted, onCallEnd }) => {
+}> = ({ sessionStarted }) => {
   if (!sessionStarted) {
     return (
       <Card className="w-full max-w-md">
@@ -33,7 +32,7 @@ export const SessionView: React.FC<{
         </p>
       </div>
       <VoiceVisualizer />
-      <CustomControlBar onCallEnd={onCallEnd} />
+      <CustomControlBar />
     </div>
   );
 };

@@ -32,7 +32,7 @@ export default function FarmerDashboard() {
   }, [data, user?.id]);
 
   return (
-    <div className="flex h-screen bg-background">
+    <div className="flex bg-background">
       <div className="flex-1 overflow-auto">
         <main className="p-8">
           <div className="bg-gradient-to-br from-card to-muted rounded-3xl p-8 mb-8 flex items-center justify-between">

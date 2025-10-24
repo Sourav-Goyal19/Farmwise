@@ -504,6 +504,35 @@ export default defineAgent({
 
     ctx.addShutdownCallback(logUsage);
 
+    session.on(voice.AgentSessionEventTypes.AgentStateChanged, (ev) => {
+      const room = ctx.room;
+      if (ev.newState == "speaking") {
+        const message = {
+          event: "agent_started_speaking",
+          msg: "Agent is speaking now",
+        };
+        const encoded = new TextEncoder().encode(JSON.stringify(message));
+        room.localParticipant?.publishData(encoded, {
+          reliable: true,
+          topic: "core-profile-topic",
+        });
+      } else if (
+        ev.newState == "listening" ||
+        ev.newState == "idle" ||
+        ev.newState == "thinking"
+      ) {
+        const message = {
+          event: "agent_stopped_speaking",
+          msg: "Agent is not speaking now.",
+        };
+        const encoded = new TextEncoder().encode(JSON.stringify(message));
+        room.localParticipant?.publishData(encoded, {
+          reliable: true,
+          topic: "core-profile-topic",
+        });
+      }
+    });
+
     await session.start({
       agent: userData.agents.coreProfile!,
       room: ctx.room,

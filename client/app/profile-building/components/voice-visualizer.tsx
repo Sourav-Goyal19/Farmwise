@@ -52,17 +52,6 @@ export const VoiceVisualizer: React.FC<{ isAgentSpeaking: boolean }> = ({
 
   return (
     <div className="flex flex-col items-center justify-center gap-8 w-full">
-      <div className="text-center space-y-2">
-        <h3 className="text-lg font-semibold">
-          {isAgentSpeaking ? "Agent Speaking" : "Agent Listening"}
-        </h3>
-        <p className="text-sm text-muted-foreground">
-          {isAgentSpeaking
-            ? "Processing your request..."
-            : "Waiting for your input"}
-        </p>
-      </div>
-
       <div className="relative w-full max-w-md h-80 flex items-center justify-center">
         <div className="absolute inset-0 flex items-center justify-center">
           {[0, 1, 2].map((i) => (

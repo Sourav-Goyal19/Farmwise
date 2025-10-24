@@ -1,8 +1,7 @@
 "use client";
-
 import axiosIns from "@/lib/axios";
 import { AxiosResponse } from "axios";
-import { Room } from "livekit-client";
+import { Room, RoomEvent } from "livekit-client";
 import { StartAudio } from "./start-audio";
 import { useEffect, useState } from "react";
 import { ConnectionDetails } from "@/types";
@@ -24,6 +23,7 @@ export const ProfileBuilding: React.FC<ProfileBuildingProps> = ({
 }) => {
   const [token, setToken] = useState("");
   const [sessionStarted, setSessionStarted] = useState(false);
+  const [isAgentSpeaking, setIsAgentSpeaking] = useState(false);
   const [roomInstance] = useState(
     () =>
       new Room({
@@ -108,8 +108,12 @@ export const ProfileBuilding: React.FC<ProfileBuildingProps> = ({
         <DataChannelHandler
           roomInstance={roomInstance}
           handleEndCall={handleCallEnd}
+          onAgentSpeakingChange={setIsAgentSpeaking}
         />
-        <SessionView sessionStarted={sessionStarted} />
+        <SessionView
+          sessionStarted={sessionStarted}
+          isAgentSpeaking={isAgentSpeaking}
+        />
       </div>
     </RoomContext.Provider>
   );

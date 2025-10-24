@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/tooltip";
 import Link from "next/link";
 import { ModeToggle } from "@/components/ui/theme-button";
-import { useAuth } from "@clerk/nextjs";
+import { useAuth, useUser } from "@clerk/nextjs";
 import { cn } from "@/lib/utils";
 import { usePathname, useRouter } from "next/navigation";
 
@@ -35,8 +35,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 }) => {
   const [activeTab, setActiveTab] = React.useState("");
   const { signOut } = useAuth();
-  const router = useRouter();
-  const pathname = usePathname();
+  const { user } = useUser();
 
   const navItems = [
     { id: "", icon: Home, label: "Home" },
@@ -74,19 +73,20 @@ export const Sidebar: React.FC<SidebarProps> = ({
         {navItems.map((item) => (
           <Tooltip key={item.id}>
             <TooltipTrigger asChild>
-              <Button
-                onClick={() => {
-                  router.push(`/${pathname}/${item.id}`);
-                  handleItemClick(item.id);
-                }}
-                variant={activeTab === item.id ? "default" : "ghost"}
-                className={cn(
-                  "w-12 h-12 rounded-xl",
-                  activeTab === item.id ? "shadow-lg" : ""
-                )}
-              >
-                <item.icon size={20} />
-              </Button>
+              <Link href={`/dashboard/${user?.id}/${item.id}`}>
+                <Button
+                  onClick={() => {
+                    handleItemClick(item.id);
+                  }}
+                  variant={activeTab === item.id ? "default" : "ghost"}
+                  className={cn(
+                    "w-12 h-12 rounded-xl",
+                    activeTab === item.id ? "shadow-lg" : ""
+                  )}
+                >
+                  <item.icon size={20} />
+                </Button>
+              </Link>
             </TooltipTrigger>
             <TooltipContent side="right">
               <p>{item.label}</p>

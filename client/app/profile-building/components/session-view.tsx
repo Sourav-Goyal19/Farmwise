@@ -4,7 +4,8 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
 export const SessionView: React.FC<{
   sessionStarted: boolean;
-}> = ({ sessionStarted }) => {
+  isAgentSpeaking: boolean;
+}> = ({ sessionStarted, isAgentSpeaking }) => {
   if (!sessionStarted) {
     return (
       <Card className="w-full max-w-md">
@@ -31,7 +32,7 @@ export const SessionView: React.FC<{
           Your profile building session is in progress
         </p>
       </div>
-      <VoiceVisualizer />
+      <VoiceVisualizer isAgentSpeaking={isAgentSpeaking} />
       <CustomControlBar />
     </div>
   );

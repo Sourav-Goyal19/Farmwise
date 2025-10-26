@@ -2,6 +2,7 @@ import { Sprout, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -26,9 +27,13 @@ export const Header = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           <div className="flex items-center space-x-3">
-            <div className="w-12 h-12 bg-primary rounded-xl flex items-center justify-center shadow-lg">
-              <Sprout className="w-7 h-7 text-primary-foreground" />
-            </div>
+            <Image
+              src="/logo.png"
+              alt="logo"
+              height={200}
+              width={200}
+              className="h-10 w-10"
+            />
             <span className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
               Farmwise
             </span>

@@ -2,6 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import { useState } from "react";
+import { Fetch } from "./components/fetch";
 import { Sidebar } from "./components/sidebar";
 import { DashboardHeader } from "./components/dashboard-header";
 
@@ -34,6 +35,8 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
         <DashboardHeader onMenuClick={() => setMobileMenuOpen(true)} />
         <main>{children}</main>
       </div>
+
+      <Fetch />
     </div>
   );
 };

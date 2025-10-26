@@ -8,12 +8,12 @@ import {
   Building2,
   ChevronRight,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useFetchUser } from "@/hooks/use-fetch-user";
-import { useUser } from "@clerk/nextjs";
 import { useEffect } from "react";
+import { useUser } from "@clerk/nextjs";
 import { useUserStore } from "@/zustand/store";
+import { Button } from "@/components/ui/button";
+import { useFetchUser } from "@/hooks/user-api-hook";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function FarmerDashboard() {
   const { user, isLoaded } = useUser();
@@ -86,7 +86,6 @@ export default function FarmerDashboard() {
           </div>
 
           <div className="grid grid-cols-2 gap-6">
-            {/* Recent Activity */}
             <Card>
               <CardHeader>
                 <div className="flex items-center justify-between">
@@ -118,7 +117,6 @@ export default function FarmerDashboard() {
               </CardContent>
             </Card>
 
-            {/* Quick Links */}
             <Card>
               <CardHeader>
                 <CardTitle>Quick Actions</CardTitle>

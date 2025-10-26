@@ -20,3 +20,44 @@ export type ConnectionDetails = {
   participantIdentity: string;
   participantToken: string;
 };
+
+export type ContactType = {
+  id: string;
+  farmerId: string;
+  phoneNumber: string;
+  aadhaarNumber?: string | null;
+  email?: string | null;
+  verified: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type PlotType = {
+  id: string;
+  farmerId: string;
+  plotName?: string;
+  area: string;
+  soilType?: "clay" | "loamy" | "sandy" | "laterite" | "black";
+  irrigationType?: "drip" | "canal" | "rain-fed" | "sprinkler";
+  waterSource?: string;
+  latitude?: string;
+  longitude?: string;
+  isOwned: boolean;
+  ownershipProofUrl?: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type PlotCropType = {
+  id: string;
+  plotId: string;
+  cropName: string;
+  variety?: string;
+  season?: string;
+  sowingDate?: string;
+  expectedHarvestDate?: string;
+  currentStage?: string;
+  estimatedYieldKg?: string;
+  createdAt: Date;
+  updatedAt: Date;
+};

@@ -8,6 +8,9 @@ import userRouter from "./routers/user.router.js";
 import { WebhookReceiver } from "livekit-server-sdk";
 import profileRouter from "./routers/profile.router.js";
 import { verifyWebhook } from "@clerk/express/webhooks";
+import cropsRouter from "./routers/plot-crops.router.js";
+import plotsRouter from "./routers/farmer-plots.router.js";
+import contactsRouter from "./routers/farmer-contact.router.js";
 
 const PORT = process.env.PORT || 8000;
 const LIVEKIT_API_KEY = process.env.LIVEKIT_API_KEY!;
@@ -19,7 +22,7 @@ const app = express();
 app.use(
   cors({
     origin: CLIENT_URL,
-    methods: ["GET", "POST", "PATCH", "OPTIONS", "DELETE"],
+    methods: ["GET", "POST", "PATCH", "OPTIONS", "DELETE", "PUT"],
     credentials: true,
     optionsSuccessStatus: 204,
   })
@@ -55,8 +58,11 @@ app.post(
   }
 );
 
-app.use("/api/profile", profileRouter);
 app.use("/api/user", userRouter);
+app.use("/api/plots", plotsRouter);
+app.use("/api/crops", cropsRouter);
+app.use("/api/profile", profileRouter);
+app.use("/api/contacts", contactsRouter);
 
 const webhookReciever = new WebhookReceiver(
   LIVEKIT_API_KEY,

@@ -5,7 +5,7 @@ import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { useFetchUser } from "@/hooks/use-fetch-user";
+import { useFetchUser } from "@/hooks/user-api-hook";
 import { ProfileBuilding } from "./components/profile-building";
 import {
   Card,

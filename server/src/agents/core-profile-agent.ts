@@ -11,7 +11,7 @@ import * as livekit from "@livekit/agents-plugin-livekit";
 import * as neuphonic from "@livekit/agents-plugin-neuphonic";
 // import * as resemble from "@livekit/agents-plugin-resemble";
 // import * as cartesia from "@livekit/agents-plugin-cartesia";
-// import * as elevenlabs from "@livekit/agents-plugin-elevenlabs";
+import * as elevenlabs from "@livekit/agents-plugin-elevenlabs";
 import {
   voice,
   llm,
@@ -445,15 +445,15 @@ export default defineAgent({
       //   voiceId: "a2103bbb-ab1f-4b1a-b4b7-f2466ce14f11",
       //   apiKey: process.env.NEUPHONIC_API_KEY,
       // }),
-      // tts: new elevenlabs.TTS({
-      //   voice: {
-      //     id: "Z3R5wn05IrDiVCyEkUrK",
-      //     name: "arabella",
-      //     category: "conversational",
-      //   },
-      //   modelID: "eleven_multilingual_v2",
-      // }),
-      tts: getTTS(primaryLanguage),
+      tts: new elevenlabs.TTS({
+        voice: {
+          id: "Z3R5wn05IrDiVCyEkUrK",
+          name: "arabella",
+          category: "conversational",
+        },
+        modelID: "eleven_multilingual_v2",
+      }),
+      // tts: getTTS(primaryLanguage),
       vad: ctx.proc.userData.vad! as silero.VAD,
       turnDetection: new livekit.turnDetector.MultilingualModel(),
     });

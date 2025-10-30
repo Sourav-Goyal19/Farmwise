@@ -1,4 +1,4 @@
-import axiosIns from "@/lib/axios";
+import { axiosIns } from "@/lib/axios";
 import { ContactType } from "@/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -17,17 +17,17 @@ export type UpdateContactData = Partial<
 const getContactsByFarmer = async (
   farmerId: string
 ): Promise<ContactType[]> => {
-  const res = await axiosIns.get(`/api/contacts/farmer/${farmerId}`);
+  const res = await axiosIns.get(`/api/farmers/contacts/farmer/${farmerId}`);
   return res.data?.contacts ?? [];
 };
 
 const getContact = async (contactId: string): Promise<ContactType | null> => {
-  const res = await axiosIns.get(`/api/contacts/${contactId}`);
+  const res = await axiosIns.get(`/api/farmers/contacts/${contactId}`);
   return res.data?.contact ?? null;
 };
 
 const createContact = async (data: CreateContactData): Promise<ContactType> => {
-  const res = await axiosIns.post("/api/contacts", data);
+  const res = await axiosIns.post("/api/farmers/contacts", data);
   return res.data.contact;
 };
 
@@ -35,16 +35,16 @@ const updateContact = async (
   contactId: string,
   data: UpdateContactData
 ): Promise<ContactType> => {
-  const res = await axiosIns.put(`/api/contacts/${contactId}`, data);
+  const res = await axiosIns.put(`/api/farmers/contacts/${contactId}`, data);
   return res.data.contact;
 };
 
 const deleteContact = async (contactId: string): Promise<void> => {
-  await axiosIns.delete(`/api/contacts/${contactId}`);
+  await axiosIns.delete(`/api/farmers/contacts/${contactId}`);
 };
 
 const verifyContact = async (contactId: string): Promise<ContactType> => {
-  const res = await axiosIns.patch(`/api/contacts/${contactId}/verify`);
+  const res = await axiosIns.patch(`/api/farmers/contacts/${contactId}/verify`);
   return res.data.contact;
 };
 

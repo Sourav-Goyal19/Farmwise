@@ -1,4 +1,4 @@
-import axiosIns from "@/lib/axios";
+import { axiosIns } from "@/lib/axios";
 import { PlotCropType, PlotType } from "@/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -18,12 +18,12 @@ export type UpdatePlotCropData = Partial<
 >;
 
 const getCropsByPlot = async (plotId: string): Promise<PlotCropType[]> => {
-  const res = await axiosIns.get(`/api/crops/plot/${plotId}`);
+  const res = await axiosIns.get(`/api/farmers/crops/plot/${plotId}`);
   return res.data?.crops ?? [];
 };
 
 const getCrop = async (cropId: string): Promise<PlotCropType | null> => {
-  const res = await axiosIns.get(`/api/crops/${cropId}`);
+  const res = await axiosIns.get(`/api/farmers/crops/${cropId}`);
   return res.data?.crop ?? null;
 };
 
@@ -35,12 +35,12 @@ const getCropsByFarmer = async (
     plot: PlotType;
   }>
 > => {
-  const res = await axiosIns.get(`/api/crops/farmer/${farmerId}`);
+  const res = await axiosIns.get(`/api/farmers/crops/farmer/${farmerId}`);
   return res.data?.crops ?? [];
 };
 
 const createCrop = async (data: CreatePlotCropData): Promise<PlotCropType> => {
-  const res = await axiosIns.post("/api/crops", data);
+  const res = await axiosIns.post("/api/farmers/crops", data);
   return res.data.crop;
 };
 
@@ -48,12 +48,12 @@ const updateCrop = async (
   cropId: string,
   data: UpdatePlotCropData
 ): Promise<PlotCropType> => {
-  const res = await axiosIns.put(`/api/crops/${cropId}`, data);
+  const res = await axiosIns.put(`/api/farmers/crops/${cropId}`, data);
   return res.data.crop;
 };
 
 const deleteCrop = async (cropId: string): Promise<void> => {
-  await axiosIns.delete(`/api/crops/${cropId}`);
+  await axiosIns.delete(`/api/farmers/crops/${cropId}`);
 };
 
 export const useFetchCropsByPlot = (

@@ -206,8 +206,8 @@ export const activityLogsTable = pgTable("activity_logs", {
   said: text("farmer_said").notNull(),
   photoUrl: text("photo_url"),
   notes: text("notes"),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
   suggestions: text("suggestions").array(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")
     .defaultNow()
     .$onUpdate(() => new Date())

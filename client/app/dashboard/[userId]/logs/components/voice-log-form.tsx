@@ -32,8 +32,8 @@ export const VoiceLogForm: React.FC<VoiceLogFormProps> = ({
         await axiosIns.post("/api/logs/create/token", {
           roomName,
           userId: user?.id,
-          // cropId: "5d26aad9-293b-4361-9296-7e01aec29e47",
-          primaryLanguage: "hindi",
+          cropId: "5d26aad9-293b-4361-9296-7e01aec29e47",
+          // primaryLanguage: "hindi",
         });
 
       const { livekitServerUrl, participantToken } = res.data.data;

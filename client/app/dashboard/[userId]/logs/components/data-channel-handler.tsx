@@ -1,5 +1,5 @@
-import { useDataChannel } from "@livekit/components-react";
 import { toast } from "sonner";
+import { useDataChannel } from "@livekit/components-react";
 
 interface DataChannelLogHandlerProps {
   setAgentSpeaking: React.Dispatch<React.SetStateAction<boolean>>;
@@ -15,10 +15,10 @@ export const DataChannelLogHandler: React.FC<DataChannelLogHandlerProps> = ({
       const parsed = JSON.parse(decoded);
 
       if (parsed.event == "agent_started_speaking") {
-        toast.message("Agent is speaking");
+        // toast.message("Agent is speaking");
         setAgentSpeaking(true);
       } else if (parsed.event == "agent_stopped_speaking") {
-        toast.message("Agent is not speaking");
+        // toast.message("Agent is not speaking");
         setAgentSpeaking(false);
       }
     }

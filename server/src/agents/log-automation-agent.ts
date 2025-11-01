@@ -1,12 +1,18 @@
 import z from "zod";
 import "dotenv/config";
+import { fileURLToPath } from "url";
 import { db } from "../db/index.js";
+import { and, desc, eq } from "drizzle-orm";
 import * as openai from "@livekit/agents-plugin-openai";
 import * as google from "@livekit/agents-plugin-google";
 import * as silero from "@livekit/agents-plugin-silero";
 import * as livekit from "@livekit/agents-plugin-livekit";
 import * as deepgram from "@livekit/agents-plugin-deepgram";
-import * as neuphonic from "@livekit/agents-plugin-neuphonic";
+import * as resemble from "@livekit/agents-plugin-resemble";
+import { voiceToLogAutomationAgentPrompt } from "../prompts/log-automation-agent-prompts.js";
+// import * as cartesia from "@livekit/agents-plugin-cartesia";
+// import * as neuphonic from "@livekit/agents-plugin-neuphonic";
+// import * as elevenlabs from "@livekit/agents-plugin-elevenlabs";
 import {
   cli,
   defineAgent,
@@ -22,9 +28,6 @@ import {
   FarmerSelect,
   SelectActivityLogType,
 } from "../db/schema.js";
-import { voiceToLogAutomationAgentPrompt } from "../prompts/log-automation-agent-prompts.js";
-import { and, desc, eq } from "drizzle-orm";
-import { fileURLToPath } from "url";
 
 type FarmerProfileData = Partial<FarmerSelect>;
 
@@ -328,7 +331,7 @@ export default defineAgent({
     const session = new voice.AgentSession<RoomData>({
       userData,
       stt: getSTT(farmerDetails.primaryLanguage!),
-      llm: getLLM("moonshot"),
+      llm: getLLM("openai"),
       tts: getTTS(farmerDetails.primaryLanguage!),
       vad: ctx.proc.userData.vad! as silero.VAD,
       turnDetection: new livekit.turnDetector.MultilingualModel(),
@@ -418,30 +421,6 @@ function getSTT(language: string) {
   }
 }
 
-function getTTS(language: string) {
-  language = language.toLowerCase();
-
-  console.log(`Creating TTS for language: ${language}`);
-
-  switch (language) {
-    case "hindi":
-      return new neuphonic.TTS({
-        voiceId: "a2103bbb-ab1f-4b1a-b4b7-f2466ce14f11",
-        apiKey: process.env.NEUPHONIC_API_KEY!,
-      });
-    case "english":
-      return new neuphonic.TTS({
-        voiceId: "06fde793-8929-45f6-8a87-643196d376e4",
-        apiKey: process.env.NEUPHONIC_API_KEY!,
-      });
-    default:
-      return new neuphonic.TTS({
-        voiceId: "a2103bbb-ab1f-4b1a-b4b7-f2466ce14f11",
-        apiKey: process.env.NEUPHONIC_API_KEY!,
-      });
-  }
-}
-
 function getLLM(model: string) {
   model = model.toLowerCase();
   switch (model) {
@@ -481,23 +460,36 @@ function getLLM(model: string) {
   }
 }
 
-// function getTTS(language: string) {
-//   language = language.toLowerCase();
-//   switch (language) {
-//     case "hindi":
-//       return new neuphonic.TTS({
-//         voiceId: "a2103bbb-ab1f-4b1a-b4b7-f2466ce14f11",
-//       });
-//     case "english":
-//       return new neuphonic.TTS({
-//         voiceId: "06fde793-8929-45f6-8a87-643196d376e4",
-//       });
-//     default:
-//       return new neuphonic.TTS({
-//         voiceId: "a2103bbb-ab1f-4b1a-b4b7-f2466ce14f11",
-//       });
-//   }
-// }
+function getTTS(language: string) {
+  language = language.toLowerCase();
+
+  switch (language) {
+    case "hindi":
+      // return new neuphonic.TTS({
+      //   voiceId: "a2103bbb-ab1f-4b1a-b4b7-f2466ce14f11",
+      //   apiKey: process.env.NEUPHONIC_API_KEY!,
+      // });
+      return new resemble.TTS({
+        voiceUuid: "af3b3fad",
+      });
+    case "english":
+      // return new neuphonic.TTS({
+      //   voiceId: "06fde793-8929-45f6-8a87-643196d376e4",
+      //   apiKey: process.env.NEUPHONIC_API_KEY!,
+      // });
+      return new resemble.TTS({
+        voiceUuid: "fb2d2858",
+      });
+    default:
+      // return new neuphonic.TTS({
+      //   voiceId: "a2103bbb-ab1f-4b1a-b4b7-f2466ce14f11",
+      //   apiKey: process.env.NEUPHONIC_API_KEY!,
+      // });
+      return new resemble.TTS({
+        voiceUuid: "af3b3fad",
+      });
+  }
+}
 
 cli.runApp(
   new WorkerOptions({

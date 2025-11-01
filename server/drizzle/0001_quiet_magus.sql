@@ -1,0 +1,1 @@
+ALTER TABLE "activity_logs" ADD COLUMN "date" timestamp DEFAULT '2025-11-01 09:31:54.047';

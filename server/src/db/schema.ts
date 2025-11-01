@@ -132,10 +132,11 @@ export const plotCropsTable = pgTable("plot_crops", {
   expectedHarvestDate: date("expected_harvest_date"),
   currentStage: text("current_stage"),
   estimatedYieldKg: numeric("estimated_yield_kg", { precision: 10, scale: 2 }),
-  createdAt: timestamp("created_at").defaultNow(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")
     .defaultNow()
-    .$onUpdate(() => new Date()),
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 export const insertPlotCropsSchema = createInsertSchema(plotCropsTable);

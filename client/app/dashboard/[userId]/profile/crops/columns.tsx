@@ -1,6 +1,7 @@
 "use client";
 
 import Actions from "./actions";
+import { format } from "date-fns";
 import { ArrowUpDown } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -82,7 +83,7 @@ export const columns: ColumnDef<CropTableType>[] = [
     header: "Sowing Date",
     cell: ({ row }) => {
       const date = row.getValue("sowingDate") as string;
-      return <div>{date ? new Date(date).toLocaleDateString() : "-"}</div>;
+      return <div>{date ? format(date, "d MMM, yyyy") : "-"}</div>;
     },
   },
   {
@@ -90,7 +91,7 @@ export const columns: ColumnDef<CropTableType>[] = [
     header: "Expected Harvest",
     cell: ({ row }) => {
       const date = row.getValue("expectedHarvestDate") as string;
-      return <div>{date ? new Date(date).toLocaleDateString() : "-"}</div>;
+      return <div>{date ? format(date, "d MMM, yyyy") : "-"}</div>;
     },
   },
   {

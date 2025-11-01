@@ -6,7 +6,7 @@ export type UserType = {
   village: string;
   district: string | null;
   age: number;
-  educationLevel: string | null;
+  educationLevel?: string;
   totalLandArea: string;
   experience: string;
   createdAt: Date;
@@ -25,8 +25,8 @@ export type ContactType = {
   id: string;
   farmerId: string;
   phoneNumber: string;
-  aadhaarNumber?: string | null;
-  email?: string | null;
+  aadhaarNumber?: string;
+  email?: string;
   verified: boolean;
   createdAt: string;
   updatedAt: string;
@@ -60,4 +60,58 @@ export type PlotCropType = {
   estimatedYieldKg?: string;
   createdAt: Date;
   updatedAt: Date;
+};
+
+export type SelectActivityLogType = {
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+  farmerId: string;
+  cropId: string;
+  activityType:
+    | "irrigation"
+    | "pesticide"
+    | "fertilizer"
+    | "sowing"
+    | "plowing"
+    | "weeding"
+    | "harvest"
+    | "transport"
+    | "sales"
+    | "inspection"
+    | "maintenance"
+    | "other";
+  details: string[];
+  summary: string;
+  said: string;
+  photoUrl?: string;
+  notes?: string;
+  suggestions?: string[];
+};
+
+export type InsertActivityLogType = {
+  cropId: string;
+  farmerId: string;
+  activityType:
+    | "irrigation"
+    | "pesticide"
+    | "fertilizer"
+    | "sowing"
+    | "plowing"
+    | "weeding"
+    | "harvest"
+    | "transport"
+    | "sales"
+    | "inspection"
+    | "maintenance"
+    | "other";
+  details: string[];
+  summary: string;
+  said: string;
+  id?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+  photoUrl?: string;
+  notes?: string;
+  suggestions?: string[];
 };

@@ -45,7 +45,7 @@ function createUserData(
     id: "",
     name: "",
     gender: "",
-    age: 0,
+    age: 18,
     primaryLanguage: "",
     village: "",
     district: "",
@@ -74,8 +74,8 @@ function summarize({
     gender: gender || "unknown",
     primaryLanguage: primaryLanguage || "unknown",
     village: village || "unknown",
-    district: district || "unknown (optional)",
-    educationLevel: educationLevel || "unknown",
+    district: district || "unknown",
+    educationLevel: educationLevel || "unknown (optional)",
     totalLandArea: totalLandArea || "unknown",
     experience: experience || "unknown",
   });
@@ -571,7 +571,7 @@ function getTTS(language: string) {
       //   apiKey: process.env.NEUPHONIC_API_KEY!,
       // });
       return new resemble.TTS({
-        voiceUuid: "af3b3fad",
+        voiceUuid: "daa6b448",
       });
     case "english":
       // return new neuphonic.TTS({

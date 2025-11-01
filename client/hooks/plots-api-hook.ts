@@ -1,4 +1,4 @@
-import axiosIns from "@/lib/axios";
+import { axiosIns } from "@/lib/axios";
 import { PlotType } from "@/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -20,22 +20,24 @@ export type UpdatePlotData = Partial<
 >;
 
 const getPlotsByFarmer = async (farmerId: string): Promise<PlotType[]> => {
-  const res = await axiosIns.get(`/api/plots/farmer/${farmerId}`);
+  const res = await axiosIns.get(`/api/farmers/plots/farmer/${farmerId}`);
   return res.data?.plots ?? [];
 };
 
 const getPlot = async (plotId: string): Promise<PlotType | null> => {
-  const res = await axiosIns.get(`/api/plots/${plotId}`);
+  const res = await axiosIns.get(`/api/farmers/plots/${plotId}`);
   return res.data?.plot ?? null;
 };
 
 const getPlotsWithCrops = async (farmerId: string): Promise<PlotType[]> => {
-  const res = await axiosIns.get(`/api/plots/farmer/${farmerId}/with-crops`);
+  const res = await axiosIns.get(
+    `/api/farmers/plots/farmer/${farmerId}/with-crops`
+  );
   return res.data?.plots ?? [];
 };
 
 const createPlot = async (data: CreatePlotData): Promise<PlotType> => {
-  const res = await axiosIns.post("/api/plots", data);
+  const res = await axiosIns.post("/api/farmers/plots", data);
   return res.data.plot;
 };
 
@@ -43,12 +45,12 @@ const updatePlot = async (
   plotId: string,
   data: UpdatePlotData
 ): Promise<PlotType> => {
-  const res = await axiosIns.put(`/api/plots/${plotId}`, data);
+  const res = await axiosIns.put(`/api/farmers/plots/${plotId}`, data);
   return res.data.plot;
 };
 
 const deletePlot = async (plotId: string): Promise<void> => {
-  await axiosIns.delete(`/api/plots/${plotId}`);
+  await axiosIns.delete(`/api/farmers/plots/${plotId}`);
 };
 
 export const useFetchPlotsByFarmer = (

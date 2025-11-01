@@ -10,7 +10,8 @@
     "db:migrate": "tsx ./src/scripts/migrate.ts",
     "db:studio": "drizzle-kit studio",
     "download-files": "bun run build && node dist/src/agents/core-profile-agent.js download-files",
-    "dev-agent": "tsx ./src/agents/core-profile-agent.ts dev"
+    "dev-agent": "tsx ./src/agents/core-profile-agent.ts dev",
+    "dev-agent2": "tsx ./src/agents/log-automation-agent.ts dev"
   },
   "dependencies": {
     "@clerk/express": "^1.7.38",

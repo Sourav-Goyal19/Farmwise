@@ -1,5 +1,5 @@
 import { v4 as uuidV4 } from "uuid";
-import { getModel } from "../utils/llms.js";
+import { getModel } from "../libs/llms.js";
 import { OutputFixingParser } from "langchain/output_parsers";
 import { JsonOutputParser } from "@langchain/core/output_parsers";
 import { insertFarmerProfileTool } from "../tools/core-profile-tools.js";

@@ -1,5 +1,5 @@
 import { CustomControlBar } from "./control-bar";
-import { VoiceVisualizer } from "./voice-visualizer";
+import { VoiceVisualizer } from "@/components/voice-visualizer";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
 export const SessionView: React.FC<{

@@ -1,11 +1,11 @@
 "use client";
-import axiosIns from "@/lib/axios";
+import { axiosIns } from "@/lib/axios";
+import { Room } from "livekit-client";
 import { AxiosResponse } from "axios";
-import { Room, RoomEvent } from "livekit-client";
-import { StartAudio } from "./start-audio";
 import { useEffect, useState } from "react";
 import { ConnectionDetails } from "@/types";
 import { SessionView } from "./session-view";
+import { StartAudio } from "@/components/start-audio";
 import { Card, CardContent } from "@/components/ui/card";
 import { DataChannelHandler } from "./data-channel-handler";
 import { RoomAudioRenderer, RoomContext } from "@livekit/components-react";
@@ -44,7 +44,7 @@ export const ProfileBuilding: React.FC<ProfileBuildingProps> = ({
     (async () => {
       try {
         const res: AxiosResponse<{ message: string; data: ConnectionDetails }> =
-          await axiosIns.post("/api/profile/token", {
+          await axiosIns.post("/api/farmers/profile/token", {
             userId,
             primaryLanguage,
             roomName,

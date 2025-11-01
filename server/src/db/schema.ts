@@ -39,7 +39,6 @@ export const farmersRelations = relations(farmersTable, ({ many }) => ({
   contacts: many(farmerContactsTable),
   plots: many(farmerPlotsTable),
   assets: many(farmerAssetsTable),
-  activities: many(farmerActivitiesTable),
 }));
 
 export type FarmerSelect = typeof farmersTable.$inferSelect;
@@ -177,45 +176,59 @@ export const farmerAssetsTableRelations = relations(
 );
 
 export const activityTypeEnum = [
-  "watering",
-  "fertilizing",
+  "irrigation",
   "pesticide",
-  "harvesting",
+  "fertilizer",
   "sowing",
   "plowing",
+  "weeding",
+  "harvest",
+  "transport",
+  "sales",
+  "inspection",
+  "maintenance",
+  "other",
 ] as const;
 
-export const farmerActivitiesTable = pgTable("farmer_activities", {
+export const activityLogsTable = pgTable("activity_logs", {
   id: uuid("id").defaultRandom().primaryKey(),
-  farmerId: text("farmer_id")
+  cropId: uuid("crop_id")
     .notNull()
-    .references(() => farmersTable.id, { onDelete: "cascade" }),
-  plotId: uuid("plot_id").references(() => farmerPlotsTable.id, {
-    onDelete: "set null",
-  }),
+    .references(() => plotCropsTable.id, { onDelete: "cascade" }),
+  farmerId: text("created_by")
+    .notNull()
+    .references(() => farmersTable.id, {
+      onDelete: "set null",
+    }),
   activityType: text("activity_type", { enum: activityTypeEnum }).notNull(),
-  cropName: text("crop_name"),
-  date: date("date").defaultNow(),
-  description: text("description"),
-  validated: boolean("validated").default(false),
-  source: text("source").default("voice"),
-  createdAt: timestamp("created_at").defaultNow(),
+  details: text("details").array().notNull(),
+  summary: text("summary").notNull(),
+  said: text("farmer_said").notNull(),
+  photoUrl: text("photo_url"),
+  notes: text("notes"),
+  suggestions: text("suggestions").array(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
-export const insertFarmerActivitiesSchema = createInsertSchema(
-  farmerActivitiesTable
-);
+export const insertActivityLogSchema = createInsertSchema(activityLogsTable);
 
-export const farmerActivitiesRelations = relations(
-  farmerActivitiesTable,
+export type SelectActivityLogType = typeof activityLogsTable.$inferSelect;
+export type InsertActivityLogType = typeof activityLogsTable.$inferInsert;
+
+export const activityLogsRelations = relations(
+  activityLogsTable,
   ({ one }) => ({
-    farmer: one(farmersTable, {
-      fields: [farmerActivitiesTable.farmerId],
-      references: [farmersTable.id],
+    crop: one(plotCropsTable, {
+      fields: [activityLogsTable.cropId],
+      references: [plotCropsTable.id],
     }),
-    plot: one(farmerPlotsTable, {
-      fields: [farmerActivitiesTable.plotId],
-      references: [farmerPlotsTable.id],
+    farmer: one(farmersTable, {
+      fields: [activityLogsTable.farmerId],
+      references: [farmersTable.id],
     }),
   })
 );

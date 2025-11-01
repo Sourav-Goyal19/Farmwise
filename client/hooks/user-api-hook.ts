@@ -1,9 +1,9 @@
-import axiosIns from "@/lib/axios";
+import { axiosIns } from "@/lib/axios";
 import { UserType } from "@/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const getUser = async (userId: string): Promise<UserType | null> => {
-  const res = await axiosIns.get(`/api/user/${userId}`);
+  const res = await axiosIns.get(`/api/farmers/user/${userId}`);
   return res.data?.user ?? null;
 };
 
@@ -24,7 +24,7 @@ const updateUser = async (
   userId: string,
   data: UpdateUserData
 ): Promise<UserType> => {
-  const res = await axiosIns.put(`/api/user/${userId}`, data);
+  const res = await axiosIns.put(`/api/farmers/user/${userId}`, data);
   return res.data.user;
 };
 

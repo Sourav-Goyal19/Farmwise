@@ -8,9 +8,9 @@ import * as silero from "@livekit/agents-plugin-silero";
 import * as openai from "@livekit/agents-plugin-openai";
 import * as google from "@livekit/agents-plugin-google";
 import * as livekit from "@livekit/agents-plugin-livekit";
-import * as neuphonic from "@livekit/agents-plugin-neuphonic";
-// import * as resemble from "@livekit/agents-plugin-resemble";
+import * as resemble from "@livekit/agents-plugin-resemble";
 // import * as cartesia from "@livekit/agents-plugin-cartesia";
+// import * as neuphonic from "@livekit/agents-plugin-neuphonic";
 // import * as elevenlabs from "@livekit/agents-plugin-elevenlabs";
 import {
   voice,
@@ -439,7 +439,7 @@ export default defineAgent({
       llm: getLLM("openai"),
       // tts: new cartesia.TTS({
       //   model: "sonic-2",
-      //   voice: "faf0731e-dfb9-4cfc-8119-259a79b27e12",
+      //   voice: "e07c00bc-4134-4eae-9ea4-1a55fb45746b",
       // }),
       // tts: new neuphonic.TTS({
       //   voiceId: "a2103bbb-ab1f-4b1a-b4b7-f2466ce14f11",
@@ -563,18 +563,31 @@ function getLLM(model: string) {
 
 function getTTS(language: string) {
   language = language.toLowerCase();
+
   switch (language) {
     case "hindi":
-      return new neuphonic.TTS({
-        voiceId: "a2103bbb-ab1f-4b1a-b4b7-f2466ce14f11",
+      // return new neuphonic.TTS({
+      //   voiceId: "a2103bbb-ab1f-4b1a-b4b7-f2466ce14f11",
+      //   apiKey: process.env.NEUPHONIC_API_KEY!,
+      // });
+      return new resemble.TTS({
+        voiceUuid: "af3b3fad",
       });
     case "english":
-      return new neuphonic.TTS({
-        voiceId: "06fde793-8929-45f6-8a87-643196d376e4",
+      // return new neuphonic.TTS({
+      //   voiceId: "06fde793-8929-45f6-8a87-643196d376e4",
+      //   apiKey: process.env.NEUPHONIC_API_KEY!,
+      // });
+      return new resemble.TTS({
+        voiceUuid: "fb2d2858",
       });
     default:
-      return new neuphonic.TTS({
-        voiceId: "a2103bbb-ab1f-4b1a-b4b7-f2466ce14f11",
+      // return new neuphonic.TTS({
+      //   voiceId: "a2103bbb-ab1f-4b1a-b4b7-f2466ce14f11",
+      //   apiKey: process.env.NEUPHONIC_API_KEY!,
+      // });
+      return new resemble.TTS({
+        voiceUuid: "af3b3fad",
       });
   }
 }

@@ -1,11 +1,8 @@
 import { z } from "zod";
 import express from "express";
-import {
-  AccessToken,
-  AccessTokenOptions,
-  AgentDispatchClient,
-  VideoGrant,
-} from "livekit-server-sdk";
+import { ConnectionDetails } from "../types.js";
+import { AgentDispatchClient } from "livekit-server-sdk";
+import { createParticipantToken } from "../libs/utils.js";
 
 const router = express.Router();
 
@@ -18,13 +15,6 @@ const tokenRequestSchema = z.object({
   userId: z.string().min(1, "User Id is Required"),
   primaryLanguage: z.string().min(1, "Primary Language is Required"),
 });
-
-type ConnectionDetails = {
-  livekitServerUrl: string;
-  roomName: string;
-  participantIdentity: string;
-  participantToken: string;
-};
 
 router.post("/token", async (req, res) => {
   console.log("Got Request to /profile/token");
@@ -62,17 +52,14 @@ router.post("/token", async (req, res) => {
     dispatchOptions
   );
 
-  const token = await createParticipantToken(
-    {
-      identity: participantIdentity,
-      name: userId,
-      metadata: JSON.stringify({
-        userId,
-        primaryLanguage,
-      }),
-    },
-    roomName
-  );
+  const token = await createParticipantToken(roomName, {
+    identity: participantIdentity,
+    name: userId,
+    metadata: JSON.stringify({
+      userId,
+      primaryLanguage,
+    }),
+  });
 
   const data: ConnectionDetails = {
     livekitServerUrl: LIVEKIT_URL,
@@ -88,24 +75,3 @@ router.post("/token", async (req, res) => {
 });
 
 export default router;
-
-function createParticipantToken(
-  userInfo: AccessTokenOptions,
-  roomName: string
-) {
-  const at = new AccessToken(LIVEKIT_API_KEY, LIVEKIT_API_SECRET, {
-    ...userInfo,
-    ttl: "15m",
-  });
-
-  const grant: VideoGrant = {
-    room: roomName,
-    roomJoin: true,
-    canPublish: true,
-    canSubscribe: true,
-    canPublishData: true,
-  };
-
-  at.addGrant(grant);
-  return at.toJwt();
-}

@@ -12,6 +12,7 @@ import { useFetchPlot } from "@/hooks/plots-api-hook";
 import { Loader2 } from "lucide-react";
 import { useUpdatePlot, useDeletePlot } from "@/hooks/plots-api-hook";
 import { useConfirm } from "@/hooks/use-confirm";
+import { toast } from "sonner";
 
 const plotFormSchema = z.object({
     plotName: z.string().optional(),
@@ -51,7 +52,9 @@ const EditPlotSheet = () => {
                 data,
             },
             {
-                onSuccess: () => {
+                onSuccess: (res) => {
+                    toast.success(res.message);
+                    // console.log("Plot message: ", res.message);
                     onClose();
                 },
             },

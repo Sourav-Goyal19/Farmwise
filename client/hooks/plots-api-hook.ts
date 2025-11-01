@@ -1,5 +1,5 @@
 import { axiosIns } from "@/lib/axios";
-import { PlotType } from "@/types";
+import { CreatePlotResponse, PlotType, UpdatePlotResponse } from "@/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export type CreatePlotData = {
@@ -36,17 +36,27 @@ const getPlotsWithCrops = async (farmerId: string): Promise<PlotType[]> => {
     return res.data?.plots ?? [];
 };
 
-const createPlot = async (data: CreatePlotData): Promise<PlotType> => {
-    const res = await axiosIns.post("/api/farmers/plots", data);
-    return res.data.plot;
+const createPlot = async (
+    data: CreatePlotData,
+): Promise<CreatePlotResponse> => {
+    const res = await axiosIns.post<CreatePlotResponse>(
+        "/api/farmers/plots",
+        data,
+    );
+    // return res.data.plot;
+    return res.data;
 };
 
 const updatePlot = async (
     plotId: string,
     data: UpdatePlotData,
-): Promise<PlotType> => {
-    const res = await axiosIns.put(`/api/farmers/plots/${plotId}`, data);
-    return res.data.plot;
+): Promise<UpdatePlotResponse> => {
+    const res = await axiosIns.put<UpdatePlotResponse>(
+        `/api/farmers/plots/${plotId}`,
+        data,
+    );
+    // return res.data.plot;
+    return res.data;
 };
 
 const deletePlot = async (plotId: string): Promise<void> => {
@@ -93,11 +103,11 @@ export const useCreatePlot = () => {
         mutationFn: createPlot,
         onSuccess: (data) => {
             queryClient.invalidateQueries({
-                queryKey: ["plots", "farmer", data.farmerId],
+                queryKey: ["plots", "farmer", data.plot.farmerId],
             });
 
             queryClient.invalidateQueries({
-                queryKey: ["plots", "farmer", data.farmerId, "with-crops"],
+                queryKey: ["plots", "farmer", data.plot.farmerId, "with-crops"],
             });
         },
     });
@@ -115,14 +125,14 @@ export const useUpdatePlot = () => {
             data: UpdatePlotData;
         }) => updatePlot(plotId, data),
         onSuccess: (data) => {
-            queryClient.setQueryData(["plots", data.id], data);
+            queryClient.setQueryData(["plots", data.plot.id], data);
 
             queryClient.invalidateQueries({
-                queryKey: ["plots", "farmer", data.farmerId],
+                queryKey: ["plots", "farmer", data.plot.farmerId],
             });
 
             queryClient.invalidateQueries({
-                queryKey: ["plots", "farmer", data.farmerId, "with-crops"],
+                queryKey: ["plots", "farmer", data.plot.farmerId, "with-crops"],
             });
         },
     });

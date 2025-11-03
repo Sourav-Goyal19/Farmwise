@@ -51,7 +51,6 @@ const NewPlotSheet = () => {
                 },
                 onError: () => {
                     toast.error("Invalid Input");
-                    // console.log("New plot error: ", error);
                 },
             },
         );

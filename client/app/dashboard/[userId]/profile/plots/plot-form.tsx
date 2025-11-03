@@ -32,7 +32,7 @@ const plotFormSchema = z.object({
         .enum(["drip", "canal", "rain-fed", "sprinkler"])
         .optional(),
     waterSource: z.string().optional(),
-    location: z.string().optional(), // New location field
+    location: z.string().optional(),
     latitude: z.string().optional(),
     longitude: z.string().optional(),
     isOwned: z.boolean().default(true),
@@ -64,7 +64,7 @@ export const PlotForm: React.FC<PlotFormProps> = ({
             soilType: undefined,
             irrigationType: undefined,
             waterSource: "",
-            location: "", // New default value
+            location: "",
             latitude: "",
             longitude: "",
             isOwned: true,
@@ -271,7 +271,6 @@ export const PlotForm: React.FC<PlotFormProps> = ({
                     )}
                 />
 
-                {/* New Location Input Field with Verify Button */}
                 <FormField
                     control={form.control}
                     name="location"

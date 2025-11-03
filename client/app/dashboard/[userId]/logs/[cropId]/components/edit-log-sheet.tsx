@@ -84,11 +84,11 @@ export const EditLogSheet = () => {
   if (!logQuery.data) return null;
 
   const defaultValues = logQuery.data && {
-    activityType: logQuery.data.activityLog.activityType,
-    summary: logQuery.data.activityLog.summary,
-    details: logQuery.data.activityLog.details || [],
-    notes: logQuery.data.activityLog.notes || "",
-    suggestions: logQuery.data.activityLog.suggestions || [],
+    activityType: logQuery.data.activeLog.activityType,
+    summary: logQuery.data.activeLog.summary,
+    details: logQuery.data.activeLog.details || [],
+    notes: logQuery.data.activeLog.notes || "",
+    suggestions: logQuery.data.activeLog.suggestions || [],
   };
 
   return (

@@ -155,7 +155,7 @@ export const CropClient: React.FC = () => {
               <DataTable
                 columns={columns}
                 data={tableData}
-                filterKey="cropName"
+                filterKey="crop by name"
                 onDelete={(rows) => {
                   const ids = rows.map((r) => r.original.id);
                   ids.forEach((id) => {

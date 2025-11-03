@@ -22,6 +22,20 @@
       "when": 1761989531596,
       "tag": "0002_polite_katie_power",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1762116405752,
+      "tag": "0003_lovely_dazzler",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1762116600004,
+      "tag": "0004_smart_goblin_queen",
+      "breakpoints": true
     }
   ]
 }

@@ -486,6 +486,14 @@ const createSuggestionAgent = () => {
           return summarizeFarmerProfileDetails(ctx.userData);
         },
       }),
+      getCurrentDateAndTime: llm.tool({
+        description: "Provides current date and time.",
+        execute: async (_, { ctx }) => {
+          return new Date().toLocaleString("en-IN", {
+            timeZone: "Asia/Kolkata",
+          });
+        },
+      }),
       setReminder: llm.tool({
         description: "Used to set the reminder for the future.",
         parameters: z.object({

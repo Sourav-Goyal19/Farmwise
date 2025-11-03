@@ -252,7 +252,7 @@ const suggestionAgentPompt = `
     1. getFarmerDetails - Understand farmer context
     2. getPreviousLogs - Analyze patterns (last 10 logs)
     3. getWeatherForecast - Check conditions (next 3 days)
-    4. checkMarketPrices - If relevant to suggestion
+    4. getCurrentDateAndTime - Keep updated yourself with the current date and time.
 
     # SUGGESTION CATEGORIES & PRIORITIZATION
 

@@ -74,7 +74,7 @@ export type UpdatePlotResponse = {
     plot: PlotType;
 };
 
-export type AddCropResponse = {
+export type CreateCropResponse = {
     message: string;
     plot: CropTableType;
 };

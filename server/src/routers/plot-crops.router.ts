@@ -88,10 +88,12 @@ router
         try {
             const validationResult = createPlotCropSchema.safeParse(req.body);
 
+            console.log("Error: ", validationResult);
             if (!validationResult.success) {
+                console.log("here is the error");
                 res.status(400).json({
-                    error: "Invalid data",
-                    details: validationResult.error.issues,
+                    error: "Invalid Data",
+                    details: validationResult.error.message,
                 });
                 return;
             }
@@ -134,9 +136,10 @@ router
             const validationResult = updatePlotCropSchema.safeParse(req.body);
 
             if (!validationResult.success) {
+                console.log("here is the error");
                 res.status(400).json({
                     error: "Invalid data",
-                    details: validationResult.error.issues,
+                    details: validationResult.error.message,
                 });
                 return;
             }

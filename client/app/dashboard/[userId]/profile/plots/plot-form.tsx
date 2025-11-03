@@ -20,6 +20,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import { useState } from "react";
 
 const plotFormSchema = z.object({
     plotName: z.string().optional(),
@@ -31,6 +32,7 @@ const plotFormSchema = z.object({
         .enum(["drip", "canal", "rain-fed", "sprinkler"])
         .optional(),
     waterSource: z.string().optional(),
+    location: z.string().optional(), // New location field
     latitude: z.string().optional(),
     longitude: z.string().optional(),
     isOwned: z.boolean().default(true),
@@ -54,6 +56,7 @@ export const PlotForm: React.FC<PlotFormProps> = ({
     onDelete,
     disabled,
 }) => {
+    const [isVerifying, setIsVerifying] = useState(false);
     const form = useForm<FormValues>({
         defaultValues: defaultValues || {
             plotName: "",
@@ -61,6 +64,7 @@ export const PlotForm: React.FC<PlotFormProps> = ({
             soilType: undefined,
             irrigationType: undefined,
             waterSource: "",
+            location: "", // New default value
             latitude: "",
             longitude: "",
             isOwned: true,
@@ -77,6 +81,45 @@ export const PlotForm: React.FC<PlotFormProps> = ({
         onDelete?.();
     };
 
+    const verifyLocation = async () => {
+        const location = form.getValues("location");
+        if (!location) {
+            alert("Please enter a location to verify");
+            return;
+        }
+
+        setIsVerifying(true);
+        try {
+            const apiKey =
+                process.env.NEXT_PUBLIC_GEOAPIFY_API_KEY ||
+                "YOUR_GEOAPIFY_API_KEY";
+            const response = await fetch(
+                `https://api.geoapify.com/v1/geocode/search?text=${encodeURIComponent(location)}&apiKey=${apiKey}`,
+            );
+            const data = await response.json();
+            console.log("Location data: ", data);
+
+            if (data.features && data.features.length > 0) {
+                const locationData = data.features[0].geometry;
+                form.setValue(
+                    "latitude",
+                    locationData.coordinates[0].toString(),
+                );
+                form.setValue(
+                    "longitude",
+                    locationData.coordinates[1].toString(),
+                );
+            } else {
+                alert("No location found");
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("Error verifying location. Please try again.");
+        } finally {
+            setIsVerifying(false);
+        }
+    };
+
     return (
         <Form {...form}>
             <form
@@ -88,7 +131,7 @@ export const PlotForm: React.FC<PlotFormProps> = ({
                     name="plotName"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Plot Name (Optional)</FormLabel>
+                            <FormLabel>Plot Name</FormLabel>
                             <div className="flex gap-2">
                                 <FormControl>
                                     <Input
@@ -207,11 +250,12 @@ export const PlotForm: React.FC<PlotFormProps> = ({
                     name="waterSource"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Water Source</FormLabel>
+                            <FormLabel>Water Source (Optional)</FormLabel>
                             <div className="flex gap-2">
                                 <FormControl>
                                     <Input
                                         placeholder="e.g. Well, River, Pond"
+                                        type="text"
                                         disabled={disabled}
                                         {...field}
                                     />
@@ -221,6 +265,43 @@ export const PlotForm: React.FC<PlotFormProps> = ({
                                         field.onChange(text)
                                     }
                                 />
+                            </div>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+
+                {/* New Location Input Field with Verify Button */}
+                <FormField
+                    control={form.control}
+                    name="location"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Location/Place</FormLabel>
+                            <div className="flex gap-2">
+                                <FormControl>
+                                    <Input
+                                        placeholder="e.g. New Delhi, India"
+                                        type="text"
+                                        disabled={disabled}
+                                        {...field}
+                                    />
+                                </FormControl>
+                                <SpeechInputButton
+                                    onTranscript={(text) =>
+                                        field.onChange(text)
+                                    }
+                                />
+                                <Button
+                                    type="button"
+                                    onClick={verifyLocation}
+                                    disabled={disabled || isVerifying}
+                                    className="whitespace-nowrap"
+                                >
+                                    {isVerifying
+                                        ? "Verifying..."
+                                        : "Verify Location"}
+                                </Button>
                             </div>
                             <FormMessage />
                         </FormItem>

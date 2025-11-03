@@ -10,6 +10,7 @@ import { PlotForm } from "./plot-form";
 import { z } from "zod";
 import { useCreatePlot } from "@/hooks/plots-api-hook";
 import { useUser } from "@clerk/nextjs";
+import { toast } from "sonner";
 
 const plotFormSchema = z.object({
     plotName: z.string().optional(),
@@ -45,7 +46,12 @@ const NewPlotSheet = () => {
             },
             {
                 onSuccess: () => {
+                    toast.success("Plot Added Successfully");
                     onClose();
+                },
+                onError: () => {
+                    toast.error("Invalid Input");
+                    // console.log("New plot error: ", error);
                 },
             },
         );

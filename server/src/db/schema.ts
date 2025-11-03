@@ -39,10 +39,11 @@ export const farmersRelations = relations(farmersTable, ({ many }) => ({
   contacts: many(farmerContactsTable),
   plots: many(farmerPlotsTable),
   assets: many(farmerAssetsTable),
+  notifications: many(notificationsTable),
 }));
 
-export type FarmerSelect = typeof farmersTable.$inferSelect;
-export type FarmerInsert = typeof farmersTable.$inferInsert;
+export type FarmerSelectType = typeof farmersTable.$inferSelect;
+export type FarmerInsertType = typeof farmersTable.$inferInsert;
 
 export const farmerContactsTable = pgTable("farmer_contacts", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -71,6 +72,9 @@ export const farmerContactsTableRelations = relations(
     }),
   })
 );
+
+export type FarmerContactSelectType = typeof farmerContactsTable.$inferSelect;
+export type FarmerContactInsertType = typeof farmerContactsTable.$inferInsert;
 
 export const irrigationTypeEnum = [
   "drip",
@@ -120,6 +124,9 @@ export const farmerPlotsTableRelations = relations(
   })
 );
 
+export type FarmerPlotSelectType = typeof farmerPlotsTable.$inferSelect;
+export type FarmerPlotInsertType = typeof farmerPlotsTable.$inferInsert;
+
 export const plotCropsTable = pgTable("plot_crops", {
   id: uuid("id").defaultRandom().primaryKey(),
   plotId: uuid("plot_id")
@@ -148,6 +155,9 @@ export const plotCropsTableRelations = relations(plotCropsTable, ({ one }) => ({
   }),
 }));
 
+export type PlotCropSelectType = typeof plotCropsTable.$inferSelect;
+export type PlotCropInsertType = typeof plotCropsTable.$inferInsert;
+
 export const farmerAssetsTable = pgTable("farmer_assets", {
   id: uuid("id").defaultRandom().primaryKey(),
   farmerId: text("farmer_id")
@@ -175,6 +185,9 @@ export const farmerAssetsTableRelations = relations(
     }),
   })
 );
+
+export type FarmerAssetSelectType = typeof farmerAssetsTable.$inferSelect;
+export type FarmerAssetInsertType = typeof farmerAssetsTable.$inferInsert;
 
 export const activityTypeEnum = [
   "irrigation",
@@ -217,9 +230,6 @@ export const activityLogsTable = pgTable("activity_logs", {
 
 export const insertActivityLogSchema = createInsertSchema(activityLogsTable);
 
-export type SelectActivityLogType = typeof activityLogsTable.$inferSelect;
-export type InsertActivityLogType = typeof activityLogsTable.$inferInsert;
-
 export const activityLogsRelations = relations(
   activityLogsTable,
   ({ one }) => ({
@@ -233,3 +243,37 @@ export const activityLogsRelations = relations(
     }),
   })
 );
+
+export type ActivityLogSelectType = typeof activityLogsTable.$inferSelect;
+export type ActivityLogInsertType = typeof activityLogsTable.$inferInsert;
+
+export const notificationsTypeEnum = ["reminder", "alert", "message"] as const;
+
+export const notificationsTable = pgTable("notifications", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  farmerId: text("farmer_id")
+    .references(() => farmersTable.id, { onDelete: "cascade" })
+    .notNull(),
+  message: text("message").notNull(),
+  type: text("type", { enum: notificationsTypeEnum }).notNull(),
+  scheduledFor: timestamp("scheduled_for", { mode: "date" }),
+  isRead: boolean("is_read").default(false).notNull(),
+  isSent: boolean("is_sent").default(false).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  jobId: text("job_id"),
+});
+
+export const insertNotificationsSchema = createInsertSchema(notificationsTable);
+
+export const notificationsRelations = relations(
+  notificationsTable,
+  ({ one }) => ({
+    farmer: one(farmersTable, {
+      fields: [notificationsTable.farmerId],
+      references: [farmersTable.id],
+    }),
+  })
+);
+
+export type NotificationSelectType = typeof notificationsTable.$inferSelect;
+export type NotificationInsertType = typeof notificationsTable.$inferInsert;

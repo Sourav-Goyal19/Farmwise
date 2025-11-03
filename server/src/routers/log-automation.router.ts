@@ -55,12 +55,12 @@ router
       }
 
       const { userId, cropId, roomName } = parseResult.data;
-      const [user] = await db
+      const [farmer] = await db
         .select()
         .from(farmersTable)
         .where(eq(farmersTable.id, userId));
 
-      if (!user) {
+      if (!farmer) {
         res.status(400).json({ error: "Farmer not found." });
         return;
       }
@@ -84,7 +84,8 @@ router
       );
 
       const metadata = JSON.stringify({
-        farmer: { ...user, cropId },
+        farmer,
+        crop: { ...crop, currentStage: null },
       });
 
       const dispatch = await agentDispatchClient.createDispatch(

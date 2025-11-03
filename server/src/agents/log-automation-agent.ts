@@ -1,68 +1,91 @@
 import z from "zod";
 import "dotenv/config";
-import { fileURLToPath } from "url";
 import { db } from "../db/index.js";
+import { fileURLToPath } from "url";
 import { and, desc, eq } from "drizzle-orm";
+import { fetchWeatherApi } from "openmeteo";
+import { notificationQueue } from "../bullmq/queues.js";
 import * as openai from "@livekit/agents-plugin-openai";
 import * as google from "@livekit/agents-plugin-google";
 import * as silero from "@livekit/agents-plugin-silero";
 import * as livekit from "@livekit/agents-plugin-livekit";
 import * as deepgram from "@livekit/agents-plugin-deepgram";
 import * as resemble from "@livekit/agents-plugin-resemble";
-import { voiceToLogAutomationAgentPrompt } from "../prompts/log-automation-agent-prompts.js";
+import {
+  suggestionAgentPompt,
+  voiceToLogAutomationAgentPrompt,
+} from "../prompts/log-automation-agent-prompts.js";
 // import * as cartesia from "@livekit/agents-plugin-cartesia";
 // import * as neuphonic from "@livekit/agents-plugin-neuphonic";
 // import * as elevenlabs from "@livekit/agents-plugin-elevenlabs";
 import {
   cli,
-  defineAgent,
-  JobProcess,
   llm,
-  metrics,
   voice,
+  metrics,
+  JobProcess,
+  defineAgent,
   WorkerOptions,
 } from "@livekit/agents";
 import {
-  activityLogsTable,
+  FarmerSelectType,
   activityTypeEnum,
-  FarmerSelect,
-  SelectActivityLogType,
+  activityLogsTable,
+  PlotCropSelectType,
+  ActivityLogSelectType,
+  notificationsTable,
 } from "../db/schema.js";
 
-type FarmerProfileData = Partial<FarmerSelect>;
+type RoomData = {
+  farmer: Partial<FarmerSelectType>;
+  crop: Partial<PlotCropSelectType>;
+  activityLog: Partial<Omit<ActivityLogSelectType, "id">>;
+  logId?: string;
+  prevAgent?: voice.Agent<RoomData>;
+  agents: Record<string, voice.Agent<RoomData>>;
+  latitude?: number;
+  longitude?: number;
+};
 
-type ActivityLogData = Partial<Omit<SelectActivityLogType, "id">>;
+const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)(:[0-5]\d(\.\d+)?)?$/;
 
-type RoomData = FarmerProfileData &
-  ActivityLogData & {
-    logId?: string;
-    prevAgent?: voice.Agent<RoomData>;
-    agents: Record<string, voice.Agent<RoomData>>;
-  };
-
-function summarizeFarmerDetails(farmer: RoomData) {
+function summarizeFarmerProfileDetails(roomData: RoomData) {
   return JSON.stringify({
-    age: farmer.age || "unknown",
-    name: farmer.name || "unknown",
-    gender: farmer.gender || "unknown",
-    primaryLanguage: farmer.primaryLanguage || "unknown",
-    village: farmer.village || "unknown",
-    district: farmer.district || "unknown (optional)",
-    educationLevel: farmer.educationLevel || "unknown",
-    totalLandArea: farmer.totalLandArea || "unknown",
-    experience: farmer.experience || "unknown",
+    age: roomData.farmer.age || "unknown",
+    name: roomData.farmer.name || "unknown",
+    gender: roomData.farmer.gender || "unknown",
+    primaryLanguage: roomData.farmer.primaryLanguage || "unknown",
+    village: roomData.farmer.village || "unknown",
+    district: roomData.farmer.district || "unknown (optional)",
+    educationLevel: roomData.farmer.educationLevel || "unknown",
+    totalLandArea: roomData.farmer.totalLandArea || "unknown",
+    experience: roomData.farmer.experience || "unknown",
+  });
+}
+
+function summarizeCropDetails(roomData: RoomData) {
+  const crop = roomData.crop;
+
+  return JSON.stringify({
+    cropName: crop.cropName || "unknown",
+    variety: crop.variety || "unknown",
+    season: crop.season || "unknown",
+    sowingDate: crop.sowingDate || "unknown",
+    expectedHarvestDate: crop.expectedHarvestDate || "unknown",
+    currentStage: crop.currentStage || "unknown",
+    estimatedYieldKg: crop.estimatedYieldKg || "unknown",
   });
 }
 
 function summarizeActivityLogs(data: RoomData) {
   return JSON.stringify({
-    activityType: data.activityType || "unknown",
-    summary: data.summary || "nothing",
-    said: data.said || "unknown",
-    photoUrl: data.photoUrl || "unknown (optional)",
-    suggestions: data.suggestions || "nothing",
-    notes: data.notes || "nothing (optional)",
-    details: data.details || "unknown",
+    activityType: data.activityLog.activityType || "unknown",
+    summary: data.activityLog.summary || "nothing",
+    said: data.activityLog.said || "unknown",
+    photoUrl: data.activityLog.photoUrl || "unknown (optional)",
+    suggestions: data.activityLog.suggestions || "nothing",
+    notes: data.activityLog.notes || "nothing (optional)",
+    details: data.activityLog.details || "unknown",
   });
 }
 
@@ -99,16 +122,18 @@ class BaseAgent extends voice.Agent<RoomData> {
       role: "system",
       content: `Your name is ${
         this.name
-      } agent. Here is the current user's data ${summarizeFarmerDetails(
+      } agent. Here is the current farmer's data: ${summarizeFarmerProfileDetails(
         userData
-      )}. Here the current log's data ${summarizeActivityLogs(userData)}`,
+      )}. Here are the current crop details: ${summarizeCropDetails(
+        userData
+      )}. Here is the current log's data: ${summarizeActivityLogs(userData)}`,
     });
 
     await this.updateChatCtx(chatCtx);
     this.session.generateReply({
       toolChoice: "none",
       instructions:
-        "Greet the farmer warmly in their native/primary language. Introduce yourself and ask them about their farming activity today. Do NOT use any tools yet, just greet them.",
+        "Greet the farmer warmly in their native/primary language. Ask them about their farming activity today. Do NOT use any tools yet, just greet and ask them.",
     });
 
     // this.session.say("नमस्ते! मैं आपका खेती सहायक हूं। आज आपने क्या काम किया?");
@@ -151,9 +176,9 @@ const createLogAgent = () => {
             .describe("Name of the activity, if type is 'other'."),
         }),
         execute: async (input, { ctx }) => {
-          ctx.userData.activityType = input.activityType;
+          ctx.userData.activityLog.activityType = input.activityType;
           if (input.otherActivity) {
-            ctx.userData.notes = input.otherActivity;
+            ctx.userData.activityLog.notes = input.otherActivity;
           }
           return "Activity type updated successfully";
         },
@@ -164,7 +189,7 @@ const createLogAgent = () => {
           said: z.string().describe("What the farmer said for the log."),
         }),
         execute: async (input, { ctx }) => {
-          ctx.userData.said = input.said;
+          ctx.userData.activityLog.said = input.said;
           return "User's exact log saved successfully.";
         },
       }),
@@ -174,7 +199,7 @@ const createLogAgent = () => {
           url: z.string().url().describe("The URL of a photo."),
         }),
         execute: async (input, { ctx }) => {
-          ctx.userData.photoUrl = input.url;
+          ctx.userData.activityLog.photoUrl = input.url;
           return "Photo URL updated successfully.";
         },
       }),
@@ -184,7 +209,7 @@ const createLogAgent = () => {
           notes: z.string().describe("The notes to be added or updated."),
         }),
         execute: async (input, { ctx }) => {
-          ctx.userData.notes = input.notes;
+          ctx.userData.activityLog.notes = input.notes;
           return "Notes added/updated successfully.";
         },
       }),
@@ -194,7 +219,7 @@ const createLogAgent = () => {
           summary: z.string().describe("A summary of the log."),
         }),
         execute: async (input, { ctx }) => {
-          ctx.userData.summary = input.summary;
+          ctx.userData.activityLog.summary = input.summary;
           return "Log summary added/updated successfully.";
         },
       }),
@@ -204,8 +229,9 @@ const createLogAgent = () => {
           detail: z.string().describe("A specific detail about the log."),
         }),
         execute: async (input, { ctx }) => {
-          if (!ctx.userData.details) ctx.userData.details = [];
-          ctx.userData.details.push(input.detail);
+          if (!ctx.userData.activityLog.details)
+            ctx.userData.activityLog.details = [];
+          ctx.userData.activityLog.details.push(input.detail);
           return "Detail added successfully.";
         },
       }),
@@ -222,7 +248,13 @@ const createLogAgent = () => {
           "Retrieve all the information collected about the farmer so far.",
         parameters: undefined,
         execute: async (input, { ctx }) => {
-          return summarizeFarmerDetails(ctx.userData);
+          return summarizeFarmerProfileDetails(ctx.userData);
+        },
+      }),
+      getCropDetails: llm.tool({
+        description: "Retrieves detailed information about the current crop.",
+        execute: async (_, { ctx }) => {
+          return summarizeCropDetails(ctx.userData);
         },
       }),
       insertLogToDatabase: llm.tool({
@@ -254,12 +286,12 @@ const createLogAgent = () => {
             const [log] = await db
               .insert(activityLogsTable)
               .values({
-                cropId: ctx.userData.cropId!,
+                cropId: ctx.userData.crop.id!,
                 activityType: input.activityType,
                 details: input.details,
                 summary: input.summary,
                 said: input.said,
-                farmerId: ctx.userData.id!,
+                farmerId: ctx.userData.farmer.id!,
                 notes: input.notes,
                 photoUrl: input.photoUrl,
               })
@@ -277,12 +309,12 @@ const createLogAgent = () => {
         },
       }),
       getPreviousLogs: llm.tool({
-        description: "Provides last 10 or less farmer's log.",
-        parameters: z.object({
-          farmerId: z.string().describe("Farmer's Id whose latest logs need."),
-          cropId: z.string().describe("The id of a crop plant"),
-        }),
-        execute: async (input, { ctx }) => {
+        description:
+          "Retrieves up to the 10 most recent activity logs for the current farmer and selected crop. Returns concise summaries of recent farming activities, ordered from newest to oldest.",
+        execute: async (_, { ctx }) => {
+          const farmerId = ctx.userData.farmer.id!;
+          const cropId = ctx.userData.crop.id!;
+
           try {
             const logs = await db
               .select({
@@ -291,8 +323,8 @@ const createLogAgent = () => {
               .from(activityLogsTable)
               .where(
                 and(
-                  eq(activityLogsTable.farmerId, input.farmerId),
-                  eq(activityLogsTable.cropId, input.cropId)
+                  eq(activityLogsTable.farmerId, farmerId),
+                  eq(activityLogsTable.cropId, cropId)
                 )
               )
               .orderBy(desc(activityLogsTable.createdAt))
@@ -305,9 +337,282 @@ const createLogAgent = () => {
           }
         },
       }),
+      toSuggestionAgent: llm.tool({
+        description: "Call when the farmer should get the suggestions.",
+        execute: async (_, { ctx }): Promise<llm.AgentHandoff | string> => {
+          return await logAgent.transferToAgent({
+            name: "suggestionAgent",
+            ctx,
+          });
+        },
+      }),
     },
   });
   return logAgent;
+};
+
+const createSuggestionAgent = () => {
+  const suggestionAgent = new BaseAgent({
+    name: "suggestion-agent",
+    instructions: suggestionAgentPompt,
+    tools: {
+      getWeatherTool: llm.tool({
+        description:
+          "Provides current temperature and daily temperature forecast for a few days.",
+        parameters: z.object({
+          days: z
+            .number()
+            .min(0)
+            .max(7)
+            .optional()
+            .describe("Number of days for weather forecast"),
+        }),
+        execute: async ({ days }, { ctx }) => {
+          const latitude = ctx.userData.latitude || 28.6214;
+          const longitude = ctx.userData.longitude || 77.2148;
+
+          const params = {
+            latitude,
+            longitude,
+            daily: ["temperature_2m_max", "temperature_2m_min", "weather_code"],
+            current: ["temperature_2m", "weather_code"],
+            timezone: "GMT",
+          };
+
+          const url = "https://api.open-meteo.com/v1/forecast";
+
+          try {
+            const responses = await fetchWeatherApi(url, params);
+            const response = responses[0];
+            const utcOffsetSeconds = response.utcOffsetSeconds();
+
+            const current = response.current()!;
+            const daily = response.daily()!;
+
+            const currentTemp = current.variables(0)!.value();
+            const currentWeatherCode = current.variables(1)!.value();
+
+            const daysCount =
+              days && days > 0 ? Math.min(days, daily.time.length) : 0;
+
+            const dailyTimes = Array.from(
+              { length: daysCount },
+              (_, i) =>
+                new Date(
+                  (Number(daily.time()) +
+                    i * daily.interval() +
+                    utcOffsetSeconds) *
+                    1000
+                )
+            );
+
+            const maxTemps = daily
+              .variables(0)!
+              .valuesArray()!
+              .slice(0, daysCount);
+            const minTemps = daily
+              .variables(1)!
+              .valuesArray()!
+              .slice(0, daysCount);
+            const weatherCodes = daily
+              .variables(2)!
+              .valuesArray()!
+              .slice(0, daysCount);
+
+            let output = `Current temperature: ${currentTemp} C, Weather code: ${currentWeatherCode}.\n`;
+
+            if (daysCount > 0) {
+              output += "Daily forecast:\n";
+              for (let i = 0; i < daysCount; i++) {
+                output += `Date: ${dailyTimes[i].toDateString()}, Max: ${
+                  maxTemps[i]
+                } C, Min: ${minTemps[i]} C, Weather code: ${weatherCodes[i]}\n`;
+              }
+            }
+
+            return output;
+          } catch (error) {
+            console.error("Weather API error:", error);
+            return "Unable to fetch weather data at the moment.";
+          }
+        },
+      }),
+      getPreviousLogs: llm.tool({
+        description:
+          "Retrieves up to the 10 most recent activity logs for the current farmer and selected crop. Returns concise summaries of recent farming activities, ordered from newest to oldest.",
+        execute: async (_, { ctx }) => {
+          const farmerId = ctx.userData.farmer.id!;
+          const cropId = ctx.userData.crop.id!;
+
+          try {
+            const logs = await db
+              .select({
+                summary: activityLogsTable.summary,
+              })
+              .from(activityLogsTable)
+              .where(
+                and(
+                  eq(activityLogsTable.farmerId, farmerId),
+                  eq(activityLogsTable.cropId, cropId)
+                )
+              )
+              .orderBy(desc(activityLogsTable.createdAt))
+              .limit(10);
+
+            return logs;
+          } catch (error) {
+            console.error("PREVIOUSLOGS[GET]:", error);
+            return "Something went wrong. Hers is the error:" + error;
+          }
+        },
+      }),
+      getLogDetails: llm.tool({
+        description:
+          "Retrieves the latest details of the farmer's activity log.",
+        execute: async (input, { ctx }) => {
+          return summarizeActivityLogs(ctx.userData);
+        },
+      }),
+      getCropDetails: llm.tool({
+        description: "Retrieves detailed information about the current crop.",
+        execute: async (_, { ctx }) => {
+          return summarizeCropDetails(ctx.userData);
+        },
+      }),
+      getFarmerProfileDetails: llm.tool({
+        description:
+          "Retrieve all the information collected about the farmer so far.",
+        execute: async (input, { ctx }) => {
+          return summarizeFarmerProfileDetails(ctx.userData);
+        },
+      }),
+      setReminder: llm.tool({
+        description: "Used to set the reminder for the future.",
+        parameters: z.object({
+          date: z
+            .number()
+            .min(1)
+            .max(31)
+            .describe("The day of the month (1-31)."),
+          month: z.number().min(1).max(12).describe("The month (1-12)."),
+          year: z.number().min(2023).describe("The year for the reminder."),
+          time: z
+            .string()
+            .regex(timeRegex, {
+              message: "Invalid time format. Expected HH:MM:SS or HH:MM.",
+            })
+            .describe("The time in 24-hour format (e.g., 14:30 or 14:30:00)."),
+          message: z.string().min(1).max(500).describe("The reminder message."),
+        }),
+        execute: async (input, { ctx }) => {
+          const { date, month, year, time, message } = input;
+          const farmerId = ctx.userData.farmer.id!;
+
+          const jsMonth = month - 1;
+
+          const [hours, minutes, seconds = "00"] = time.split(":");
+
+          const reminderDate = new Date(
+            year,
+            jsMonth,
+            date,
+            parseInt(hours),
+            parseInt(minutes),
+            parseInt(seconds)
+          );
+
+          if (isNaN(reminderDate.getTime())) {
+            return "Invalid date or time. Please check your input.";
+          }
+
+          const now = new Date();
+          if (reminderDate.getTime() <= now.getTime()) {
+            return "The reminder time must be in the future.";
+          }
+
+          const existingReminder = await db
+            .select()
+            .from(notificationsTable)
+            .where(
+              and(
+                eq(notificationsTable.farmerId, farmerId),
+                eq(notificationsTable.message, message),
+                eq(notificationsTable.type, "reminder"),
+                eq(notificationsTable.scheduledFor, reminderDate)
+              )
+            )
+            .limit(1);
+
+          if (existingReminder.length > 0) {
+            return "A similar reminder already exists.";
+          }
+
+          const diffMs = reminderDate.getTime() - now.getTime();
+          const job = await notificationQueue.add(
+            "notification-job",
+            { type: "reminder", message, farmerId },
+            { delay: diffMs }
+          );
+
+          await db.insert(notificationsTable).values({
+            farmerId,
+            message,
+            jobId: job.id!,
+            type: "reminder",
+            scheduledFor: reminderDate,
+            isRead: false,
+          });
+
+          return `Reminder set for ${reminderDate.toLocaleString()}: "${message}"`;
+        },
+      }),
+      listReminders: llm.tool({
+        description: "List all active reminders for the farmer.",
+        execute: async (_, { ctx }) => {
+          const farmerId = ctx.userData.farmer.id!;
+          const reminders = await db
+            .select()
+            .from(notificationsTable)
+            .where(
+              and(
+                eq(notificationsTable.farmerId, farmerId),
+                eq(notificationsTable.type, "reminder")
+              )
+            );
+          return reminders.map((r) => ({
+            reminderId: r.id,
+            message: r.message,
+            scheduledFor: new Date(r.scheduledFor!).toLocaleString(),
+          }));
+        },
+      }),
+      deleteReminder: llm.tool({
+        description: "Delete a specific reminder by its ID.",
+        parameters: z.object({
+          reminderId: z.string().describe("The ID of the reminder to delete."),
+        }),
+        execute: async ({ reminderId }, { ctx }) => {
+          const farmerId = ctx.userData.farmer.id!;
+          const [deletedNotification] = await db
+            .delete(notificationsTable)
+            .where(
+              and(
+                eq(notificationsTable.id, reminderId),
+                eq(notificationsTable.farmerId, farmerId),
+                eq(notificationsTable.type, "reminder")
+              )
+            )
+            .returning();
+
+          await notificationQueue.remove(deletedNotification.jobId!);
+
+          return "Reminder deleted successfully.";
+        },
+      }),
+    },
+  });
+
+  return suggestionAgent;
 };
 
 export default defineAgent({
@@ -315,24 +620,38 @@ export default defineAgent({
     proc.userData.vad = await silero.VAD.load();
   },
   entry: async (ctx) => {
-    const farmerData = ctx.job.metadata ? JSON.parse(ctx.job.metadata) : {};
-    const farmerDetails = farmerData.farmer;
+    const metadata = ctx.job.metadata ? JSON.parse(ctx.job.metadata) : {};
+    const farmerData = metadata.farmer || {};
+    const cropData = metadata.crop || {};
 
     const agents = {
       logAgent: createLogAgent(),
+      suggestionAgent: createSuggestionAgent(),
     };
 
     const userData = createRoomData({
-      ...farmerDetails,
+      farmer: farmerData,
+      crop: cropData,
+      activityLog: {
+        activityType: undefined,
+        details: [],
+        summary: "",
+        said: "",
+        photoUrl: undefined,
+        notes: undefined,
+        suggestions: undefined,
+      },
       agents,
       prevAgent: undefined,
+      latitude: cropData.latitude || farmerData.latitude,
+      longitude: cropData.longitude || farmerData.longitude,
     });
 
     const session = new voice.AgentSession<RoomData>({
       userData,
-      stt: getSTT(farmerDetails.primaryLanguage!),
+      stt: getSTT(farmerData.primaryLanguage || "english"),
       llm: getLLM("openai"),
-      tts: getTTS(farmerDetails.primaryLanguage!),
+      tts: getTTS(farmerData.primaryLanguage || "english"),
       vad: ctx.proc.userData.vad! as silero.VAD,
       turnDetection: new livekit.turnDetector.MultilingualModel(),
     });

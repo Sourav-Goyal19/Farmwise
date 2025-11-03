@@ -115,3 +115,15 @@ export type InsertActivityLogType = {
   notes?: string;
   suggestions?: string[];
 };
+
+export type NotificationType = {
+  id: string;
+  createdAt: Date;
+  farmerId: string;
+  message: string;
+  type: "message" | "reminder" | "alert";
+  scheduledFor: Date | null;
+  isRead: boolean;
+  isSent: boolean;
+  jobId?: string;
+};

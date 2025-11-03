@@ -1,8 +1,11 @@
 import "dotenv/config";
+import http from "http";
 import cors from "cors";
+import "./bullmq/worker-runner.js";
 import express from "express";
 import { db } from "./db/index.js";
 import { farmersTable } from "./db/schema.js";
+import { initSocket } from "./libs/socket-io.js";
 import { clerkMiddleware } from "@clerk/express";
 import userRouter from "./routers/user.router.js";
 import { WebhookReceiver } from "livekit-server-sdk";
@@ -12,6 +15,7 @@ import cropsRouter from "./routers/plot-crops.router.js";
 import plotsRouter from "./routers/farmer-plots.router.js";
 import logsRouter from "./routers/log-automation.router.js";
 import contactsRouter from "./routers/farmer-contact.router.js";
+import notificationsRouter from "./routers/notifications.router.js";
 
 const PORT = process.env.PORT || 8000;
 const LIVEKIT_API_KEY = process.env.LIVEKIT_API_KEY!;
@@ -19,6 +23,9 @@ const LIVEKIT_API_SECRET = process.env.LIVEKIT_API_SECRET!;
 const CLIENT_URL = process.env.CLIENT_URL || "http://localhost:3000";
 
 const app = express();
+const server = http.createServer(app);
+
+initSocket(server);
 
 app.use(
   cors({
@@ -65,6 +72,7 @@ app.use("/api/farmers/plots", plotsRouter);
 app.use("/api/farmers/crops", cropsRouter);
 app.use("/api/farmers/profile", profileRouter);
 app.use("/api/farmers/contacts", contactsRouter);
+app.use("/api/notifications", notificationsRouter);
 
 const webhookReciever = new WebhookReceiver(
   LIVEKIT_API_KEY,
@@ -82,4 +90,4 @@ app.post("/livekit/webhook", async (req, res) => {
   res.status(200).send();
 });
 
-app.listen(PORT, () => console.log("Server started at port", PORT));
+server.listen(PORT, () => console.log("Server started at port", PORT));

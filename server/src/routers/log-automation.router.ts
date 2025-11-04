@@ -134,7 +134,10 @@ router
 
       return res.status(200).json({
         message: "Activity logs retrieved successfully",
-        logs,
+        logs: logs.map((log) => ({
+          activeLog: log.activityLog,
+          crop: log.crop,
+        })),
       });
     } catch (error) {
       console.error("ACTIVITY_LOGS[GET]:", error);
@@ -162,7 +165,7 @@ router
 
       const logs = await db
         .select({
-          activeLog: activityLogsTable,
+          activityLog: activityLogsTable,
           crop: plotCropsTable,
         })
         .from(activityLogsTable)
@@ -175,7 +178,10 @@ router
 
       return res.status(200).json({
         message: "Activity logs for crop retrieved successfully",
-        logs,
+        logs: logs.map((log) => ({
+          activeLog: log.activityLog,
+          crop: log.crop,
+        })),
       });
     } catch (error) {
       console.error("CROP_ACTIVITY_LOGS[GET]:", error);
@@ -216,7 +222,10 @@ router
 
       return res.status(200).json({
         message: "Activity logs for farmer retrieved successfully",
-        logs,
+        logs: logs.map((log) => ({
+          activeLog: log.activityLog,
+          crop: log.crop,
+        })),
       });
     } catch (error) {
       console.error("FARMER_ACTIVITY_LOGS[GET]:", error);
@@ -251,7 +260,10 @@ router
 
       return res.status(200).json({
         message: "Activity log found successfully",
-        log,
+        log: {
+          activeLog: log.activityLog,
+          crop: log.crop,
+        },
       });
     } catch (error) {
       console.error("ACTIVITY_LOG[GET]:", error);

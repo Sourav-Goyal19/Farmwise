@@ -46,7 +46,7 @@ export const EditLogSheet = () => {
     "You are about to delete this activity log"
   );
 
-  const logQuery = useFetchActivityLog(id);
+  const logQuery = useFetchActivityLog(id, isOpen);
   const updateMutation = useUpdateActivityLog();
   const deleteMutation = useDeleteActivityLog();
 
@@ -84,11 +84,11 @@ export const EditLogSheet = () => {
   if (!logQuery.data) return null;
 
   const defaultValues = logQuery.data && {
-    activityType: logQuery.data.activeLog.activityType,
-    summary: logQuery.data.activeLog.summary,
-    details: logQuery.data.activeLog.details || [],
-    notes: logQuery.data.activeLog.notes || "",
-    suggestions: logQuery.data.activeLog.suggestions || [],
+    activityType: logQuery?.data?.activeLog?.activityType,
+    summary: logQuery?.data?.activeLog?.summary,
+    details: logQuery?.data?.activeLog?.details || [],
+    notes: logQuery?.data?.activeLog?.notes || "",
+    suggestions: logQuery.data?.activeLog?.suggestions || [],
   };
 
   return (

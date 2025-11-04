@@ -7,11 +7,18 @@ type LogStore = {
   id?: string;
 };
 
-export const useNewLog = create<LogStore>((set) => ({
-  isOpen: false,
-  onOpen: () => set({ isOpen: true, id: undefined }),
-  onClose: () => set({ isOpen: false, id: undefined }),
-  id: undefined,
+type LogViewStore = {
+  isViewOpen: boolean;
+  onViewOpen: (id?: string) => void;
+  onViewClose: () => void;
+  viewId?: string;
+};
+
+export const useViewLog = create<LogViewStore>((set) => ({
+  isViewOpen: false,
+  onViewOpen: (id?: string) => set({ isViewOpen: true, viewId: id }),
+  onViewClose: () => set({ isViewOpen: false, viewId: undefined }),
+  viewId: undefined,
 }));
 
 export const useOpenLog = create<LogStore>((set) => ({

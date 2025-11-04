@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { useConfirm } from "@/hooks/use-confirm";
-import { useOpenLog } from "@/hooks/use-log-store";
+import { useViewLog, useOpenLog } from "@/hooks/use-log-store";
 import { useDeleteActivityLog } from "@/hooks/logs-api-hook";
 import { Edit, MoreHorizontal, Trash, Eye } from "lucide-react";
 import {
@@ -18,6 +18,7 @@ interface ActionsProps {
 
 export const Actions: React.FC<ActionsProps> = ({ id }) => {
   const { onOpen } = useOpenLog();
+  const { onViewOpen } = useViewLog();
   const deleteMutation = useDeleteActivityLog();
   const [ConfirmDialog, confirm] = useConfirm(
     "Are you sure?",
@@ -42,7 +43,7 @@ export const Actions: React.FC<ActionsProps> = ({ id }) => {
       <DropdownMenuContent align="end">
         <DropdownMenuItem
           onClick={() => {
-            onOpen(id);
+            onViewOpen(id);
           }}
         >
           <Eye className="mr-2 size-4" />

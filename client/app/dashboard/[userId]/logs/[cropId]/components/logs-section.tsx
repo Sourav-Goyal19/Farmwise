@@ -14,6 +14,7 @@ import {
   useDeleteActivityLog,
   useFetchActivityLogsByCrop,
 } from "@/hooks/logs-api-hook";
+import { ViewLogSheet } from "./view-details-sheet";
 
 interface LogsSectionProps {
   userId: string;
@@ -75,8 +76,7 @@ export const LogsSection: React.FC<LogsSectionProps> = ({ cropId }) => {
   console.log("Logs:", logs);
 
   const tableData: LogTableType[] = (logs || []).map((log) => {
-    // Debug each item
-    console.log("Processing log:", log);
+    // console.log("Processing log:", log);
 
     return {
       id: log.activeLog.id,
@@ -129,6 +129,7 @@ export const LogsSection: React.FC<LogsSectionProps> = ({ cropId }) => {
           disabled={isDisabled}
         />
         <EditLogSheet />
+        <ViewLogSheet />
       </CardContent>
     </div>
   );

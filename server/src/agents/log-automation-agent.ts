@@ -2,6 +2,7 @@ import z from "zod";
 import "dotenv/config";
 import { db } from "../db/index.js";
 import { fileURLToPath } from "url";
+import { encode } from "@toon-format/toon";
 import { and, desc, eq } from "drizzle-orm";
 import { fetchWeatherApi } from "openmeteo";
 import { notificationQueue } from "../bullmq/queues.js";
@@ -48,9 +49,11 @@ type RoomData = {
 };
 
 const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)(:[0-5]\d(\.\d+)?)?$/;
+const ACTOR_BASE_URL = process.env.APIFY_URL!;
+const APIFY_TOKEN = process.env.APIFY_TOKEN;
 
 function summarizeFarmerProfileDetails(roomData: RoomData) {
-  return JSON.stringify({
+  return encode({
     age: roomData.farmer.age || "unknown",
     name: roomData.farmer.name || "unknown",
     gender: roomData.farmer.gender || "unknown",
@@ -66,7 +69,7 @@ function summarizeFarmerProfileDetails(roomData: RoomData) {
 function summarizeCropDetails(roomData: RoomData) {
   const crop = roomData.crop;
 
-  return JSON.stringify({
+  return encode({
     cropName: crop.cropName || "unknown",
     variety: crop.variety || "unknown",
     season: crop.season || "unknown",
@@ -78,7 +81,7 @@ function summarizeCropDetails(roomData: RoomData) {
 }
 
 function summarizeActivityLogs(data: RoomData) {
-  return JSON.stringify({
+  return encode({
     activityType: data.activityLog.activityType || "unknown",
     summary: data.activityLog.summary || "nothing",
     said: data.activityLog.said || "unknown",
@@ -172,7 +175,7 @@ const createLogAgent = () => {
             .describe("The type of activity"),
           otherActivity: z
             .string()
-            .optional()
+            .nullish()
             .describe("Name of the activity, if type is 'other'."),
         }),
         execute: async (input, { ctx }) => {
@@ -275,10 +278,10 @@ const createLogAgent = () => {
           said: z
             .string()
             .describe("What the actually farmer said about his/her log."),
-          notes: z.string().optional().describe("Extra notes about the log."),
+          notes: z.string().nullish().describe("Extra notes about the log."),
           photoUrl: z
             .string()
-            .optional()
+            .nullish()
             .describe("The url of an uploaded photograph."),
         }),
         execute: async (input, { ctx }) => {
@@ -299,7 +302,7 @@ const createLogAgent = () => {
 
             ctx.userData.logId = log.id;
 
-            return `Log added to the database successfully. Log: ${JSON.stringify(
+            return `Log added to the database successfully. Log: ${encode(
               log
             )}`;
           } catch (error) {
@@ -364,7 +367,7 @@ const createSuggestionAgent = () => {
             .number()
             .min(0)
             .max(7)
-            .optional()
+            .nullish()
             .describe("Number of days for weather forecast"),
         }),
         execute: async ({ days }, { ctx }) => {
@@ -617,6 +620,74 @@ const createSuggestionAgent = () => {
           return "Reminder deleted successfully.";
         },
       }),
+      webSearch: llm.tool({
+        description: "",
+        parameters: z.object({
+          query: z
+            .string()
+            .regex(/[^\s]+/, { message: "Search term or URL cannot be empty" })
+            .describe(
+              "Search query or specific URL. Supports Google search operators. Examples: 'san francisco weather', 'https://example.com', 'AI research site:arxiv.org filetype:pdf'"
+            ),
+        }),
+        execute: async (args, { ctx }) => {
+          if (!APIFY_TOKEN) {
+            throw new Error(
+              "APIFY_TOKEN is required but not set. " +
+                "Please set it in your environment variables or pass it as a command-line argument."
+            );
+          }
+
+          type ScrapingConfig = {
+            maxResults: number;
+            scrapingTool: "browser-playwright" | "raw-http";
+            outputFormats: ("text" | "markdown" | "html")[];
+            requestTimeoutSecs: number;
+          };
+
+          const searchConfiguration: ScrapingConfig = {
+            maxResults: 1,
+            scrapingTool: "browser-playwright",
+            outputFormats: ["text", "markdown"],
+            requestTimeoutSecs: 60,
+          };
+
+          const queryParams = new URLSearchParams({
+            query: args.query,
+            maxResults: searchConfiguration?.maxResults!.toString(),
+            scrapingTool: searchConfiguration.scrapingTool!,
+          });
+
+          if (searchConfiguration.outputFormats) {
+            searchConfiguration.outputFormats.forEach((format) => {
+              queryParams.append("outputFormats", format);
+            });
+          }
+          if (searchConfiguration.requestTimeoutSecs) {
+            queryParams.append(
+              "requestTimeoutSecs",
+              searchConfiguration.requestTimeoutSecs.toString()
+            );
+          }
+
+          const url = `${ACTOR_BASE_URL}?${queryParams.toString()}`;
+          const response = await fetch(url, {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${APIFY_TOKEN}`,
+            },
+          });
+
+          if (!response.ok) {
+            throw new Error(
+              `Failed to call RAG Web Browser: ${response.status} ${response.statusText}`
+            );
+          }
+
+          const responseBody = await response.json();
+          return JSON.stringify(responseBody);
+        },
+      }),
     },
   });
 
@@ -672,7 +743,7 @@ export default defineAgent({
 
     const logUsage = async () => {
       const summary = usageCollector.getSummary();
-      console.log(`Usage: ${JSON.stringify(summary)}`);
+      console.log(`Usage: ${encode(summary)}`);
     };
 
     ctx.addShutdownCallback(logUsage);
@@ -749,10 +820,11 @@ function getSTT(language: string) {
 }
 
 const llms = {
-  openai: openai.LLM.withDeepSeek({
+  openai: new openai.LLM({
     model: "openai/gpt-4.1",
     apiKey: process.env.OPENROUTER_API_KEY,
     baseURL: process.env.OPENROUTER_BASE_URL,
+    parallelToolCalls: true,
   }),
   deepseek: openai.LLM.withDeepSeek({
     model: "deepseek/deepseek-chat-v3-0324",
@@ -771,11 +843,6 @@ const llms = {
   google: new google.LLM({
     model: "gemini-2.0-flash",
     apiKey: process.env.GOOGLE_API_KEY!,
-  }),
-  claude: openai.LLM.withDeepSeek({
-    model: "anthropic/claude-sonnet-4",
-    apiKey: process.env.OPENROUTER_API_KEY,
-    baseURL: process.env.OPENROUTER_BASE_URL,
   }),
 };
 

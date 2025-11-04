@@ -22,6 +22,7 @@
         "@livekit/agents-plugin-rime": "^1.0.4",
         "@livekit/agents-plugin-silero": "^1.0.11",
         "@neondatabase/serverless": "^1.0.2",
+        "@toon-format/toon": "^0.7.3",
         "@types/ioredis": "^5.0.0",
         "@upstash/redis": "^1.35.6",
         "bullmq": "^5.63.0",
@@ -281,6 +282,8 @@
     "@socket.io/component-emitter": ["@socket.io/component-emitter@3.1.2", "", {}, "sha512-9BCxFwvbGg/RsZK9tjXd8s4UcwR0MWeFQ1XEKIQVVvAGJyINdrqKMcTRyLoK8Rse1GjzLV9cwjWV1olXRWEXVA=="],
 
     "@stablelib/base64": ["@stablelib/base64@1.0.1", "", {}, "sha512-1bnPQqSxSuc3Ii6MhBysoWCg58j97aUjuCSZrGSmDxNqtytIi0k8utUenAwTZN4V5mXXYGsVUI9zeBqy+jBOSQ=="],
+
+    "@toon-format/toon": ["@toon-format/toon@0.7.3", "", {}, "sha512-LZ3paGMEWOAuFquNUp6sLvhZB85brlIR2Qn5CUWunoCxyGOkImZNXXEl4FXFWCeFcHr8F0ZhPhERa07C8LWgYQ=="],
 
     "@types/body-parser": ["@types/body-parser@1.19.6", "", { "dependencies": { "@types/connect": "*", "@types/node": "*" } }, "sha512-HLFeCYgz89uk22N5Qg3dvGvsv46B8GLvKKo1zKG4NybA8U2DiEO3w9lqGg29t/tfLRJpJ6iQxnVw4OnB7MoM9g=="],
 

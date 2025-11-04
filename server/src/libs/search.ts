@@ -1,9 +1,9 @@
 import z from "zod";
+import "dotenv/config";
 
 const MAX_RESULTS = 1;
-const TOOL_SEARCH = "search";
-const ACTOR_BASE_URL = "https://rag-web-browser.apify.actor/search";
-const APIFY_TOKEN = "apify_api_UKqDfNkl4CO9HQ1Tb0a51x4L4CnNgm3jAYcb";
+const ACTOR_BASE_URL = process.env.APIFY_URL!;
+const APIFY_TOKEN = process.env.APIFY_TOKEN;
 
 const WebBrowserArgsSchema = z.object({
   query: z
@@ -97,19 +97,20 @@ async function callRagWebBrowser(
   return JSON.stringify(responseBody);
 }
 
-// async function search() {
-//   const response = await callRagWebBrowser({
-//     query: "Best pesticides for Indian farmer",
-//     maxResults: 1,
-//     scrapingTool: "browser-playwright",
-//     outputFormats: ["text", "markdown"],
-//     requestTimeoutSecs: 60,
-//   });
+async function search() {
+  const response = await callRagWebBrowser({
+    query:
+      "Best pesticides for wheat crop for an indian farmer in the northern region.",
+    maxResults: 1,
+    scrapingTool: "browser-playwright",
+    outputFormats: ["text", "markdown"],
+    requestTimeoutSecs: 60,
+  });
 
-//   console.log("Response:", response);
-// }
+  console.log("Response:", response);
+}
 
-// search();
+search();
 
 /* webSearch: llm.tool({
     description: "",

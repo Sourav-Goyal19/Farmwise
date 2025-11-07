@@ -382,7 +382,7 @@ export const PlotForm: React.FC<PlotFormProps> = ({
                                     type="checkbox"
                                     checked={field.value}
                                     onChange={field.onChange}
-                                    className="mt-1 h-full"
+                                    className="mt-1"
                                 />
                             </FormControl>
                             <div className="space-y-1 leading-none">

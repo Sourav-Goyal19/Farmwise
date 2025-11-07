@@ -1,0 +1,2 @@
+ALTER TABLE "plot_crops" ADD COLUMN "farmer_id" text DEFAULT 'user_34c6elREuvpi47h78L7seEkBE9o' NOT NULL;--> statement-breakpoint
+ALTER TABLE "plot_crops" ADD CONSTRAINT "plot_crops_farmer_id_farmers_id_fk" FOREIGN KEY ("farmer_id") REFERENCES "public"."farmers"("id") ON DELETE cascade ON UPDATE no action;

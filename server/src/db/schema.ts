@@ -40,6 +40,7 @@ export const farmersRelations = relations(farmersTable, ({ many }) => ({
   plots: many(farmerPlotsTable),
   assets: many(farmerAssetsTable),
   notifications: many(notificationsTable),
+  documents: many(farmerDocumentsTable),
 }));
 
 export type FarmerSelectType = typeof farmersTable.$inferSelect;
@@ -129,6 +130,10 @@ export type FarmerPlotInsertType = typeof farmerPlotsTable.$inferInsert;
 
 export const plotCropsTable = pgTable("plot_crops", {
   id: uuid("id").defaultRandom().primaryKey(),
+  farmerId: text("farmer_id")
+    .notNull()
+    .default("user_34c6elREuvpi47h78L7seEkBE9o")
+    .references(() => farmersTable.id, { onDelete: "cascade" }),
   plotId: uuid("plot_id")
     .notNull()
     .references(() => farmerPlotsTable.id, { onDelete: "cascade" }),
@@ -152,6 +157,10 @@ export const plotCropsTableRelations = relations(plotCropsTable, ({ one }) => ({
   plot: one(farmerPlotsTable, {
     fields: [plotCropsTable.plotId],
     references: [farmerPlotsTable.id],
+  }),
+  farmer: one(farmersTable, {
+    fields: [plotCropsTable.farmerId],
+    references: [farmersTable.id],
   }),
 }));
 
@@ -277,3 +286,172 @@ export const notificationsRelations = relations(
 
 export type NotificationSelectType = typeof notificationsTable.$inferSelect;
 export type NotificationInsertType = typeof notificationsTable.$inferInsert;
+
+export const schemesTable = pgTable("schemes", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  schemeName: text("scheme_name").notNull(),
+  state: text("state"),
+  ministry: text("ministry").notNull(),
+  benefit: text("benefit").notNull(),
+  objective: text("objective").array().notNull(),
+  eligibilityCriteria: text("eligibility_criteria").array().notNull(),
+  exclusions: text("exclusions").array(),
+  documentsRequired: text("documents_required").array().notNull(),
+  applicationProcess: text("application_process").notNull(),
+  officialWebsite: text("official_website").notNull(),
+  lastUpdatedAt: date("last_updated_at").notNull(),
+  features: text("features").array(),
+  components: text("components").array(),
+  targets: text("targets").array(),
+  deadline: date("deadline"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertSchemeSchema = createInsertSchema(schemesTable);
+
+export type SchemeSelectType = typeof schemesTable.$inferSelect;
+export type SchemeInsertType = typeof schemesTable.$inferInsert;
+
+export const farmerDocumentsTable = pgTable("farmer_documents", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  farmerId: text("farmer_id")
+    .references(() => farmersTable.id, { onDelete: "cascade" })
+    .notNull(),
+  documentType: text("document_type").notNull(),
+  documentUrl: text("document_url").notNull(),
+  verifiedAt: timestamp("verified_at"),
+  uploadedAt: timestamp("uploaded_at").defaultNow(),
+});
+
+export const insertFarmerDocumentsSchema =
+  createInsertSchema(farmerDocumentsTable);
+
+export const farmerDocumentsRelations = relations(
+  farmerDocumentsTable,
+  ({ one }) => ({
+    farmer: one(farmersTable, {
+      fields: [farmerDocumentsTable.farmerId],
+      references: [farmersTable.id],
+    }),
+  })
+);
+
+export type FarmerDocumentSelectType = typeof farmerDocumentsTable.$inferSelect;
+export type FarmerDocumentInsertType = typeof farmerDocumentsTable.$inferInsert;
+
+export const schemeRequiredDocumentsTable = pgTable(
+  "scheme_required_documents",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    schemeId: uuid("scheme_id")
+      .references(() => schemesTable.id, { onDelete: "cascade" })
+      .notNull(),
+    documentType: text("document_type").notNull(),
+    isMandatory: boolean("is_mandatory").default(true),
+  }
+);
+
+export const insertSchemeRequiredDocumentsSchema = createInsertSchema(
+  schemeRequiredDocumentsTable
+);
+
+export const schemeRequiredDocumentsRelations = relations(
+  schemeRequiredDocumentsTable,
+  ({ one }) => ({
+    scheme: one(schemesTable, {
+      fields: [schemeRequiredDocumentsTable.schemeId],
+      references: [schemesTable.id],
+    }),
+  })
+);
+
+export type SchemeRequiredDocumentSelectType =
+  typeof schemeRequiredDocumentsTable.$inferSelect;
+export type SchemeRequiredDocumentInsertType =
+  typeof schemeRequiredDocumentsTable.$inferInsert;
+
+export const farmerSchemeMatchingTable = pgTable("farmer_scheme_matches", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  farmerId: text("farmer_id")
+    .references(() => farmersTable.id, { onDelete: "cascade" })
+    .notNull(),
+  schemeId: uuid("scheme_id").references(() => schemesTable.id, {
+    onDelete: "cascade",
+  }),
+  reason: text("reason").notNull(),
+  isEligible: boolean("is_eligible").default(true).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const inserFarmerSchemeMatchingSchema = createInsertSchema(
+  farmerSchemeMatchingTable
+);
+
+export const farmerSchemeMatchingRelations = relations(
+  farmerSchemeMatchingTable,
+  ({ one }) => ({
+    farmer: one(farmersTable, {
+      fields: [farmerSchemeMatchingTable.farmerId],
+      references: [farmersTable.id],
+    }),
+    scheme: one(schemesTable, {
+      fields: [farmerSchemeMatchingTable.schemeId],
+      references: [schemesTable.id],
+    }),
+  })
+);
+
+export type FarmerSchemeMatchingSelectType =
+  typeof farmerSchemeMatchingTable.$inferSelect;
+export type FarmerSchemeMatchingInsertType =
+  typeof farmerSchemeMatchingTable.$inferInsert;
+
+const applicationStatusEnum = [
+  "not_applied",
+  "in_progress",
+  "submitted",
+  "approved",
+  "rejected",
+] as const;
+
+export const schemeApplicationsTable = pgTable("scheme_applications", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  farmerId: text("farmer_id")
+    .references(() => farmersTable.id, { onDelete: "cascade" })
+    .notNull(),
+  schemeId: uuid("scheme_id")
+    .references(() => schemesTable.id, { onDelete: "cascade" })
+    .notNull(),
+  applicationStatus: text("application_status", {
+    enum: applicationStatusEnum,
+  })
+    .default("not_applied")
+    .notNull(),
+  appliedOn: timestamp("applied_on").notNull(),
+  updatedOn: timestamp("updated_on")
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+});
+
+export const insertSchemeApplicationsSchema = createInsertSchema(
+  schemeApplicationsTable
+);
+
+export const schemeApplicationsRelations = relations(
+  schemeApplicationsTable,
+  ({ one }) => ({
+    farmer: one(farmersTable, {
+      fields: [schemeApplicationsTable.farmerId],
+      references: [farmersTable.id],
+    }),
+    scheme: one(schemesTable, {
+      fields: [schemeApplicationsTable.schemeId],
+      references: [schemesTable.id],
+    }),
+  })
+);
+
+export type SchemeApplicationsSelectType =
+  typeof schemeApplicationsTable.$inferSelect;
+export type SchemeApplicationsInsertType =
+  typeof schemeApplicationsTable.$inferInsert;

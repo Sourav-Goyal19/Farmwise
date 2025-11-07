@@ -6,8 +6,16 @@ export const chatLlama70B = createOpenRouterLLM({
   modelName: "meta-llama/llama-3.3-70b-instruct",
 });
 
+export const chatGpt4oMini = createOpenRouterLLM({
+  modelName: "gpt-4o-mini",
+});
+
 export const chatGptOSS20B = createOpenRouterLLM({
   modelName: "openai/gpt-oss-20b",
+});
+
+export const chatClaudeSonnet = createOpenRouterLLM({
+  modelName: "anthropic/claude-sonnet-4.5",
 });
 
 export const chatGeminiFlash = new ChatGoogleGenerativeAI({
@@ -26,6 +34,8 @@ export const chatDeepseekChat = createOpenRouterLLM({
 
 export const LLMS = {
   llama70: chatLlama70B,
+  gpt4omini: chatGpt4oMini,
+  claudeSonnet: chatClaudeSonnet,
   gptoss20: chatGptOSS20B,
   gemini2o: chatGeminiFlash,
   deepseekv3: chatDeepseekChat,

@@ -1,4 +1,4 @@
-import { ChatOpenAI } from "@langchain/openai";
+import { ChatOpenAI, ChatOpenAIFields } from "@langchain/openai";
 
 interface OpenRouterConfig {
   modelName: string;
@@ -7,7 +7,7 @@ interface OpenRouterConfig {
 export const createOpenRouterLLM = ({
   modelName,
 }: OpenRouterConfig): ChatOpenAI => {
-  const config = {
+  const config: ChatOpenAIFields = {
     model: modelName,
     configuration: {
       baseURL: process.env.OPENROUTER_BASE_URL!,

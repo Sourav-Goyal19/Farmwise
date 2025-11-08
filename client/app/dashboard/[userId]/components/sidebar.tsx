@@ -40,14 +40,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
     { id: "", path: "", icon: Home, label: "Home" },
     { id: "profile", path: "profile", icon: User, label: "Profile Builder" },
     { id: "logs", path: "logs", icon: Mic, label: "Voice Logs" },
-    {
-      id: "market",
-      path: "market",
-      icon: TrendingUp,
-      label: "Market Insights",
-    },
+    // {
+    //   id: "market",
+    //   path: "market",
+    //   icon: TrendingUp,
+    //   label: "Market Insights",
+    // },
     { id: "schemes", path: "schemes", icon: Building2, label: "Gov Schemes" },
-    { id: "chat", path: "chat", icon: FileText, label: "AI Assistant" },
+    // { id: "chat", path: "chat", icon: FileText, label: "AI Assistant" },
   ];
 
   const handleItemClick = (itemId: string) => {

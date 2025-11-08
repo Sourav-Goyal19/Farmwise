@@ -220,7 +220,7 @@ const SchemesPage = () => {
                         href={`/dashboard/${user?.id}/schemes/${scheme.schemeId}`}
                       >
                         View Details
-                        <ExternalLink className="h-4 w-4 ml-2" />
+                        {/* <ExternalLink className="h-4 w-4 ml-2" /> */}
                       </Link>
                     </Button>
                   </CardFooter>

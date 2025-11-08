@@ -9,6 +9,7 @@ import {
   plotCropsTable,
   activityLogsTable,
   insertActivityLogSchema,
+  farmerPlotsTable,
 } from "../db/schema.js";
 import {
   LIVEKIT_URL,
@@ -75,6 +76,11 @@ router
         return;
       }
 
+      const [plot] = await db
+        .select()
+        .from(farmerPlotsTable)
+        .where(eq(farmerPlotsTable.farmerId, userId));
+
       const participantIdentity = `log-automation-${crypto.randomUUID()}`;
 
       const agentDispatchClient = new AgentDispatchClient(
@@ -85,7 +91,12 @@ router
 
       const metadata = JSON.stringify({
         farmer,
-        crop: { ...crop, currentStage: null },
+        crop: {
+          ...crop,
+          currentStage: null,
+          latitude: plot.latitude,
+          longitude: plot.longitude,
+        },
       });
 
       const dispatch = await agentDispatchClient.createDispatch(

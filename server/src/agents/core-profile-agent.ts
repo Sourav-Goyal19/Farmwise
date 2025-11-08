@@ -9,172 +9,172 @@ import * as openai from "@livekit/agents-plugin-openai";
 import * as google from "@livekit/agents-plugin-google";
 import * as livekit from "@livekit/agents-plugin-livekit";
 import * as resemble from "@livekit/agents-plugin-resemble";
-// import * as cartesia from "@livekit/agents-plugin-cartesia";
+import * as cartesia from "@livekit/agents-plugin-cartesia";
 // import * as neuphonic from "@livekit/agents-plugin-neuphonic";
 // import * as elevenlabs from "@livekit/agents-plugin-elevenlabs";
 import {
-    voice,
-    llm,
-    defineAgent,
-    JobProcess,
-    JobContext,
-    cli,
-    WorkerOptions,
-    metrics,
-    getJobContext,
+  voice,
+  llm,
+  defineAgent,
+  JobProcess,
+  JobContext,
+  cli,
+  WorkerOptions,
+  metrics,
+  getJobContext,
 } from "@livekit/agents";
 
 type FarmerData = Partial<{
-    id: string;
-    name: string;
-    age: number;
-    gender: string;
-    primaryLanguage: string;
-    village: string;
-    district: string;
-    educationLevel: string;
-    totalLandArea: number;
-    experience: number;
-    prevAgent: voice.Agent<FarmerData>;
+  id: string;
+  name: string;
+  age: number;
+  gender: string;
+  primaryLanguage: string;
+  village: string;
+  district: string;
+  educationLevel: string;
+  totalLandArea: number;
+  experience: number;
+  prevAgent: voice.Agent<FarmerData>;
 }> & { agents: Record<string, voice.Agent<FarmerData>>; roomName: string };
 
 function createUserData(
-    agents: Record<string, voice.Agent<FarmerData>>,
+  agents: Record<string, voice.Agent<FarmerData>>
 ): FarmerData {
-    return {
-        id: "",
-        name: "",
-        gender: "",
-        age: 18,
-        primaryLanguage: "",
-        village: "",
-        district: "",
-        educationLevel: "",
-        totalLandArea: 0,
-        experience: 0,
-        roomName: "",
-        agents,
-    };
+  return {
+    id: "",
+    name: "",
+    gender: "",
+    age: 18,
+    primaryLanguage: "",
+    village: "",
+    district: "",
+    educationLevel: "",
+    totalLandArea: 0,
+    experience: 0,
+    roomName: "",
+    agents,
+  };
 }
 
 function summarize({
-    id,
-    name,
-    gender,
-    primaryLanguage,
-    village,
-    district,
-    educationLevel,
-    totalLandArea,
-    experience,
+  id,
+  name,
+  gender,
+  primaryLanguage,
+  village,
+  district,
+  educationLevel,
+  totalLandArea,
+  experience,
 }: FarmerData) {
-    return JSON.stringify({
-        id: id || "unknown",
-        name: name || "unknown",
-        gender: gender || "unknown",
-        primaryLanguage: primaryLanguage || "unknown",
-        village: village || "unknown",
-        district: district || "unknown",
-        educationLevel: educationLevel || "unknown (optional)",
-        totalLandArea: totalLandArea || "unknown",
-        experience: experience || "unknown",
-    });
+  return JSON.stringify({
+    id: id || "unknown",
+    name: name || "unknown",
+    gender: gender || "unknown",
+    primaryLanguage: primaryLanguage || "unknown",
+    village: village || "unknown",
+    district: district || "unknown",
+    educationLevel: educationLevel || "unknown (optional)",
+    totalLandArea: totalLandArea || "unknown",
+    experience: experience || "unknown",
+  });
 }
 
 class BaseAgent extends voice.Agent<FarmerData> {
+  name: string;
+
+  constructor(options: voice.AgentOptions<FarmerData> & { name: string }) {
+    const { name, ...opts } = options;
+    super(opts);
+    this.name = name;
+  }
+
+  async onEnter(): Promise<void> {
+    const farmersData = this.session.userData;
+    const chatCtx = this.chatCtx.copy();
+
+    if (farmersData.prevAgent) {
+      const truncatedChatCtx = farmersData.prevAgent.chatCtx.copy({
+        excludeFunctionCall: true,
+        excludeInstructions: true,
+      });
+      const existingIds = new Set(chatCtx.items.map((it) => it.id));
+      const newItems = truncatedChatCtx.items.filter(
+        (item) => !existingIds.has(item.id)
+      );
+      chatCtx.items.push(...newItems);
+    }
+
+    chatCtx.addMessage({
+      role: "system",
+      content: `You are ${
+        this.name
+      } agent. Current Farmer's data is \n ${summarize(farmersData)}`,
+    });
+
+    await this.updateChatCtx(chatCtx);
+    this.session.generateReply({
+      toolChoice: "none",
+      instructions:
+        "Greet the farmer in their native/primary language and then start to talk.",
+    });
+  }
+
+  async transferToAgent(options: {
     name: string;
-
-    constructor(options: voice.AgentOptions<FarmerData> & { name: string }) {
-        const { name, ...opts } = options;
-        super(opts);
-        this.name = name;
+    ctx: voice.RunContext<FarmerData>;
+  }) {
+    const { name, ctx } = options;
+    const farmersData = ctx.userData;
+    const currAgent = ctx.session.currentAgent;
+    const nextAgent = farmersData.agents[name];
+    if (!nextAgent) {
+      throw new Error(`Agent ${name} not found.`);
     }
+    farmersData.prevAgent = currAgent;
 
-    async onEnter(): Promise<void> {
-        const farmersData = this.session.userData;
-        const chatCtx = this.chatCtx.copy();
-
-        if (farmersData.prevAgent) {
-            const truncatedChatCtx = farmersData.prevAgent.chatCtx.copy({
-                excludeFunctionCall: true,
-                excludeInstructions: true,
-            });
-            const existingIds = new Set(chatCtx.items.map((it) => it.id));
-            const newItems = truncatedChatCtx.items.filter(
-                (item) => !existingIds.has(item.id),
-            );
-            chatCtx.items.push(...newItems);
-        }
-
-        chatCtx.addMessage({
-            role: "system",
-            content: `You are ${
-                this.name
-            } agent. Current Farmer's data is \n ${summarize(farmersData)}`,
-        });
-
-        await this.updateChatCtx(chatCtx);
-        this.session.generateReply({
-            toolChoice: "none",
-            instructions:
-                "Greet the farmer in their native/primary language and then start to talk.",
-        });
-    }
-
-    async transferToAgent(options: {
-        name: string;
-        ctx: voice.RunContext<FarmerData>;
-    }) {
-        const { name, ctx } = options;
-        const farmersData = ctx.userData;
-        const currAgent = ctx.session.currentAgent;
-        const nextAgent = farmersData.agents[name];
-        if (!nextAgent) {
-            throw new Error(`Agent ${name} not found.`);
-        }
-        farmersData.prevAgent = currAgent;
-
-        return llm.handoff({
-            agent: nextAgent,
-            returns: `Transferring to ${name} agent.`,
-        });
-    }
+    return llm.handoff({
+      agent: nextAgent,
+      returns: `Transferring to ${name} agent.`,
+    });
+  }
 }
 
 function createCoreProfileAgent() {
-    const insertFarmerSchema = z.object({
-        id: z.string().describe("Unique identifier for the farmer"),
-        name: z.string().describe("Full name of the farmer"),
-        gender: z.enum(["M", "F"]).describe("Gender of the farmer: M or F"),
-        primaryLanguage: z
-            .string()
-            .describe("Primary language spoken by the farmer"),
-        village: z.string().describe("Village where the farmer resides"),
-        district: z
-            .string()
-            .default("")
-            .optional()
-            .describe("District of the farmer (optional)"),
-        age: z.number().int().describe("Age of the farmer in years"),
-        educationLevel: z
-            .string()
-            .optional()
-            .describe("Highest education level attained (optional)"),
-        totalLandArea: z
-            .string()
-            .describe(
-                "Total land area owned or cultivated by the farmer, in acres or hectares (as string to preserve decimal precision)",
-            ),
-        experience: z
-            .string()
-            .describe(
-                "Years of farming experience (as string to preserve decimal precision)",
-            ),
-    });
+  const insertFarmerSchema = z.object({
+    id: z.string().describe("Unique identifier for the farmer"),
+    name: z.string().describe("Full name of the farmer"),
+    gender: z.enum(["M", "F"]).describe("Gender of the farmer: M or F"),
+    primaryLanguage: z
+      .string()
+      .describe("Primary language spoken by the farmer"),
+    village: z.string().describe("Village where the farmer resides"),
+    district: z
+      .string()
+      .default("")
+      .optional()
+      .describe("District of the farmer (optional)"),
+    age: z.number().int().describe("Age of the farmer in years"),
+    educationLevel: z
+      .string()
+      .optional()
+      .describe("Highest education level attained (optional)"),
+    totalLandArea: z
+      .string()
+      .describe(
+        "Total land area owned or cultivated by the farmer, in acres or hectares (as string to preserve decimal precision)"
+      ),
+    experience: z
+      .string()
+      .describe(
+        "Years of farming experience (as string to preserve decimal precision)"
+      ),
+  });
 
-    const coreProfile = new BaseAgent({
-        name: "core-profile",
-        instructions: `
+  const coreProfile = new BaseAgent({
+    name: "core-profile",
+    instructions: `
     # ROLE
     You are "Krishi Mitr" (female) (Farmer's Friend), a compassionate and polite AI voice assistant designed to support Indian farmers. Your primary goal is to collect information to complete their profile and store it securely in the database, making farmers feel valued and supported throughout the process.
 
@@ -248,363 +248,357 @@ function createCoreProfileAgent() {
 
     **Important Note** - In the end, data must be saved into the database using one of your tools.
     `,
-        tools: {
-            updateName: llm.tool({
-                description:
-                    "A tool to update the farmer's name and store that.",
-                parameters: z.object({
-                    name: z.string().min(1),
-                }),
-                execute: async ({ name }, { ctx }) => {
-                    ctx.userData.name = name;
-                    return "Farmer's name saved successfully.";
-                },
-            }),
-
-            updateGender: llm.tool({
-                description:
-                    "A tool to update the farmer's gender (e.g., Male, Female, Other).",
-                parameters: z.object({
-                    gender: z.enum(["M", "F", "O"]),
-                }),
-                execute: async ({ gender }, { ctx }) => {
-                    ctx.userData.gender = gender;
-                    return "Farmer's gender saved successfully.";
-                },
-            }),
-
-            updatePrimaryLanguage: llm.tool({
-                description:
-                    "A tool to update the farmer's primary language (e.g., Hindi, Tamil, Marathi).",
-                parameters: z.object({
-                    primaryLanguage: z.string().min(1),
-                }),
-                execute: async ({ primaryLanguage }, { ctx }) => {
-                    ctx.userData.primaryLanguage = primaryLanguage;
-                    return "Farmer's primary language saved successfully.";
-                },
-            }),
-
-            updateVillage: llm.tool({
-                description: "A tool to update the farmer's village name.",
-                parameters: z.object({
-                    village: z.string().min(1),
-                }),
-                execute: async ({ village }, { ctx }) => {
-                    ctx.userData.village = village;
-                    return "Farmer's village saved successfully.";
-                },
-            }),
-
-            updateDistrict: llm.tool({
-                description: "A tool to update the farmer's district name.",
-                parameters: z.object({
-                    district: z.string().min(1),
-                }),
-                execute: async ({ district }, { ctx }) => {
-                    ctx.userData.district = district;
-                    return "Farmer's district saved successfully.";
-                },
-            }),
-
-            updateEducationLevel: llm.tool({
-                description:
-                    "A tool to update the farmer's education level (e.g., Primary, Secondary, Graduate).",
-                parameters: z.object({
-                    educationLevel: z.string().min(1),
-                }),
-                execute: async ({ educationLevel }, { ctx }) => {
-                    ctx.userData.educationLevel = educationLevel;
-                    return "Farmer's education level saved successfully.";
-                },
-            }),
-
-            updateAge: llm.tool({
-                description: "A tool to update the age of a farmer.",
-                parameters: z.object({
-                    age: z.number().min(0),
-                }),
-                execute: async ({ age }, { ctx }) => {
-                    ctx.userData.age = age;
-                    return "Farmer's total land area saved successfully.";
-                },
-            }),
-
-            updateTotalLandArea: llm.tool({
-                description:
-                    "A tool to update the total land area owned by the farmer (in acres).",
-                parameters: z.object({
-                    totalLandArea: z.number().min(0),
-                }),
-                execute: async ({ totalLandArea }, { ctx }) => {
-                    ctx.userData.totalLandArea = totalLandArea;
-                    return "Farmer's total land area saved successfully.";
-                },
-            }),
-
-            updateExperience: llm.tool({
-                description:
-                    "A tool to update the farmer's years of experience in farming.",
-                parameters: z.object({
-                    experience: z.number().min(0),
-                }),
-                execute: async ({ experience }, { ctx }) => {
-                    ctx.userData.experience = experience;
-                    return "Farmer's experience saved successfully.";
-                },
-            }),
-
-            getFarmerSummary: llm.tool({
-                description:
-                    "Retrieve all the information collected about the farmer so far.",
-                execute: async (_, { ctx }) => {
-                    return summarize(ctx.userData);
-                },
-            }),
-
-            insertDataToDB: llm.tool({
-                parameters: insertFarmerSchema,
-                description:
-                    "Tool to add farmers profile in an online database",
-                execute: async (input, { ctx }) => {
-                    const [farmer] = await db
-                        .update(farmersTable)
-                        .set({
-                            ...input,
-                            completed: true,
-                        })
-                        .where(eq(farmersTable.id, input.id))
-                        .returning();
-
-                    const room = getJobContext().room;
-                    if (!room) {
-                        console.warn(
-                            "Could not access LiveKit room via JobContext.",
-                        );
-                        return "Inserted successfully, but no message sent to frontend.";
-                    }
-
-                    const message = {
-                        event: "profile_completed",
-                        data: farmer,
-                        message:
-                            "Farmer profile stored successfully. You may disconnect now.",
-                    };
-
-                    const encoded = new TextEncoder().encode(
-                        JSON.stringify(message),
-                    );
-                    room.localParticipant?.publishData(encoded, {
-                        reliable: true,
-                        topic: "core-profile-topic",
-                    });
-
-                    return "A farmer profile has been inserted successfully";
-                },
-            }),
+    tools: {
+      updateName: llm.tool({
+        description: "A tool to update the farmer's name and store that.",
+        parameters: z.object({
+          name: z.string().min(1),
+        }),
+        execute: async ({ name }, { ctx }) => {
+          ctx.userData.name = name;
+          return "Farmer's name saved successfully.";
         },
-    });
+      }),
 
-    return coreProfile;
+      updateGender: llm.tool({
+        description:
+          "A tool to update the farmer's gender (e.g., Male, Female, Other).",
+        parameters: z.object({
+          gender: z.enum(["M", "F", "O"]),
+        }),
+        execute: async ({ gender }, { ctx }) => {
+          ctx.userData.gender = gender;
+          return "Farmer's gender saved successfully.";
+        },
+      }),
+
+      updatePrimaryLanguage: llm.tool({
+        description:
+          "A tool to update the farmer's primary language (e.g., Hindi, Tamil, Marathi).",
+        parameters: z.object({
+          primaryLanguage: z.string().min(1),
+        }),
+        execute: async ({ primaryLanguage }, { ctx }) => {
+          ctx.userData.primaryLanguage = primaryLanguage;
+          return "Farmer's primary language saved successfully.";
+        },
+      }),
+
+      updateVillage: llm.tool({
+        description: "A tool to update the farmer's village name.",
+        parameters: z.object({
+          village: z.string().min(1),
+        }),
+        execute: async ({ village }, { ctx }) => {
+          ctx.userData.village = village;
+          return "Farmer's village saved successfully.";
+        },
+      }),
+
+      updateDistrict: llm.tool({
+        description: "A tool to update the farmer's district name.",
+        parameters: z.object({
+          district: z.string().min(1),
+        }),
+        execute: async ({ district }, { ctx }) => {
+          ctx.userData.district = district;
+          return "Farmer's district saved successfully.";
+        },
+      }),
+
+      updateEducationLevel: llm.tool({
+        description:
+          "A tool to update the farmer's education level (e.g., Primary, Secondary, Graduate).",
+        parameters: z.object({
+          educationLevel: z.string().min(1),
+        }),
+        execute: async ({ educationLevel }, { ctx }) => {
+          ctx.userData.educationLevel = educationLevel;
+          return "Farmer's education level saved successfully.";
+        },
+      }),
+
+      updateAge: llm.tool({
+        description: "A tool to update the age of a farmer.",
+        parameters: z.object({
+          age: z.number().min(0),
+        }),
+        execute: async ({ age }, { ctx }) => {
+          ctx.userData.age = age;
+          return "Farmer's total land area saved successfully.";
+        },
+      }),
+
+      updateTotalLandArea: llm.tool({
+        description:
+          "A tool to update the total land area owned by the farmer (in acres).",
+        parameters: z.object({
+          totalLandArea: z.number().min(0),
+        }),
+        execute: async ({ totalLandArea }, { ctx }) => {
+          ctx.userData.totalLandArea = totalLandArea;
+          return "Farmer's total land area saved successfully.";
+        },
+      }),
+
+      updateExperience: llm.tool({
+        description:
+          "A tool to update the farmer's years of experience in farming.",
+        parameters: z.object({
+          experience: z.number().min(0),
+        }),
+        execute: async ({ experience }, { ctx }) => {
+          ctx.userData.experience = experience;
+          return "Farmer's experience saved successfully.";
+        },
+      }),
+
+      getFarmerSummary: llm.tool({
+        description:
+          "Retrieve all the information collected about the farmer so far.",
+        execute: async (_, { ctx }) => {
+          return summarize(ctx.userData);
+        },
+      }),
+
+      insertDataToDB: llm.tool({
+        parameters: insertFarmerSchema,
+        description: "Tool to add farmers profile in an online database",
+        execute: async (input, { ctx }) => {
+          const [farmer] = await db
+            .update(farmersTable)
+            .set({
+              ...input,
+              completed: true,
+            })
+            .where(eq(farmersTable.id, input.id))
+            .returning();
+
+          const room = getJobContext().room;
+          if (!room) {
+            console.warn("Could not access LiveKit room via JobContext.");
+            return "Inserted successfully, but no message sent to frontend.";
+          }
+
+          const message = {
+            event: "profile_completed",
+            data: farmer,
+            message:
+              "Farmer profile stored successfully. You may disconnect now.",
+          };
+
+          const encoded = new TextEncoder().encode(JSON.stringify(message));
+          room.localParticipant?.publishData(encoded, {
+            reliable: true,
+            topic: "core-profile-topic",
+          });
+
+          return "A farmer profile has been inserted successfully";
+        },
+      }),
+    },
+  });
+
+  return coreProfile;
 }
 
 export default defineAgent({
-    prewarm: async (proc: JobProcess) => {
-        proc.userData.vad = await silero.VAD.load();
-    },
-    entry: async (ctx: JobContext) => {
-        const metadata = ctx.job.metadata ? JSON.parse(ctx.job.metadata) : {};
-        const id = metadata.userId;
-        const primaryLanguage = metadata.primaryLanguage || "en";
-        const roomName = ctx.room.name!;
+  prewarm: async (proc: JobProcess) => {
+    proc.userData.vad = await silero.VAD.load();
+  },
+  entry: async (ctx: JobContext) => {
+    const metadata = ctx.job.metadata ? JSON.parse(ctx.job.metadata) : {};
+    const id = metadata.userId;
+    const primaryLanguage = metadata.primaryLanguage || "en";
+    const roomName = ctx.room.name!;
 
-        const userData = createUserData({
-            coreProfile: createCoreProfileAgent(),
-        });
+    const userData = createUserData({
+      coreProfile: createCoreProfileAgent(),
+    });
 
-        userData.id = id;
-        userData.primaryLanguage = primaryLanguage;
-        userData.roomName = roomName;
+    userData.id = id;
+    userData.primaryLanguage = primaryLanguage;
+    userData.roomName = roomName;
 
-        const session = new voice.AgentSession({
-            userData,
-            stt: getSTT(primaryLanguage),
-            // llm: new openai.LLM({
-            //   model: "gpt-4.1",
-            //   apiKey: process.env.OPENROUTER_API_KEY,
-            //   baseURL: process.env.OPENROUTER_API_KEY,
-            // }),
-            // llm: new google.LLM({
-            //   model: "gemini-2.0-flash",
-            //   apiKey: process.env.GOOGLE_API_KEY!,
-            // }),
-            // llm: openai.LLM.withGroq({
-            //   model: "moonshotai/kimi-k2-instruct-0905",
-            //   apiKey: process.env.GROQ_API_KEY!,
-            // }),
-            llm: getLLM("openai"),
-            // tts: new cartesia.TTS({
-            //   model: "sonic-2",
-            //   voice: "e07c00bc-4134-4eae-9ea4-1a55fb45746b",
-            // }),
-            // tts: new neuphonic.TTS({
-            //   voiceId: "a2103bbb-ab1f-4b1a-b4b7-f2466ce14f11",
-            //   apiKey: process.env.NEUPHONIC_API_KEY,
-            // }),
-            // tts: new elevenlabs.TTS({
-            //   voice: {
-            //     id: "Z3R5wn05IrDiVCyEkUrK",
-            //     name: "arabella",
-            //     category: "conversational",
-            //   },
-            //   modelID: "eleven_multilingual_v2",
-            // }),
-            tts: getTTS(primaryLanguage),
-            vad: ctx.proc.userData.vad! as silero.VAD,
-            turnDetection: new livekit.turnDetector.MultilingualModel(),
-        });
+    const session = new voice.AgentSession({
+      userData,
+      stt: getSTT(primaryLanguage),
+      // llm: new openai.LLM({
+      //   model: "gpt-4.1",
+      //   apiKey: process.env.OPENROUTER_API_KEY,
+      //   baseURL: process.env.OPENROUTER_API_KEY,
+      // }),
+      // llm: new google.LLM({
+      //   model: "gemini-2.0-flash",
+      //   apiKey: process.env.GOOGLE_API_KEY!,
+      // }),
+      // llm: openai.LLM.withGroq({
+      //   model: "moonshotai/kimi-k2-instruct-0905",
+      //   apiKey: process.env.GROQ_API_KEY!,
+      // }),
+      llm: getLLM("openai"),
+      // tts: new cartesia.TTS({
+      //   model: "sonic-2",
+      //   voice: "e07c00bc-4134-4eae-9ea4-1a55fb45746b",
+      // }),
+      // tts: new neuphonic.TTS({
+      //   voiceId: "a2103bbb-ab1f-4b1a-b4b7-f2466ce14f11",
+      //   apiKey: process.env.NEUPHONIC_API_KEY,
+      // }),
+      // tts: new elevenlabs.TTS({
+      //   voice: {
+      //     id: "Z3R5wn05IrDiVCyEkUrK",
+      //     name: "arabella",
+      //     category: "conversational",
+      //   },
+      //   modelID: "eleven_multilingual_v2",
+      // }),
+      tts: getTTS(primaryLanguage),
+      vad: ctx.proc.userData.vad! as silero.VAD,
+      turnDetection: new livekit.turnDetector.MultilingualModel(),
+    });
 
-        const usageCollector = new metrics.UsageCollector();
-        session.on(voice.AgentSessionEventTypes.MetricsCollected, (ev) => {
-            metrics.logMetrics(ev.metrics);
-            usageCollector.collect(ev.metrics);
-        });
+    const usageCollector = new metrics.UsageCollector();
+    session.on(voice.AgentSessionEventTypes.MetricsCollected, (ev) => {
+      metrics.logMetrics(ev.metrics);
+      usageCollector.collect(ev.metrics);
+    });
 
-        const logUsage = async () => {
-            const summary = usageCollector.getSummary();
-            console.log(`Usage: ${JSON.stringify(summary)}`);
+    const logUsage = async () => {
+      const summary = usageCollector.getSummary();
+      console.log(`Usage: ${JSON.stringify(summary)}`);
+    };
+
+    ctx.addShutdownCallback(logUsage);
+
+    session.on(voice.AgentSessionEventTypes.AgentStateChanged, (ev) => {
+      const room = ctx.room;
+      if (ev.newState == "speaking") {
+        const message = {
+          event: "agent_started_speaking",
+          msg: "Agent is speaking now",
         };
-
-        ctx.addShutdownCallback(logUsage);
-
-        session.on(voice.AgentSessionEventTypes.AgentStateChanged, (ev) => {
-            const room = ctx.room;
-            if (ev.newState == "speaking") {
-                const message = {
-                    event: "agent_started_speaking",
-                    msg: "Agent is speaking now",
-                };
-                const encoded = new TextEncoder().encode(
-                    JSON.stringify(message),
-                );
-                room.localParticipant?.publishData(encoded, {
-                    reliable: true,
-                    topic: "core-profile-topic",
-                });
-            } else if (
-                ev.newState == "listening" ||
-                ev.newState == "idle" ||
-                ev.newState == "thinking"
-            ) {
-                const message = {
-                    event: "agent_stopped_speaking",
-                    msg: "Agent is not speaking now.",
-                };
-                const encoded = new TextEncoder().encode(
-                    JSON.stringify(message),
-                );
-                room.localParticipant?.publishData(encoded, {
-                    reliable: true,
-                    topic: "core-profile-topic",
-                });
-            }
+        const encoded = new TextEncoder().encode(JSON.stringify(message));
+        room.localParticipant?.publishData(encoded, {
+          reliable: true,
+          topic: "core-profile-topic",
         });
-
-        await session.start({
-            agent: userData.agents.coreProfile!,
-            room: ctx.room,
+      } else if (
+        ev.newState == "listening" ||
+        ev.newState == "idle" ||
+        ev.newState == "thinking"
+      ) {
+        const message = {
+          event: "agent_stopped_speaking",
+          msg: "Agent is not speaking now.",
+        };
+        const encoded = new TextEncoder().encode(JSON.stringify(message));
+        room.localParticipant?.publishData(encoded, {
+          reliable: true,
+          topic: "core-profile-topic",
         });
+      }
+    });
 
-        const participant = await ctx.waitForParticipant();
-        console.log("Participant joined:", participant.identity);
-    },
+    await session.start({
+      agent: userData.agents.coreProfile!,
+      room: ctx.room,
+    });
+
+    const participant = await ctx.waitForParticipant();
+    console.log("Participant joined:", participant.identity);
+  },
 });
 
 function getSTT(language: string) {
-    language = language.toLowerCase();
-    switch (language) {
-        case "hindi":
-            return "deepgram/nova-2:hi";
-        case "english":
-            return "deepgram/nova-2:en";
-        default:
-            return "deepgram/nova-2:en";
-    }
+  language = language.toLowerCase();
+  switch (language) {
+    case "hindi":
+      return "deepgram/nova-2:hi";
+    case "english":
+      return "deepgram/nova-2:en";
+    default:
+      return "deepgram/nova-2:en";
+  }
 }
 
 function getLLM(model: string) {
-    model = model.toLowerCase();
-    switch (model) {
-        case "openai":
-            return openai.LLM.withDeepSeek({
-                model: "openai/gpt-4.1",
-                apiKey: process.env.OPENROUTER_API_KEY,
-                baseURL: process.env.OPENROUTER_BASE_URL,
-            });
-        case "deepseek":
-            return openai.LLM.withDeepSeek({
-                model: "deepseek/deepseek-chat-v3-0324",
-                apiKey: process.env.OPENROUTER_API_KEY,
-                baseURL: process.env.OPENROUTER_BASE_URL,
-            });
-        case "moonshot":
-            return openai.LLM.withGroq({
-                model: "moonshotai/kimi-k2-instruct-0905",
-                apiKey: process.env.GROQ_API_KEY!,
-            });
-        case "llama":
-            return openai.LLM.withDeepSeek({
-                model: "meta-llama/llama-3.3-70b-instruct",
-                apiKey: process.env.OPENROUTER_API_KEY,
-                baseURL: process.env.OPENROUTER_BASE_URL,
-            });
-        case "google":
-            return new google.LLM({
-                model: "gemini-2.0-flash",
-                apiKey: process.env.GOOGLE_API_KEY!,
-            });
-        default:
-            return new google.LLM({
-                model: "gemini-2.0-flash",
-                apiKey: process.env.GOOGLE_API_KEY!,
-            });
-    }
+  model = model.toLowerCase();
+  switch (model) {
+    case "openai":
+      return openai.LLM.withDeepSeek({
+        model: "openai/gpt-4.1",
+        apiKey: process.env.OPENROUTER_API_KEY,
+        baseURL: process.env.OPENROUTER_BASE_URL,
+      });
+    case "deepseek":
+      return openai.LLM.withDeepSeek({
+        model: "deepseek/deepseek-chat-v3-0324",
+        apiKey: process.env.OPENROUTER_API_KEY,
+        baseURL: process.env.OPENROUTER_BASE_URL,
+      });
+    case "moonshot":
+      return openai.LLM.withGroq({
+        model: "moonshotai/kimi-k2-instruct-0905",
+        apiKey: process.env.GROQ_API_KEY!,
+      });
+    case "llama":
+      return openai.LLM.withDeepSeek({
+        model: "meta-llama/llama-3.3-70b-instruct",
+        apiKey: process.env.OPENROUTER_API_KEY,
+        baseURL: process.env.OPENROUTER_BASE_URL,
+      });
+    case "google":
+      return new google.LLM({
+        model: "gemini-2.0-flash",
+        apiKey: process.env.GOOGLE_API_KEY!,
+      });
+    default:
+      return new google.LLM({
+        model: "gemini-2.0-flash",
+        apiKey: process.env.GOOGLE_API_KEY!,
+      });
+  }
 }
 
 function getTTS(language: string) {
-    language = language.toLowerCase();
+  language = language.toLowerCase();
 
-    switch (language) {
-        case "hindi":
-            // return new neuphonic.TTS({
-            //   voiceId: "a2103bbb-ab1f-4b1a-b4b7-f2466ce14f11",
-            //   apiKey: process.env.NEUPHONIC_API_KEY!,
-            // });
-            return new resemble.TTS({
-                voiceUuid: "daa6b448",
-            });
-        case "english":
-            // return new neuphonic.TTS({
-            //   voiceId: "06fde793-8929-45f6-8a87-643196d376e4",
-            //   apiKey: process.env.NEUPHONIC_API_KEY!,
-            // });
-            return new resemble.TTS({
-                voiceUuid: "fb2d2858",
-            });
-        default:
-            // return new neuphonic.TTS({
-            //   voiceId: "a2103bbb-ab1f-4b1a-b4b7-f2466ce14f11",
-            //   apiKey: process.env.NEUPHONIC_API_KEY!,
-            // });
-            return new resemble.TTS({
-                voiceUuid: "af3b3fad",
-            });
-    }
+  switch (language) {
+    case "hindi":
+      // return new neuphonic.TTS({
+      //   voiceId: "a2103bbb-ab1f-4b1a-b4b7-f2466ce14f11",
+      //   apiKey: process.env.NEUPHONIC_API_KEY!,
+      // });
+      // return new resemble.TTS({
+      //     voiceUuid: "daa6b448",
+      // });
+      return new cartesia.TTS({
+        model: "sonic-2",
+        voice: "56e35e2d-6eb6-4226-ab8b-9776515a7094",
+      });
+    case "english":
+      // return new neuphonic.TTS({
+      //   voiceId: "06fde793-8929-45f6-8a87-643196d376e4",
+      //   apiKey: process.env.NEUPHONIC_API_KEY!,
+      // });
+      return new resemble.TTS({
+        voiceUuid: "fb2d2858",
+      });
+    default:
+      // return new neuphonic.TTS({
+      //   voiceId: "a2103bbb-ab1f-4b1a-b4b7-f2466ce14f11",
+      //   apiKey: process.env.NEUPHONIC_API_KEY!,
+      // });
+      return new resemble.TTS({
+        voiceUuid: "af3b3fad",
+      });
+  }
 }
 
 cli.runApp(
-    new WorkerOptions({
-        agentName: "core-profile-agent",
-        agent: fileURLToPath(import.meta.url),
-    }),
+  new WorkerOptions({
+    agentName: "core-profile-agent",
+    agent: fileURLToPath(import.meta.url),
+  })
 );

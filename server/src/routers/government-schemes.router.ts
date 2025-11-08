@@ -66,7 +66,7 @@ router
           schemesTable,
           eq(farmerSchemeMatchingTable.schemeId, schemesTable.id)
         )
-        .where(eq(farmerSchemeMatchingTable.id, id));
+        .where(eq(farmerSchemeMatchingTable.schemeId, id));
 
       if (!matchingScheme) {
         return res.status(404).json({

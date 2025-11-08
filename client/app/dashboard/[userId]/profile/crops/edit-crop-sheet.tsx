@@ -12,6 +12,7 @@ import { useConfirm } from "@/hooks/use-confirm";
 import { useOpenCrop } from "@/hooks/use-crop-store";
 import { useFetchCrop } from "@/hooks/plot-crops-api-hook";
 import { useUpdateCrop, useDeleteCrop } from "@/hooks/plot-crops-api-hook";
+import { toast } from "sonner";
 
 const cropFormSchema = z.object({
   cropName: z.string().min(1, "Crop name is required"),
@@ -46,6 +47,7 @@ const EditCropSheet = () => {
       },
       {
         onSuccess: () => {
+          toast.success("Crop Editing successfully");
           onClose();
         },
       }

@@ -1,0 +1,587 @@
+[
+  {
+    "scheme_name": "Pradhan Mantri Kisan Samman Nidhi (PM-KISAN)",
+    "state": "haryana",
+    "ministry": "Ministry of Agriculture and Farmers Welfare",
+    "objective": "To supplement the financial needs of all landholding farmer's families so that they can procure various inputs to ensure proper crop health and yields, and to meet domestic needs.",
+    "benefit": "₹6000 per year released by the Central Government directly into the bank accounts of eligible farmers in three equal installments through Direct Benefit Transfer.",
+    "eligibility": {
+      "criteria": [
+        "Must be an Indian citizen",
+        "Must be a landholder farmer's family",
+        "Family should own cultivable land in India"
+      ]
+    },
+    "exclusions": [
+      "Institutional landholders",
+      "Families with a member who is or was a constitutional post holder, or senior government official, or ministers",
+      "Serving or retired officers/employees of Central/State Govt (except Class IV/Group D employees)",
+      "Retired pensioners with monthly pension of ₹10,000 or more (excluding Class IV/Group D employees)",
+      "Families with a member who paid income tax in the last assessment year",
+      "Professional practitioners like doctors, engineers, lawyers, chartered accountants, architects registered with professional bodies and carrying out profession by undertaking practices",
+      "Non-resident Indians"
+    ],
+    "application_process": "Eligible farmers can apply online via the official PM-KISAN portal (https://www.pmkisan.gov.in/) or through their respective state agriculture departments.",
+    "documents_required": [
+      "Aadhaar card",
+      "Proof of landholding",
+      "Bank account details",
+      "Citizenship proof"
+    ],
+    "official_website": "https://www.pmkisan.gov.in/",
+    "last_updated": "2025-10-22"
+  },
+  {
+    "scheme_name": "Pradhan Mantri Adarsh Gram Yojana (PMAGY)",
+    "state": "haryana",
+    "ministry": "Ministry of Social Justice and Empowerment",
+    "objective": "Integrated development of Scheduled Castes (SC) majority villages by convergent implementation of government schemes and gap-filling funds.",
+    "benefit": "Central Assistance up to ₹20,00,000 per village for gap-filling activities and access to basic services and infrastructure for dignified living.",
+    "eligibility": {
+      "criteria": [
+        "Village must have SC majority population",
+        "Preference for villages with a population greater than 500",
+        "Selection by State Governments as per scheme guidelines"
+      ]
+    },
+    "exclusions": [
+      "Villages not having SC majority population",
+      "Villages already developed as per scheme standards"
+    ],
+    "application_process": "Villages are selected by State Governments following scheme guidelines; individuals cannot apply directly.",
+    "documents_required": [
+      "Village population data",
+      "Administrative approval by State Government"
+    ],
+    "official_website": "https://www.myscheme.gov.in/schemes/pmagy",
+    "last_updated": "2025-10-22"
+  },
+  {
+    "scheme_name": "Pradhan Mantri Krishi Sinchayee Yojana: Per Drop More Crop (PMKSY-PDMC)",
+    "state": "haryana",
+    "ministry": "Ministry of Agriculture and Farmers Welfare",
+    "objective": "Enhance water use efficiency at the farm level through micro irrigation (drip/sprinkler), improve crop productivity, and ensure access to irrigation.",
+    "benefit": "Financial assistance for installation of micro irrigation systems, micro-level water storage, and water conservation activities.",
+    "features": [
+      "Increase area under micro irrigation technologies",
+      "Increase crop productivity and farmer income by precision water management",
+      "Promote micro-irrigation tech in water-intensive crops (sugarcane, banana, cotton, etc.)",
+      "Encourage fertigation and efficient water-energy use",
+      "Convergence with existing schemes leveraging created water sources"
+    ],
+    "components": [
+      "Accelerated Irrigation Benefit Programme (AIBP)",
+      "Per Drop More Crop (PDMC)",
+      "Har Khet Ko Pani",
+      "Watershed Development"
+    ],
+    "eligibility": {
+      "criteria": ["Indian citizens", "Farmers engaged in cultivation"]
+    },
+    "application_process": "Eligible farmers can apply via their State Agriculture Departments as per nodal/implementing agency guidelines.",
+    "documents_required": [
+      "Aadhaar card",
+      "Proof of landholding/cultivation",
+      "Bank account details"
+    ],
+    "official_website": "https://www.myscheme.gov.in/schemes/pmksypdmc",
+    "last_updated": "2025-10-22"
+  },
+  {
+    "scheme_name": "Central Assistance For One Time Settlement Of Displaced Families From PoK And Chhamb Under Prime Minister's Development Package",
+    "state": "haryana",
+    "ministry": "Ministry of Home Affairs",
+    "objective": "Relief and rehabilitation for displaced families from Pakistan-occupied Jammu & Kashmir (PoJK) and Chhamb, currently settled in Jammu & Kashmir, through central assistance for one-time settlement.",
+    "benefit": "Rs. 5,49,692 per family via Direct Benefit Transfer (DBT) from the Central Government; Rs. 308 per family transferred by the State Government via DBT.",
+    "eligibility": {
+      "criteria": [
+        "Indian citizen",
+        "Family must be among the 36,384 displaced families from PoJK (1947) or Chhamb (1965, 1971)",
+        "Family/head/successor/heir residing in Jammu & Kashmir"
+      ]
+    },
+    "exclusions": [
+      "Families not displaced from PoJK during 1947 or Chhamb during 1965/1971",
+      "Families not currently settled in Jammu & Kashmir"
+    ],
+    "application_process": "The claimant/head/successor/heir can apply via the nodal authority in Jammu & Kashmir; verification and benefit transfer as per guidelines.",
+    "documents_required": [
+      "Identity proof (Aadhaar, Voter ID, etc.)",
+      "Proof of displacement category",
+      "Proof of residence in Jammu & Kashmir",
+      "Bank account details"
+    ],
+    "official_website": "https://www.myscheme.gov.in/schemes/otsdfpc",
+    "last_updated": "2025-10-22"
+  },
+  {
+    "scheme_name": "Pradhan Mantri Gram Sadak Yojana (PMGSY)",
+    "state": "haryana",
+    "ministry": "Ministry of Rural Development",
+    "objective": "Provide all-weather road connectivity to eligible unconnected rural habitations and improve rural infrastructure as a strategy for poverty alleviation.",
+    "benefit": "Construction of all-weather roads in eligible rural areas to connect habitations for economic, social, and health benefits; decentralized planning and quality assurance.",
+    "features": [
+      "Decentralized planning for road building",
+      "Roads constructed as per Indian Road Congress and Rural Roads Manual",
+      "Three-tier quality management system",
+      "Continuous fund flow",
+      "Joint funding by Centre and State (ratio varies by region)"
+    ],
+    "eligibility": {
+      "criteria": [
+        "Unconnected habitations with population up to 500 (Census 2001) in plain areas",
+        "Population of 250+ in Special Category States (North East, J&K, Himachal Pradesh, Uttarakhand), Desert Area, or designated Backward Districts"
+      ]
+    },
+    "application_process": "Selection of eligible habitations by Panchayati Raj and local representatives; individuals cannot apply directly.",
+    "documents_required": [
+      "Village population data",
+      "Administrative approval"
+    ],
+    "official_website": "https://www.myscheme.gov.in/schemes/pmgsy",
+    "last_updated": "2025-10-22"
+  },
+  {
+    "scheme_name": "Pradhan Mantri Matsya Kisan Samridhi Sah-yojana (PM-MKSSY): COMPONENT 1B: One-Time Incentive for the Adoption of Aquaculture Insurance",
+    "state": "haryana",
+    "ministry": "Ministry of Fisheries, Animal Husbandry and Dairying",
+    "objective": "Formalise the fisheries sector and incentivise fisheries-based microenterprises and entrepreneurs to access institutional finance; encourage formal credit adoption and support repayment capacity of fisheries microenterprises.",
+    "benefit": "One-time incentive to eligible applicants who availed institutional credit for fisheries-related activities and have adopted aquaculture insurance.",
+    "features": [
+      "Central Sector Sub-scheme under Pradhan Mantri Matsya Sampada Yojana",
+      "Implemented via National Fisheries Digital Platform (NFDP)",
+      "Online application and registration"
+    ],
+    "eligibility": {
+      "criteria": [
+        "Fisheries microenterprise or individual engaged in fisheries/aquaculture-related activities",
+        "Applicant must be registered on NFDP",
+        "Applicant must have availed institutional credit through a recognised financial institution"
+      ]
+    },
+    "application_process": "Applicants must apply online through National Fisheries Digital Platform (NFDP) and submit required documents as per Department of Fisheries guidelines.",
+    "documents_required": [
+      "NFDP registration proof",
+      "Proof of availed institutional credit",
+      "Identity proof (Aadhaar, Voter ID, etc.)"
+    ],
+    "official_website": "https://www.myscheme.gov.in/schemes/pmmkssy-1b",
+    "last_updated": "2025-10-22"
+  },
+  {
+    "scheme_name": "Pradhan Mantri Matsya Sampada Yojana: Establishment of Backyard mini RAS Units - Haryana",
+    "state": "haryana",
+    "ministry": "Fisheries Department, Government of Haryana (Centrally Sponsored Scheme under Ministry of Fisheries, Animal Husbandry and Dairying)",
+    "objective": "Promote the setup of Mini Recirculatory Aquaculture System (RAS) units to enhance fish production and create livelihood opportunities among fish farmers in Haryana.",
+    "benefit": "Financial assistance in the form of subsidies to eligible beneficiaries for establishing backyard mini RAS units using various water sources (canals, rivers, springs, wells, tube wells).",
+    "features": [
+      "Support for constructing Mini RAS units",
+      "Utilization of multiple surface and groundwater sources",
+      "Implementation at the state level in Haryana"
+    ],
+    "eligibility": {
+      "criteria": [
+        "Resident of Haryana",
+        "Fish farmer or individual intending to set up backyard mini RAS unit"
+      ]
+    },
+    "application_process": "Eligible applicants can apply through the Fisheries Department, Government of Haryana; application guidelines as per department notifications.",
+    "documents_required": [
+      "Residence proof (Haryana)",
+      "Identity proof",
+      "Proof of engagement in fish farming or intent to set up RAS unit"
+    ],
+    "official_website": "https://www.myscheme.gov.in/schemes/ebmrasuhr",
+    "last_updated": "2025-10-22"
+  },
+  {
+    "scheme_name": "Pradhan Mantri Fasal Bima Yojna (PMFBY)",
+    "state": "haryana",
+    "ministry": "Ministry of Agriculture and Farmers Welfare",
+    "objective": "To provide financial protection and crop insurance to farmers against crop loss due to natural disasters, pests, and diseases; to stabilize farmers' income and encourage modern agricultural practices.",
+    "benefit": "Insurance coverage for over 50 different crops with cost-effective premium rates. Compensation for crops damaged due to natural calamities, pests, and diseases. Coverage through network of insurance companies and banks.",
+    "features": [
+      "Affordable crop insurance for all Indian farmers",
+      "Coverage of more than 50 crore farmers",
+      "Covers both kharif and rabi crops",
+      "Implemented via authorized insurance providers"
+    ],
+    "eligibility": {
+      "criteria": [
+        "Indian citizens",
+        "Farmers (cultivators or sharecroppers) of insured land"
+      ]
+    },
+    "application_process": "Eligible farmers/cultivators/sharecroppers can apply through banks, insurance companies, or the official PMFBY portal as per government notification.",
+    "documents_required": [
+      "Proof of cultivation/sharecropping",
+      "Identity proof (Aadhaar, Voter ID, etc.)",
+      "Bank account details"
+    ],
+    "official_website": "https://www.myscheme.gov.in/schemes/pmfby",
+    "last_updated": "2025-10-22"
+  },
+  {
+    "scheme_name": "Pradhan Mantri Matsya Sampada Yojana (PMMSY)",
+    "state": "haryana",
+    "ministry": "Ministry of Fisheries, Animal Husbandry and Dairying",
+    "objective": "Ecologically healthy, economically viable, and socially inclusive development of the fisheries sector through a Blue Revolution. Enhance fish production, productivity, and exports, generate employment, and ensure the welfare of fishers.",
+    "benefit": "Financial support for fisheries activities, infrastructure development, post-harvest management, quality improvement, and direct/indirect employment for 55 lakh persons.",
+    "features": [
+      "Central sector and centrally sponsored sub-schemes",
+      "Holistic development and welfare of the fisheries sector",
+      "Implemented pan-India, including all States and UTs",
+      "Online application and eligibility check via official portal"
+    ],
+    "targets": [
+      "Increase fish production to 22 million metric tons by 2024-25",
+      "Enhance aquaculture productivity to 5 tons/hectare",
+      "Augment domestic fish consumption to 12 kg per capita",
+      "Double export earnings to ₹1,00,000 crores by 2024-25",
+      "Generate 55 lakh direct and indirect employment opportunities"
+    ],
+    "eligibility": {
+      "criteria": [
+        "Fishers, fish farmers, fish workers, fish vendors",
+        "Fisheries development corporations, SHGs, JLGs, cooperatives, federations",
+        "Entrepreneurs, private firms, Fish Farmers Producer Organizations/Companies",
+        "SC/ST/women/differently abled persons",
+        "State/UT government entities and boards",
+        "Central government entities"
+      ]
+    },
+    "application_process": "Applicants must check eligibility and apply through the PMMSY official portal or through their respective department/agency online or offline as per guidelines.",
+    "documents_required": [
+      "Identity proof (Aadhaar, Voter ID, etc.)",
+      "Proof of occupation or participation in eligible fisheries activities",
+      "Relevant institutional approvals"
+    ],
+    "official_website": "https://www.myscheme.gov.in/schemes/pmmsy",
+    "last_updated": "2025-10-22"
+  },
+  {
+    "scheme_name": "National Food Security Mission (NFSM)",
+    "state": "haryana",
+    "ministry": "Ministry of Agriculture and Farmers Welfare",
+    "objective": "Bridge yield gaps in crops such as rice, wheat, pulses, millets, and nutri cereals by promoting improved technologies and farm management practices.",
+    "benefit": "Incentives for demonstrations (up to Rs. 9,000 per ha for sole crop, Rs. 15,000 for cropping-system based, Rs. 6,000 for coarse cereals), assistance for seed purchase (area not exceeding 2 ha each per season), supply of seed mini kits, improved farm implements, bio-pesticides, micronutrients, and bio-fertilizers.",
+    "features": [
+      "Production and distribution of seeds",
+      "Cluster/Frontline Demonstrations",
+      "Supply of farm inputs and implements",
+      "Seed mini kits",
+      "Support for bio-pesticides, micronutrients, bio-fertilizers"
+    ],
+    "eligibility": {
+      "criteria": [
+        "Indian citizens",
+        "Farmers growing rice, wheat, pulses, millets, or nutri cereals",
+        "Area not exceeding 2 hectares for seed assistance per crop season"
+      ]
+    },
+    "application_process": "Eligible farmers can apply through State Agriculture Departments or designated channels; components and benefits determined as per DBT provisions.",
+    "documents_required": [
+      "Identity proof (Aadhaar, Voter ID, etc.)",
+      "Proof of landholding/cultivation"
+    ],
+    "official_website": "https://www.myscheme.gov.in/schemes/nfsmcss",
+    "last_updated": "2025-10-22"
+  },
+  {
+    "scheme_name": "Bhavantar Bharpai Yojana",
+    "state": "haryana",
+    "ministry": "Department of Horticulture, Government of Haryana",
+    "objective": "Protect horticultural farmers from market price fluctuations and compensate them if they receive low prices for their produce in the market; reduce financial risk and encourage diversification in agriculture.",
+    "benefit": "Compensation provided to registered farmers if the sale price of covered crops in the market falls below the protected price set by the government.",
+    "features": [
+      "Covers 21 crops including Ladyfinger, Chilli, Bottle Gourd, Bitter Gourd, Cabbage, Radish, Tomato, Onion, Potato, Cauliflower, Carrot, Peas, Capsicum, Brinjal, Turmeric, Garlic, Mango, Kinnow, Guava, Litchi, Plum",
+      "Eligibility for landowner, lessee, or tenant farmers in Haryana",
+      "Financial security for horticultural produce"
+    ],
+    "eligibility": {
+      "criteria": [
+        "Landowner, lessee, or tenant farmer in Haryana",
+        "Cultivate one or more covered crops"
+      ]
+    },
+    "application_process": "Eligible farmers can apply via the Department of Horticulture, Haryana, as per the notified process.",
+    "documents_required": [
+      "Proof of land ownership/lease/tenancy",
+      "Identity proof (Aadhaar, Voter ID, etc.)",
+      "Details of cultivation/sown crops"
+    ],
+    "official_website": "https://www.myscheme.gov.in/schemes/bvby",
+    "last_updated": "2025-10-22"
+  },
+  {
+    "scheme_name": "National Agriculture Insurance Scheme (NAIS)",
+    "state": "haryana",
+    "ministry": "Ministry of Agriculture and Farmers Welfare",
+    "objective": "Provide comprehensive insurance coverage and financial support to farmers against crop loss due to natural calamities, pests, and diseases; encourage the stability of farm incomes and adoption of modern agricultural practices.",
+    "benefit": "Insurance for food crops, oilseeds, and selected commercial/horticultural crops; subsidized premiums for small and marginal farmers; claim settlement through direct bank transfer.",
+    "features": [
+      "Protection against crop losses due to drought, flood, hailstorm, cyclone, pests, and diseases",
+      "Coverage for sowing/planting risk, standing crop losses, post-harvest losses due to specified perils, and localized losses like hailstorms/landslides",
+      "Available across notified areas and seasons"
+    ],
+    "eligibility": {
+      "criteria": [
+        "Indian farmers cultivating notified crops in insured areas",
+        "Small and marginal farmers eligible for subsidized premium rates"
+      ]
+    },
+    "application_process": "Eligible farmers can apply through local agriculture offices, insurance companies, or notified channels; report losses within 48 hours for assessment.",
+    "documents_required": [
+      "Proof of cultivation",
+      "Identity proof (Aadhaar, Voter ID, etc.)",
+      "Bank account details"
+    ],
+    "official_website": "https://www.myscheme.gov.in/schemes/nai",
+    "last_updated": "2025-10-22"
+  },
+  {
+    "scheme_name": "Development Support for Coffee in Traditional Areas: Water Augmentation",
+    "state": "haryana",
+    "ministry": "Ministry of Commerce and Industry",
+    "objective": "Improve the production and productivity of coffee plantations by encouraging water augmentation (irrigation and water management) in traditional coffee-growing regions.",
+    "benefit": "Subsidy and development support provided to eligible stakeholders for water augmentation activities in coffee plantations.",
+    "features": [
+      "Sub-component of Integrated Coffee Development Project (Medium Term Framework)",
+      "Administered by Coffee Board, Department of Commerce",
+      "Promotes improved irrigation in traditional coffee areas"
+    ],
+    "eligibility": {
+      "criteria": [
+        "Individual coffee grower",
+        "Joint coffee owner",
+        "Family members growing coffee together",
+        "Stakeholder in traditional coffee growing region"
+      ]
+    },
+    "application_process": "Eligible applicants (coffee growers/owners) may apply to the Coffee Board as per notified scheme guidelines.",
+    "documents_required": [
+      "Proof of coffee plantation ownership",
+      "Stakeholder credentials",
+      "Identity proof"
+    ],
+    "official_website": "https://www.myscheme.gov.in/schemes/dsctawa",
+    "last_updated": "2025-10-22"
+  },
+  {
+    "scheme_name": "SVAMITVA Yojana (Survey of Villages and Mapping with Improvised Technology in Village Areas)",
+    "state": "haryana",
+    "ministry": "Ministry of Panchayati Raj",
+    "objective": "To establish clear ownership of property in rural inhabited (Abadi) areas by mapping land parcels using drone technology and providing legal ownership cards (Property cards/Title deeds) to property owners. To create accurate land records, enable financial stability, and inform rural planning.",
+    "benefit": "Issuance of legal ownership cards (Property cards/Title deeds) to rural land/property owners; creation of survey infrastructure and GIS maps to support rural development planning and determine property tax.",
+    "features": [
+      "Covers 6.62 lakh villages over five years",
+      "Drone technology for land parcel mapping",
+      "Central Sector scheme"
+    ],
+    "eligibility": {
+      "criteria": [
+        "Resident of rural area",
+        "Possess property in rural abadi area"
+      ]
+    },
+    "application_process": "Eligible rural residents can apply for property mapping and ownership card via the Gram Panchayat or designated authorities as per SVAMITVA guidelines.",
+    "documents_required": [
+      "Proof of property ownership in rural abadi area",
+      "Identity proof (Aadhaar, Voter ID, etc.)",
+      "Residence proof"
+    ],
+    "official_website": "https://www.myscheme.gov.in/schemes/pmsy",
+    "last_updated": "2025-10-22"
+  },
+  {
+    "scheme_name": "National Agriculture Market (e-NAM)",
+    "state": "haryana",
+    "ministry": "Ministry of Agriculture and Farmers Welfare",
+    "objective": "Create a pan-India electronic trading portal integrating existing APMC mandis into one unified online marketplace, promoting 'One Nation One Market' for agricultural commodities.",
+    "benefit": "Single-window online platform for agricultural trade, commodity arrivals, quality assaying, e-bidding, and direct e-payment to farmers. Enhances transparency, efficiency, price discovery, and market access for sellers and buyers.",
+    "features": [
+      "Digital integration of mandis across India",
+      "AI-based quality assaying system",
+      "E-bidding and online payments for efficiency",
+      "Standardized marketing and transaction procedures",
+      "Integrated more than 1,000 mandis nationwide"
+    ],
+    "eligibility": {
+      "criteria": [
+        "State Governments/UT Administrations for mandi integration",
+        "Farmers, traders, buyers registered with integrated APMC mandis"
+      ]
+    },
+    "application_process": "Eligible farmers, traders, and buyers must register online through the e-NAM platform or participating APMC mandis as per guidelines.",
+    "documents_required": [
+      "Identity proof (Aadhaar, Voter ID, etc.)",
+      "Relevant mandi/trade documents"
+    ],
+    "official_website": "https://www.myscheme.gov.in/schemes/e-nam",
+    "last_updated": "2025-10-22"
+  },
+  {
+    "scheme_name": "Agri-Clinics And Agri-Business Centres Scheme (AC&ABC)",
+    "state": "haryana",
+    "ministry": "Ministry of Agriculture and Farmers Welfare",
+    "objective": "Promote agricultural development by providing extension and advisory services to farmers, supplement public extension, and generate self-employment for agricultural graduates and allied subject holders.",
+    "benefit": "Start-up training and special loans for eligible agricultural and allied graduates to set up agri-clinics/agri-business centers that offer paid or free services to farmers, such as agricultural advice, input supply, veterinary care, soil and water testing labs, pesticide units, seed processing units, farm equipment hire centres, and marketing services.",
+    "features": [
+      "Implemented by National Bank for Agriculture and Rural Development (NABARD)",
+      "Start-up training and business support for self-employment",
+      "Loans available for successful trainees",
+      "Extension and advisory services across a wide range of agricultural activities"
+    ],
+    "eligibility": {
+      "criteria": [
+        "Unemployed graduates in Agriculture",
+        "Unemployed graduates in Horticulture",
+        "Unemployed graduates in Sericulture",
+        "Unemployed graduates in Veterinary Sciences",
+        "Unemployed graduates in Forestry",
+        "Unemployed graduates in Dairy Technology",
+        "Unemployed graduates in Poultry Production",
+        "Unemployed graduates in Fisheries",
+        "Diploma holders in Agriculture and allied subjects",
+        "Intermediates with Postgraduate degrees in agribusiness/agricultural biological sciences",
+        "Age between 18 and 60 years"
+      ]
+    },
+    "application_process": "Eligible candidates apply for training and loan assistance through the scheme portal and designated nodal agencies as per guidelines.",
+    "documents_required": [
+      "Aadhaar Number",
+      "Email ID",
+      "Latest Educational Qualification certificates",
+      "Bank Account Details",
+      "Applicant photo",
+      "If Aadhaar not assigned: Aadhaar enrolment ID slip or Copy of request for Aadhaar enrolment and Voter Identity Card or PAN or Passport or Ration Card or Employee Government ID or Passbook of Bank/Post Office or MGNREGS Card or Kisan Photo Passport or Driving Licence or any other document as specified by State/UT"
+    ],
+    "official_website": "https://www.myscheme.gov.in/schemes/acandabc",
+    "last_updated": "2025-10-22"
+  },
+  {
+    "scheme_name": "Indian Agricultural Research Institute - Scholarship",
+    "state": "haryana",
+    "ministry": "Ministry of Agriculture and Farmers Welfare",
+    "objective": "Support postgraduate education at IARI by awarding scholarships to meritorious students in M.Sc. and Ph.D. courses, strengthen agricultural research and education.",
+    "benefit": "Institute scholarship for M.Sc. students (up to 2 years, extendable to 3 years and 3 months in exceptional cases for SC/ST/PC and up to one additional year for introductory courses), and Ph.D. students (up to 3 years, extendable to 4 years and 6 months for SC/ST/PC). Continuation subject to maintaining OGPA of minimum 6.00 out of 10.00 after 3rd trimester.",
+    "features": [
+      "Awarded by Dean and Joint Director (Education) based on Standing Committee recommendation",
+      "Renewal based on academic performance and attendance",
+      "Only available for periods of residence and valid attendance in Post Graduate Hostels and concerned divisions"
+    ],
+    "eligibility": {
+      "criteria": [
+        "At least 21 years of age as of 31st July in year of admission",
+        "Admission and continuing performance at IARI Post Graduate School",
+        "Maintaining minimum OGPA requirement"
+      ]
+    },
+    "application_process": "Apply through IARI's postgraduate selection process; awards made at admission and reviewed every academic year as per merit and academic progress.",
+    "documents_required": [
+      "Age proof",
+      "Admission offer and academic performance record",
+      "Attendance record at Post Graduate Hostel",
+      "Identity proof (Aadhaar, Voter ID, etc.)"
+    ],
+    "official_website": "https://www.myscheme.gov.in/schemes/iaris",
+    "last_updated": "2025-10-22"
+  },
+  {
+    "scheme_name": "Establishment of Entrepreneur for Breed Development in Small Ruminant Sector (Sheep and Goat Farming)",
+    "state": "haryana",
+    "ministry": "Ministry of Fisheries, Animal Husbandry and Dairying",
+    "objective": "Develop entrepreneurs for sustainable and integrated business models in rural sheep and goat farming, incentivize stakeholders for breed development, and convert the small ruminant sector from unorganized to organized.",
+    "benefit": "Financial assistance for setting up sheep and goat breeding units with a minimum of 500 females and 25 males using high genetic variety breeds for milk, meat, and wool. Support for establishing forward and backward linkages, scientific rearing, and stall feeding models.",
+    "features": [
+      "Promotion of scientific sheep and goat rearing and disease prevention",
+      "Encouragement of stall feeding model",
+      "Integrated approach for production and market linkages",
+      "Eligible breeds selected from official guidelines or in consultation with State Government",
+      "Minimum unit size: 500 females, 25 males",
+      "Available for individual entrepreneurs, Farmer Producer Organizations (FPO), Farmer Cooperatives (FCO), Self-Help Groups (SHG), Joint Liability Groups (JLG), and Section 8 Companies"
+    ],
+    "eligibility": {
+      "criteria": [
+        "Individual entrepreneur",
+        "Farmer Producer Organization (FPO)",
+        "Farmer Cooperative (FCO)",
+        "Self-Help Group (SHG)",
+        "Joint Liability Group (JLG)",
+        "Section 8 Company",
+        "Minimum capacity: 500 female sheep/goats and 25 male sheep/goats"
+      ]
+    },
+    "application_process": "Applicants must apply as per the National Livestock Mission guidelines through the Department of Animal Husbandry & Dairying; breed list and establishment procedures to be followed with State Government consultation.",
+    "documents_required": [
+      "Proof of entity registration (individual, FPO, FCO, SHG, JLG, Section 8 Company)",
+      "Project proposal for breed development",
+      "Proof of land/space for the unit",
+      "Identity proof (Aadhaar, Voter ID, PAN, passport, etc.)"
+    ],
+    "official_website": "https://www.myscheme.gov.in/schemes/eebdsrs",
+    "last_updated": "2025-10-22"
+  },
+  {
+    "scheme_name": "Integrated Horticulture Development Plan Scheme for Scheduled Caste Families",
+    "state": "haryana",
+    "ministry": "Department of Horticulture, Government of Haryana",
+    "objective": [
+      "Encourage Scheduled Caste (SC) farmers to take up horticultural crops as a diversification option.",
+      "Acquaint SC farmers with the latest technologies in horticulture.",
+      "Increase the income of SC families by adopting various horticultural crops and improving output."
+    ],
+    "benefit": "Quality planting materials and inputs for mushroom cultivation, bamboo stacking for vegetables, and protected cultivation with a subsidy of up to 90%. Training provided on horticulture practices.",
+    "features": [
+      "Targeted at SC farmers with small landholdings in Haryana.",
+      "Promotes mushroom cultivation and vegetable farming.",
+      "Provides training, technical guidance, and modern technologies for horticulture diversification."
+    ],
+    "eligibility": {
+      "criteria": ["Scheduled Caste farmer", "Small landholding in Haryana"]
+    },
+    "application_process": "Eligible SC farmers apply via the Department of Horticulture, Haryana. Follow notifications and guidelines issued by the department.",
+    "documents_required": [
+      "Proof of Scheduled Caste status (certificate)",
+      "Proof of landholding in Haryana",
+      "Identity proof (Aadhaar, Voter ID, PAN, Passport)",
+      "Address proof",
+      "Passport-sized photographs"
+    ],
+    "official_website": "https://www.myscheme.gov.in/schemes/ihdpsscf",
+    "last_updated": "2025-10-22"
+  },
+  {
+    "scheme_name": "Prime Minister's Rural Development Fellows Scheme (PMRDFS)",
+    "state": "haryana",
+    "ministry": "Ministry of Rural Development",
+    "objective": [
+      "Provide structured learning and hands-on professional experience in rural development and poverty reduction.",
+      "Offer short-term work opportunities for young women and men with academic or professional expertise to support district administration."
+    ],
+    "benefit": "Selected Fellows act as Development Facilitators, participate in district administration, assist in programme delivery to marginalized communities, and pursue a post-graduate degree in Development Practice through distance learning and contact sessions.",
+    "features": [
+      "Opportunity for professional and academic growth in rural development",
+      "Participation in backward districts with exposure to governance challenges",
+      "Contribution to bridging developmental and governance deficits"
+    ],
+    "eligibility": {
+      "criteria": [
+        "Young women and men with academic or professional expertise relevant to rural development",
+        "Applicants must possess qualifications allowing contribution to district-level programme delivery"
+      ]
+    },
+    "exclusions": [
+      "Applicants without relevant academic or professional expertise"
+    ],
+    "application_process": "Apply through notifications released by the Department of Rural Development; selection based on merit and relevance of experience.",
+    "documents_required": [
+      "Proof of age",
+      "Proof of educational/professional qualifications",
+      "Identity proof (Aadhaar card, Voter ID, PAN, Passport)",
+      "Supporting documents for experience"
+    ],
+    "official_website": "https://www.myscheme.gov.in/schemes/pmrdfs",
+    "last_updated": "2025-10-22"
+  }
+]

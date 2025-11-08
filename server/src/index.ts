@@ -16,6 +16,7 @@ import plotsRouter from "./routers/farmer-plots.router.js";
 import logsRouter from "./routers/log-automation.router.js";
 import contactsRouter from "./routers/farmer-contact.router.js";
 import notificationsRouter from "./routers/notifications.router.js";
+import schemesRouter from "./routers/government-schemes.router.js";
 
 const PORT = process.env.PORT || 8000;
 const LIVEKIT_API_KEY = process.env.LIVEKIT_API_KEY!;
@@ -28,42 +29,46 @@ const server = http.createServer(app);
 initSocket(server);
 
 app.use(
-    cors({
-        origin: CLIENT_URL,
-        methods: ["GET", "POST", "PATCH", "OPTIONS", "DELETE", "PUT"],
-        credentials: true,
-        optionsSuccessStatus: 204,
-    }),
+  cors({
+    origin: CLIENT_URL,
+    methods: ["GET", "POST", "PATCH", "OPTIONS", "DELETE", "PUT"],
+    credentials: true,
+    optionsSuccessStatus: 204,
+  })
 );
-app.use(express.json());
+app.use(
+  express.json({
+    limit: "50mb",
+  })
+);
 app.use(clerkMiddleware());
 app.use(express.raw({ type: "application/webhook+json" }));
 
 app.get("/", (req, res) => {
-    res.status(200).send("<h1>Working</h1>");
+  res.status(200).send("<h1>Working</h1>");
 });
 
 app.post(
-    "/api/webhooks",
-    express.raw({ type: "application/json" }),
-    async (req, res) => {
-        try {
-            const evt = await verifyWebhook(req);
-            console.log(evt.type);
-            console.log(evt.data);
+  "/api/webhooks",
+  express.raw({ type: "application/json" }),
+  async (req, res) => {
+    try {
+      const evt = await verifyWebhook(req);
+      console.log(evt.type);
+      console.log(evt.data);
 
-            if (evt.type == "user.created") {
-                await db.insert(farmersTable).values({
-                    id: evt.data.id,
-                });
-            }
+      if (evt.type == "user.created") {
+        await db.insert(farmersTable).values({
+          id: evt.data.id,
+        });
+      }
 
-            return res.send("Webhook received");
-        } catch (err) {
-            console.error("Error verifying webhook:", err);
-            return res.status(400).send("Error verifying webhook");
-        }
-    },
+      return res.send("Webhook received");
+    } catch (err) {
+      console.error("Error verifying webhook:", err);
+      return res.status(400).send("Error verifying webhook");
+    }
+  }
 );
 
 app.use("/api/logs", logsRouter);
@@ -73,21 +78,22 @@ app.use("/api/farmers/crops", cropsRouter);
 app.use("/api/farmers/profile", profileRouter);
 app.use("/api/farmers/contacts", contactsRouter);
 app.use("/api/notifications", notificationsRouter);
+app.use("/api/schemes", schemesRouter);
 
 const webhookReciever = new WebhookReceiver(
-    LIVEKIT_API_KEY,
-    LIVEKIT_API_SECRET,
+  LIVEKIT_API_KEY,
+  LIVEKIT_API_SECRET
 );
 
 app.post("/livekit/webhook", async (req, res) => {
-    try {
-        const event = await webhookReciever.receive(
-            req.body,
-            req.get("Authorization"),
-        );
-        console.log(event);
-    } catch (error) {}
-    res.status(200).send();
+  try {
+    const event = await webhookReciever.receive(
+      req.body,
+      req.get("Authorization")
+    );
+    console.log(event);
+  } catch (error) {}
+  res.status(200).send();
 });
 
 server.listen(PORT, () => console.log("Server started at port", PORT));

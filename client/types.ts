@@ -87,6 +87,68 @@ export type RetrieveCropResponse = {
     plot: CropTableType;
 };
 
-// export type CreateContactResponse={
-//
-// }
+export type SelectActivityLogType = {
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+  farmerId: string;
+  cropId: string;
+  activityType:
+    | "irrigation"
+    | "pesticide"
+    | "fertilizer"
+    | "sowing"
+    | "plowing"
+    | "weeding"
+    | "harvest"
+    | "transport"
+    | "sales"
+    | "inspection"
+    | "maintenance"
+    | "other";
+  details: string[];
+  summary: string;
+  said: string;
+  photoUrl?: string;
+  notes?: string;
+  suggestions?: string[];
+};
+
+export type InsertActivityLogType = {
+  cropId: string;
+  farmerId: string;
+  activityType:
+    | "irrigation"
+    | "pesticide"
+    | "fertilizer"
+    | "sowing"
+    | "plowing"
+    | "weeding"
+    | "harvest"
+    | "transport"
+    | "sales"
+    | "inspection"
+    | "maintenance"
+    | "other";
+  details: string[];
+  summary: string;
+  said: string;
+  id?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+  photoUrl?: string;
+  notes?: string;
+  suggestions?: string[];
+};
+
+export type NotificationType = {
+  id: string;
+  createdAt: Date;
+  farmerId: string;
+  message: string;
+  type: "message" | "reminder" | "alert";
+  scheduledFor: Date | null;
+  isRead: boolean;
+  isSent: boolean;
+  jobId?: string;
+};

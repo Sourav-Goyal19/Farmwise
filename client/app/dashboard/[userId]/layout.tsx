@@ -1,13 +1,22 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Fetch } from "./components/fetch";
 import { Sidebar } from "./components/sidebar";
 import { DashboardHeader } from "./components/dashboard-header";
+import { useSocketStore } from "@/zustand/store";
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { initializeSocket, disconnectSocket } = useSocketStore();
+
+  useEffect(() => {
+    initializeSocket();
+    return () => {
+      disconnectSocket();
+    };
+  }, [initializeSocket, disconnectSocket]);
 
   return (
     <div className="flex">

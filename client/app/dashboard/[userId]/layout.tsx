@@ -38,7 +38,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
         )}
       >
         <Sidebar isMobile={true} onNavigate={() => setMobileMenuOpen(false)} />
-      </div>
+      </div>   
 
       <div className="flex-1">
         <DashboardHeader onMenuClick={() => setMobileMenuOpen(true)} />

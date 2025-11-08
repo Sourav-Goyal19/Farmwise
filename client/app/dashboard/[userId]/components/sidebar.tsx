@@ -74,10 +74,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
       <nav className="flex flex-col gap-4">
         {navItems.map((item) => {
-          const href = user?.id
-            ? `/dashboard/${user.id}/${item.path}`
-            : `/dashboard/${item.path}`;
-          const active = pathname.startsWith(href);
+          const baseHref = user?.id ? `/dashboard/${user.id}` : '/dashboard';
+          const href = item.path ? `${baseHref}/${item.path}` : baseHref;
+          let active;
+          if (item.path === "") {
+            active = pathname === href;
+          } else {
+            active = pathname.startsWith(href);
+          }
 
           return (
             <Tooltip key={item.id}>
@@ -86,7 +90,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   <Button
                     variant={active ? "default" : "ghost"}
                     className={cn(
-                      "w-12 h-12 rounded-xl",
+                      "w-12 h-12 rounded-xl cursor-pointer",
                       active ? "shadow-lg" : ""
                     )}
                   >

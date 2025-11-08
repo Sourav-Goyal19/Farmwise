@@ -25,9 +25,8 @@ const NewContactSheet = () => {
                 farmerId: user.id,
             },
             {
-                onSuccess: (res) => {
-                    toast.success(res.message);
-                    // console.log("Plot create msg: ", res.message);
+                onSuccess: () => {
+                    toast.success("Contact Created Successfully");
                     onClose();
                 },
             },

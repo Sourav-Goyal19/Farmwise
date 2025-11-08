@@ -76,15 +76,15 @@ export type UpdatePlotResponse = {
 
 export type CreateCropResponse = {
     message: string;
-    plot: CropTableType;
+    crop: CropTableType;
 };
 export type UpdateCropResponse = {
     message: string;
-    plot: CropTableType;
+    crop: CropTableType;
 };
 export type RetrieveCropResponse = {
     message: string;
-    plot: CropTableType;
+    crop: CropTableType;
 };
 
 export type SelectActivityLogType = {

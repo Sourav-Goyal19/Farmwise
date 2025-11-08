@@ -589,7 +589,7 @@
     },
     {
         "scheme_name": "Pradhan Mantri Adarsh Gram Yojana",
-        "state": "west bengal",
+        "state": "West Bengal",
         "ministry": "Ministry of Social Justice & Empowerment, Government of India",
         "objective": "Integrated development of Scheduled Castes (SC) majority villages in West Bengal, enabling access to basic services, fulfilling minimum needs, and reducing disparities among all sections of society.",
         "benefit": "Central assistance through 'Gap-filling' funds up to ₹20,00,000 per village and support via convergence with existing Central and State schemes for infrastructure and service provision.",
@@ -617,7 +617,7 @@
     },
     {
         "scheme_name": "National Scheme Of Welfare Of Fishermen",
-        "state": "kerala",
+        "state": "Kerala",
         "ministry": "Ministry of Fisheries, Animal Husbandry and Dairying, Government of India",
         "objective": "To provide financial assistance to fishermen in Kerala for constructing houses, community halls, and installing tube wells, thereby enhancing their social welfare and livelihood.",
         "benefit": "Financial assistance is provided for housing, community infrastructure, and installation of tube wells for fishermen.",
@@ -643,7 +643,7 @@
     },
     {
         "scheme_name": "RKVY Soil Health and Fertility Village level Soil Testing Lab",
-        "state": "kerala",
+        "state": "Kerala",
         "ministry": "Ministry of Agriculture and Farmers Welfare, Government of India",
         "objective": "To provide easy access to soil testing facilities at the village level, enable timely and accurate soil analysis for informed fertilizer application and soil management practices, and promote soil health awareness among farmers in Kerala.",
         "benefit": "One-time financial assistance of ₹1.5 lakh for setting up village-level soil testing labs (VLSTL), including equipment and consumables; payment made via DBT mode to state validated labs.",
@@ -698,7 +698,7 @@
     },
     {
         "scheme_name": "Prime Minister’s Rural Development Fellows Scheme",
-        "state": "tamil nadu",
+        "state": "Tamil Nadu",
         "ministry": "Ministry of Rural Development, Government of India",
         "objective": "To provide short-term work opportunities for young professionals in Tamil Nadu with academic or professional expertise, supporting district administration in improving programme delivery and the interface with marginalized populations. The scheme aims to reduce developmental and governance deficits in rural areas.",
         "benefit": "Structured learning, hands-on professional experience, and opportunities to act as Development Facilitators in backward districts, with participation in a post-graduate degree programme through distance learning and contact sessions leading to a post-graduate degree in Development Practice.",
@@ -727,7 +727,7 @@
     },
     {
         "scheme_name": "Kisan Credit Card",
-        "state": "tamil nadu",
+        "state": "Tamil Nadu",
         "ministry": "Ministry of Agriculture and Farmers Welfare, Government of India",
         "objective": "To provide adequate and timely credit to farmers in Tamil Nadu for their agricultural operations, including short-term crop loans, post-harvest expenses, marketing loans, consumption requirements, farm asset maintenance, and investment credit for allied activities.",
         "benefit": "Subsidized interest rate on credit (4% per annum after interest subvention and prompt repayment incentive), flexibility in credit withdrawal via ATMs, micro ATMs, PoS, and mobile banking for various agricultural needs.",
@@ -754,6 +754,364 @@
             "Relevant group membership certificate (for SHG/JLG)"
         ],
         "official_website": "https://www.myscheme.gov.in/schemes/kcc",
+        "last_updated": "2025-11-06"
+    },
+    {
+        "scheme_name": "Pradhan Mantri Matsya Sampada Yojana",
+        "state": "Assam",
+        "ministry": "Ministry of Fisheries, Animal Husbandry and Dairying, Government of India",
+        "objective": "To bring about sustainable, responsible, inclusive, and equitable development of the fisheries sector in Assam, harnessing its potential and doubling the income of fishers and fish farmers.",
+        "benefit": "Financial assistance, subsidies, and support for fisheries activities, infrastructure development, and value chain modernization. Enhanced income, employment opportunities, and welfare of fishers and fish farmers.",
+        "features": [
+            "Support for fishers, fish farmers, vendors, cooperatives, and producer organizations",
+            "Modernization of value chain and quality improvement",
+            "Blue Revolution through holistic fisheries development in Assam",
+            "Targets increased fish production, aquaculture productivity, and export earnings"
+        ],
+        "eligibility": {
+            "criteria": [
+                "Resident of Assam",
+                "Fishers, fish farmers, fish vendors, Fisheries Development Corporations, SHGs/JLGs, cooperatives, federations, entrepreneurs, private firms, Fish Farmers Producer Organizations/Companies, SCs/STs/Women/Differently Abled Persons, relevant government and sector entities"
+            ]
+        },
+        "application_process": "Eligible applicants can apply via the Fisheries Department, Government of Assam, or designated agencies following detailed guidelines of the PMMSY scheme.",
+        "documents_required": [
+            "Residence proof (Assam)",
+            "Identity proof",
+            "Proof of engagement in fisheries sector (as applicable)"
+        ],
+        "official_website": "https://www.myscheme.gov.in/schemes/pmmsy",
+        "last_updated": "2025-11-06"
+    },
+    {
+        "scheme_name": "Rashtriya Gram Swaraj Abhiyan",
+        "state": "Assam",
+        "ministry": "Ministry of Panchayati Raj, Government of India",
+        "objective": "To strengthen the capacities of rural local governance institutions and Panchayati Raj Institutions (PRIs) in Assam for effective delivery on local development needs, participatory planning leveraging technology, and achieving SDGs.",
+        "benefit": "Financial and technical support for capacity building, infrastructure enhancement, e-governance, and improved service delivery at Panchayat level.",
+        "features": [
+            "Capacity building for Panchayati Raj Institutions (PRIs)",
+            "Support for participatory planning and leveraging technology",
+            "Funding for infrastructure, facilities, and training",
+            "Encouragement of e-governance and performance-based incentives"
+        ],
+        "eligibility": {
+            "criteria": [
+                "Applicable to Panchayati Raj Institutions (PRIs) in Assam",
+                "State and local governance bodies as per the scheme guidelines"
+            ]
+        },
+        "application_process": "Eligible institutions and bodies need to apply as per the directives from Ministry of Panchayati Raj and Assam State Government notifications.",
+        "documents_required": [
+            "Authorization/establishment proof of the PRI or local governance body",
+            "Relevant state government approvals and documentation",
+            "Any additional documents as stated by the Ministry of Panchayati Raj"
+        ],
+        "official_website": "https://www.myscheme.gov.in/schemes/rgsa",
+        "last_updated": "2025-11-06"
+    },
+    {
+        "scheme_name": "Galvanizing Organic Bio-Agro Resources Dhan (GOBARdhan)",
+        "state": "Assam",
+        "ministry": "Ministry of Jal Shakti (Coordinated by Department of Drinking Water and Sanitation, with involvement from multiple ministries: MNRE, MoPNG, DAHD, DACFW, Department of Rural Development, DDWS)",
+        "objective": "Support management and conversion of cattle, agricultural, and other organic waste in villages to generate wealth and energy, enhance rural income, improve village cleanliness, and promote ODF-plus status.",
+        "benefit": "Technical and financial assistance for establishing biogas and waste-to-wealth projects at village/community/entrepreneur levels, supporting wealth and energy generation from organic waste.",
+        "features": [
+            "Supports construction/operation of biogas plants (individual, community, commercial, cluster models)",
+            "Promotes use of cattle/organic/agricultural waste for energy and manure",
+            "Creates livelihood opportunities and enhances farmers' income",
+            "Fosters rural entrepreneurship by engaging SHGs, youth groups, and entrepreneurs"
+        ],
+        "eligibility": {
+            "criteria": [
+                "Resident of Assam",
+                "Individual household, community, cluster, or commercial entities including entrepreneurs, SHGs, youth groups"
+            ]
+        },
+        "application_process": "Eligible applicants can apply through the designated nodal department at the state/district level as per current notifications. Application details and model choice (individual, community, cluster, commercial) are to be submitted as per guidelines from Department of Drinking Water and Sanitation.",
+        "documents_required": [
+            "Residence proof (Assam)",
+            "Identity proof",
+            "Relevant documentation supporting project model (household proof/SHG/entrepreneur credentials)",
+            "Project proposal as per state guidelines"
+        ],
+        "official_website": "https://www.myscheme.gov.in/schemes/gobardhan",
+        "last_updated": "2025-11-06"
+    },
+    {
+        "scheme_name": "Agricultural Marketing Infrastructure (AMI)",
+        "state": "Assam",
+        "ministry": "Ministry of Agriculture and Farmers Welfare, Government of India",
+        "objective": "Enhance farmers’ income by enabling value addition and processing at the farmers' level through the creation of agricultural marketing and scientific storage infrastructure.",
+        "benefit": "Credit-linked, back-ended capital subsidy for eligible beneficiaries (Individuals, Agri-preneurs, farmers, FPOs, Cooperatives, state agencies, etc.) for creation and upgradation of agricultural marketing infrastructure, including scientific storage, market yards, Grameen Agricultural Markets (GrAMs), cold storages, facilitation centers, and direct marketing setups.",
+        "features": [
+            "Open-ended, demand-driven scheme",
+            "Subsidy at 25% for plain areas and 33.33% for NER (Assam), hilly areas, women/SC/ST promoters, and FPOs",
+            "Supports creation/upgradation of storage infrastructure (50–5000 MT for Private/Cooperatives, 50–10,000 MT for State agencies)",
+            "Includes marketing infrastructure projects beyond storage: rural haats, mobile infrastructure, cold storages, integrated value chains up to primary processing"
+        ],
+        "eligibility": {
+            "criteria": [
+                "Resident of Assam",
+                "Individuals, farmers, FPOs, FPCs, SHGs, Cooperatives, state agencies, firms, companies, NGOs, panchayats, autonomous bodies, local bodies"
+            ]
+        },
+        "application_process": "Eligible applicants must apply through the notified application process of the Ministry of Agriculture & Farmers Welfare, Government of India. Credit linkage with financial institutions is required for subsidy. Refer to official guidelines for full application details.",
+        "documents_required": [
+            "Residence proof (Assam)",
+            "Identity proof",
+            "Proof of category (farmer/organization etc.)",
+            "Project proposals and financial documents",
+            "Documents for credit linkage with financial institutions"
+        ],
+        "official_website": "https://www.myscheme.gov.in/schemes/ami",
+        "last_updated": "2025-11-06"
+    },
+    {
+        "scheme_name": "Pradhan Mantri Matsya Sampada Yojana",
+        "state": "Assam",
+        "ministry": "Ministry of Fisheries, Animal Husbandry and Dairying, Government of India",
+        "objective": "To bring about sustainable, responsible, inclusive, and equitable development of the fisheries sector in Assam, harnessing its potential and doubling the income of fishers and fish farmers.",
+        "benefit": "Financial assistance, subsidies, and support for fisheries activities, infrastructure development, and value chain modernization. Enhanced income, employment opportunities, and welfare of fishers and fish farmers.",
+        "features": [
+            "Support for fishers, fish farmers, vendors, cooperatives, and producer organizations",
+            "Modernization of value chain and quality improvement",
+            "Blue Revolution through holistic fisheries development in Assam",
+            "Targets increased fish production, aquaculture productivity, and export earnings"
+        ],
+        "eligibility": {
+            "criteria": [
+                "Resident of Assam",
+                "Fishers, fish farmers, fish vendors, Fisheries Development Corporations, SHGs/JLGs, cooperatives, federations, entrepreneurs, private firms, Fish Farmers Producer Organizations/Companies, SCs/STs/Women/Differently Abled Persons, relevant government and sector entities"
+            ]
+        },
+        "application_process": "Eligible applicants can apply via the Fisheries Department, Government of Assam, or designated agencies following detailed guidelines of the PMMSY scheme.",
+        "documents_required": [
+            "Residence proof (Assam)",
+            "Identity proof",
+            "Proof of engagement in fisheries sector (as applicable)"
+        ],
+        "official_website": "https://www.myscheme.gov.in/schemes/pmmsy",
+        "last_updated": "2025-11-06"
+    },
+    {
+        "scheme_name": "Distribution Of Tractor Unit Under CMSGUY",
+        "state": "Assam",
+        "ministry": "Government of Assam (under the Umbrella Scheme of Chief Minister Samagra Gramya Unnayan Yojna)",
+        "objective": "To revive the agricultural sector and help in doubling the farmer’s income by distribution of tractor units at subsidized rates to farmer groups in Assam.",
+        "benefit": "Provision of a tractor unit along with necessary accessories to eligible groups of farmers at a subsidized rate. State government aims to distribute over 10,000 tractor units throughout Assam in a phase-wise manner.",
+        "features": [
+            "Tractor units distributed at subsidized rates",
+            "Each revenue village to receive at least one tractor unit",
+            "Implementation across all villages in Assam in multiple phases",
+            "Accessories provided along with tractors"
+        ],
+        "eligibility": {
+            "criteria": [
+                "Group of 8-10 actual adult farmers",
+                "Residents of Assam",
+                "Applicants must form a registered farmer group"
+            ]
+        },
+        "application_process": "Eligible farmer groups can apply through the designated application channel as notified by the Assam government under CMSGUY. Applications subject to guidelines issued by implementing authorities.",
+        "documents_required": [
+            "Residence proof (Assam)",
+            "Identity proof",
+            "Group registration document",
+            "Proof of agricultural activity"
+        ],
+        "official_website": "https://www.myscheme.gov.in/schemes/dtu-cmsguy",
+        "last_updated": "2025-11-06"
+    },
+    {
+        "scheme_name": "National Bamboo Mission",
+        "state": "Assam",
+        "ministry": "Ministry Of Agriculture and Farmers Welfare, Government of India",
+        "objective": "Develop the complete bamboo value chain, link growers with consumers, enhance farm income, and support climate resilience by increasing area under bamboo plantation and industry development.",
+        "benefit": "Support for bamboo plantation, processing units, product development, and skill enhancement. Provisions for government agencies and private entrepreneurs to establish units for bio-energy extraction, activated carbon production, charcoal, pellet making, and more.",
+        "features": [
+            "Promotion of bamboo plantations in non-forest, private, and government lands",
+            "Aid for establishing primary processing and market infrastructure",
+            "Support for product development R&D, MSMEs, entrepreneurship",
+            "Skill development and capacity building for bamboo sector",
+            "Reduction in dependency on bamboo imports by enhancing domestic supply"
+        ],
+        "eligibility": {
+            "criteria": [
+                "Resident of Assam",
+                "Farmers, government agencies, and private entrepreneurs intending to participate in bamboo sector activities"
+            ]
+        },
+        "application_process": "Eligible applicants can apply through the Department of Agriculture and Farmers Welfare, as per official notifications and guidelines published by the ministry.",
+        "documents_required": [
+            "Residence proof (Assam)",
+            "Identity proof",
+            "Land or business proof as related to bamboo plantation or enterprise"
+        ],
+        "official_website": "https://www.myscheme.gov.in/schemes/nbm",
+        "last_updated": "2025-11-06"
+    },
+    {
+        "scheme_name": "Students Ready (Rural Entrepreneurship Awareness Development Yojana)",
+        "state": "Maharastra",
+        "ministry": "Ministry of Agriculture and Farmers Welfare",
+        "objective": "To provide rural entrepreneurship awareness, practical experience in real-life rural agricultural situations, and skill development for undergraduate students, thereby building confidence and preparing them for self-employment in agriculture and allied sciences.",
+        "benefit": "Opportunities for hands-on training, project work, rural work experience, internships, and enhanced employability, including a stipend of Rs 3000 per student per month for village/rural training (for a maximum of 6 months).",
+        "features": [
+            "Experiential Learning (business mode and skill development)",
+            "Rural Awareness Work Experience (RAWE)",
+            "Internship/In-Plant Training/Industrial Attachment",
+            "Student Projects",
+            "Course introduced in the 4th year of UG programs in agriculture and allied disciplines"
+        ],
+        "eligibility": {
+            "criteria": [
+                "Undergraduate students enrolled in SAUs/DUs/CAU/CUs of the National Agricultural Research & Education System (NARES)",
+                "Courses accredited by the National Agricultural Education Accreditation Board (NAEAB) of ICAR"
+            ]
+        },
+        "application_process": "Eligible students participate through their accredited university as part of their curriculum in the 4th year of undergraduate education.",
+        "documents_required": [
+            "Proof of undergraduate enrollment in an accredited agricultural or allied science program",
+            "Identity proof",
+            "Other documents as specified by the university"
+        ],
+        "official_website": "https://www.myscheme.gov.in/schemes/sr",
+        "last_updated": "2025-11-06"
+    },
+    {
+        "scheme_name": "RKVY Soil Health and Fertility - Soil Health Card",
+        "state": "Maharastra",
+        "ministry": "Ministry Of Agriculture and Farmers Welfare",
+        "objective": "Promote soil test-based nutrient management, issue soil health cards to all farmers, strengthen soil testing laboratories, and build capacity for nutrient management practices.",
+        "benefit": "Farmers receive a Soil Health Card (SHC) with detailed analysis and recommendations for soil nutrient management based on 12 key soil parameters (macronutrients, micronutrients, and soil properties).",
+        "features": [
+            "Soil sampling and testing for farmers' fields",
+            "Digital soil health cards accessible online or via SMS",
+            "Recommendations for fertilizers and soil amendments",
+            "Strengthening of soil testing laboratory infrastructure",
+            "Nationwide implementation including Maharashtra"
+        ],
+        "eligibility": {
+            "criteria": [
+                "Resident farmer in Maharashtra",
+                "Engaged in agriculture or farming activities"
+            ]
+        },
+        "application_process": "Farmers can participate by providing soil samples through local agriculture officers or designated centers. SHC can be downloaded from the official portal or through SMS link received on mobile.",
+        "documents_required": [
+            "Residence proof (Maharashtra)",
+            "Identity proof",
+            "Land ownership or cultivation proof"
+        ],
+        "official_website": "https://www.myscheme.gov.in/schemes/rkvyshfshc",
+        "last_updated": "2025-11-06"
+    },
+    {
+        "scheme_name": "Nanaji Deshmukh Krishi Sanjivani Prakalp",
+        "state": "Maharastra",
+        "ministry": "Department of Agriculture, Government of Maharashtra (in collaboration with the World Bank)",
+        "objective": "Develop a drought-proofing and climate-resilient strategy for the agriculture sector to address impacts of climate variability and climate change.",
+        "benefit": "Support for farm-level investments and matching grants for implementing climate-smart technologies, improving water access, resource utilization, and value addition in drought-affected and salinity/sodicity-impacted villages.",
+        "features": [
+            "Scaling adoption of climate-smart agricultural technologies",
+            "Support for investments by farmers, collectives, and communities",
+            "Direct Benefit Transfer for grants to Aadhar-linked accounts",
+            "Special focus on women stakeholders via 'Krushi Tais'"
+        ],
+        "eligibility": {
+            "criteria": [
+                "Resident of Maharashtra",
+                "Farmers, farmers’ collectives, or communities in targeted villages"
+            ]
+        },
+        "application_process": "Eligible beneficiaries can apply through the project's Direct Benefit Transfer portal and mobile application; verification and grant transfer is workflow-based and online.",
+        "documents_required": [
+            "Residence proof (Maharashtra)",
+            "Identity proof (Aadhar card preferred)",
+            "Proof of farming or collective/community engagement"
+        ],
+        "official_website": "https://www.myscheme.gov.in/schemes/pocra",
+        "last_updated": "2025-11-06"
+    },
+    {
+        "scheme_name": "Chief Minister Agriculture and Food Processing Scheme",
+        "state": "Maharastra",
+        "ministry": "Department of Agriculture, Government of Maharashtra",
+        "objective": "Promote value addition of agriculture produce through model technology-based projects, enhance quality of produce, encourage exports, create skilled manpower for agro and food processing, and generate employment in rural areas.",
+        "benefit": "Financial and technical support for establishment, modernization, and quality improvement of small and medium agro and food processing units in rural Maharashtra.",
+        "features": [
+            "Support for setting up modern technology-based agro and food processing units",
+            "Promotion of processed foods and market/export development",
+            "Skill development and employment generation in rural areas",
+            "Priority for small and medium enterprises in rural Maharashtra"
+        ],
+        "eligibility": {
+            "criteria": [
+                "Resident of Maharashtra",
+                "Entrepreneurs, farmers, or organizations seeking to set up or modernize agro and food processing units"
+            ]
+        },
+        "application_process": "Eligible applicants can apply through notified procedures as per government resolution; guidelines available via the Department of Agriculture, Maharashtra.",
+        "documents_required": [
+            "Residence proof (Maharashtra)",
+            "Identity proof",
+            "Business/project proposal or plan"
+        ],
+        "official_website": "https://www.myscheme.gov.in/schemes/chief-minister-agriculture-and-food-processing-scheme",
+        "last_updated": "2025-11-06"
+    },
+    {
+        "scheme_name": "Establishment of Regional Semen Production Laboratory and Semen Bank for sheep and goat",
+        "state": "Maharastra",
+        "ministry": "Department of Animal Husbandry & Dairying, Ministry of Fisheries, Animal Husbandry and Dairying (Centrally Sponsored Scheme under Government of India)",
+        "objective": "Genetic improvement of indigenous breeds and genetic upgradation of non-descript breeds of sheep and goat to increase productivity, employment generation, and entrepreneurship development.",
+        "benefit": "Central assistance for establishment of frozen and liquid semen production laboratory and semen bank for sheep and goat at regional level to improve breeding and productivity.",
+        "features": [
+            "Support for setting up regional semen labs for sheep and goat",
+            "Propagation of superior male germplasm through artificial insemination and reproductive technologies",
+            "Distribution of produced semen to neighbouring states",
+            "Adherence to minimum standard protocols for semen processing"
+        ],
+        "eligibility": {
+            "criteria": [
+                "Expression of Interest from the State in respective region (e.g., state livestock agency)",
+                "Ability to adhere to guidelines for semen lab setup"
+            ]
+        },
+        "application_process": "Eligible agencies can submit project proposals as per guidelines and Expression of Interest requirements; adhere to minimum standard protocols for semen processing.",
+        "documents_required": [
+            "Expression of Interest/Project proposal from eligible state agency",
+            "Documents conforming to minimum standards for semen lab establishment",
+            "Relevant state government approvals"
+        ],
+        "official_website": "https://www.myscheme.gov.in/schemes/ersplsbsg",
+        "last_updated": "2025-11-06"
+    },
+    {
+        "scheme_name": "Kera Suraksha Insurance Scheme",
+        "state": "Maharastra",
+        "ministry": "Ministry of Agriculture and Farmers Welfare (Implemented by Coconut Development Board)",
+        "objective": "Attract unemployed youth to agriculture and overcome the shortage of coconut tree climbers by imparting skill development training, scientific management, and plant protection techniques.",
+        "benefit": "Insurance coverage with a sum assured of ₹7 lakhs for Coconut Tree Climbers, Neera Technicians, and Coconut Harvesters for 24-hour accident-related risks including death. Annual premium: ₹956 (₹717 covered by Board, ₹239 paid by beneficiary).",
+        "features": [
+            "Covers coconut tree climbers, Neera technicians, and harvesters in all coconut growing states",
+            "24-hour accident risk coverage, including death",
+            "Skill development under the Friends of Coconut Tree (FoCT) initiative"
+        ],
+        "eligibility": {
+            "criteria": [
+                "Resident of Maharashtra",
+                "Coconut tree climber, Neera technician, or coconut harvester (or undergoing training for these roles)"
+            ]
+        },
+        "application_process": "Eligible applicants can apply via the Coconut Development Board through online or offline mode; premium payment through demand draft or online; guidelines as per Board notifications.",
+        "documents_required": [
+            "Residence proof (Maharashtra)",
+            "Identity proof",
+            "Proof of engagement or training in coconut tree climbing, Neera production, or harvesting"
+        ],
+        "official_website": "https://www.myscheme.gov.in/schemes/ksis",
         "last_updated": "2025-11-06"
     }
 ]

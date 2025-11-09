@@ -1,4 +1,13 @@
 # FarmWise 🌱
+![](https://res.cloudinary.com/dvovo1lfg/image/upload/v1762666815/Screenshot_2025-11-09_at_11.09.03_pqphty.png)
+![](https://res.cloudinary.com/dvovo1lfg/image/upload/v1762667059/Screenshot_2025-11-09_at_11.13.45_wdvo0r.png)
+![](https://res.cloudinary.com/dvovo1lfg/image/upload/v1762667134/Screenshot_2025-11-09_at_11.15.12_znujma.png)
+![](https://res.cloudinary.com/dvovo1lfg/image/upload/v1762667264/Screenshot_2025-11-09_at_11.17.30_mizgjt.png)
+![](https://res.cloudinary.com/dvovo1lfg/image/upload/v1762667351/Screenshot_2025-11-09_at_11.18.59_o31whh.png)
+![](https://res.cloudinary.com/dvovo1lfg/image/upload/v1762667230/Screenshot_2025-11-09_at_11.16.50_mk74my.png)
+![](https://res.cloudinary.com/dvovo1lfg/image/upload/v1762667397/Screenshot_2025-11-09_at_11.19.45_q6wgjf.png)
+![](https://res.cloudinary.com/dvovo1lfg/image/upload/v1762667444/Screenshot_2025-11-09_at_11.20.27_goqvlv.png)
+![](https://res.cloudinary.com/dvovo1lfg/image/upload/v1762667546/Screenshot_2025-11-09_at_11.22.08_gn3v2y.png)
 
 **FarmWise** is an innovative platform designed to empower Indian farmers—especially small and marginal ones—by simplifying access to vital information and personalized guidance. It bridges the gap between complex government schemes and the farmers who need them most.
 

@@ -522,43 +522,35 @@ function getSTT(language: string) {
   }
 }
 
-function getLLM(model: string) {
-  model = model.toLowerCase();
-  switch (model) {
-    case "openai":
-      return openai.LLM.withDeepSeek({
-        model: "openai/gpt-4.1",
-        apiKey: process.env.OPENROUTER_API_KEY,
-        baseURL: process.env.OPENROUTER_BASE_URL,
-      });
-    case "deepseek":
-      return openai.LLM.withDeepSeek({
-        model: "deepseek/deepseek-chat-v3-0324",
-        apiKey: process.env.OPENROUTER_API_KEY,
-        baseURL: process.env.OPENROUTER_BASE_URL,
-      });
-    case "moonshot":
-      return openai.LLM.withGroq({
-        model: "moonshotai/kimi-k2-instruct-0905",
-        apiKey: process.env.GROQ_API_KEY!,
-      });
-    case "llama":
-      return openai.LLM.withDeepSeek({
-        model: "meta-llama/llama-3.3-70b-instruct",
-        apiKey: process.env.OPENROUTER_API_KEY,
-        baseURL: process.env.OPENROUTER_BASE_URL,
-      });
-    case "google":
-      return new google.LLM({
-        model: "gemini-2.0-flash",
-        apiKey: process.env.GOOGLE_API_KEY!,
-      });
-    default:
-      return new google.LLM({
-        model: "gemini-2.0-flash",
-        apiKey: process.env.GOOGLE_API_KEY!,
-      });
-  }
+const llms = {
+  openai: new openai.LLM({
+    model: "openai/gpt-4.1-mini",
+    apiKey: process.env.OPENROUTER_API_KEY,
+    baseURL: process.env.OPENROUTER_BASE_URL,
+    parallelToolCalls: true,
+  }),
+  deepseek: openai.LLM.withDeepSeek({
+    model: "deepseek/deepseek-chat-v3-0324",
+    apiKey: process.env.OPENROUTER_API_KEY,
+    baseURL: process.env.OPENROUTER_BASE_URL,
+  }),
+  moonshot: openai.LLM.withGroq({
+    model: "moonshotai/kimi-k2-instruct-0905",
+    apiKey: process.env.GROQ_API_KEY!,
+  }),
+  llama: openai.LLM.withDeepSeek({
+    model: "meta-llama/llama-3.3-70b-instruct",
+    apiKey: process.env.OPENROUTER_API_KEY,
+    baseURL: process.env.OPENROUTER_BASE_URL,
+  }),
+  google: new google.LLM({
+    model: "gemini-2.0-flash",
+    apiKey: process.env.GOOGLE_API_KEY!,
+  }),
+};
+
+function getLLM(model: keyof typeof llms) {
+  return llms[model];
 }
 
 function getTTS(language: string) {

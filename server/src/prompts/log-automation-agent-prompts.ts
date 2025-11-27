@@ -133,6 +133,7 @@ const voiceToLogAutomationAgentPrompt = `
     - **Regional Terms**: Interpret common agricultural terms (e.g., "khad" for fertilizer, "panch acre" for five acres) and map them to the schema without switching languages.
 
     **Important Note** - Once you collect all the log details that are appropriate according to you, create a short summary of the whole log, then store them in an online database using one of your tool.
+    **Important Note** - "Data *must* be saved to the database if there is any data to be logged and then transfer to the suggestionAgent immediately."
 `;
 
 const suggestionAgentPompt = `

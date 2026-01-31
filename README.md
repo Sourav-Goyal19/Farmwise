@@ -27,12 +27,9 @@ Through a personalized, interactive AI agent, the platform builds a unique farme
 - 🤖 **Interactive Profile Building:** An intelligent AI agent interactively builds a detailed farmer profile, capturing data on land holdings, crop types, location, and existing resources.
 - 🌾 **Personalized Scheme Matching:** Delivers tailored recommendations for government subsidies and schemes (at central and state levels) that the farmer is eligible for.
 - 🗣️ **Multilingual Voice Agent:** Full-featured support in multiple Indian languages, accessible via an interactive voice agent (powered by LiveKit) for maximum accessibility.
-- 📈 **Live Market Pricing:** Provides up-to-date crop price suggestions based on current market trends and location, helping farmers get the best value for their produce.
 - 🗓️ **Daily Activity Management:** Helps farmers log, track, and manage their daily activities, such as planting, irrigation, and fertilization.
 - 💡 **Proactive Farm Guidance:** Suggests future courses of action (e.g., best time to plant, soil health tips, pest control) based on profile data and activity logs.
 - 🔔 **Smart AI Reminders:** The AI intelligently sets reminders for important upcoming tasks, such as subsidy application deadlines, irrigation schedules, or harvesting times.
-- 🧠 **Persistent Contextual Memory:** (Powered by `mem0`) The AI remembers past conversations and farm details for a continuous, contextual, and truly personal experience.
-- 🔄 **Reliable Task Orchestration:** (Powered by `LangGraph` and `Inngest`) Robust, stateful, and reliable management of complex AI flows and background tasks like fetching market data or processing scheme updates.
 - ⚡ **Fast & Scalable:** Built on a modern, high-performance stack to ensure a responsive and reliable experience for all users.
 
 ## Tech Stack 🛠️
@@ -40,12 +37,10 @@ Through a personalized, interactive AI agent, the platform builds a unique farme
 - **Frontend:** Next.js, TypeScript
 - **Backend:** Node.js
 - **Database:** PostgreSQL
-- **ORM:** Drizzle ORM (Type-safe SQL)
-- **Vector Database:** QdrantDB (For semantic search on schemes/profiles)
-- **AI Orchestration:** LangChain, LangGraph (For complex, stateful AI agents)
-- **Real-time & Voice:** LiveKit (WebRTC for AI voice agent), MCP Server
-- **AI Memory:** mem0 (Persistent memory for the agent)
-- **Task & Event Management:** Inngest (Reliable background jobs and async tasks)
+- **ORM:** Drizzle ORM
+- **Vector Database:** QdrantDB 
+- **AI Orchestration:** LangChain
+- **Real-time & Voice:** LiveKit
 
 ## Installation
 
